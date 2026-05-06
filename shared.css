@@ -670,16 +670,80 @@ ul { list-style: none; }
 .mb-24 { margin-bottom: 24px; }
 .mb-48 { margin-bottom: 48px; }
 
-/* AdSense placeholder style */
+/* ── Ad Slots ──────────────────────────────────────────────────────────── */
+/*
+ * These containers hold Google AdSense units once slot IDs are configured
+ * in ads.js. Until then they render as subtle visual placeholders so the
+ * page layout reserves the correct space.
+ *
+ * Activation: set slotId values in ads.js → DiamondPainterAds.activate()
+ * will inject <ins class="adsbygoogle"> and call adsbygoogle.push({}).
+ */
+
+.ad-slot {
+  position: relative;
+  background: var(--bg-alt);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin: 32px 0;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+/* Label shown in placeholder state */
+.ad-slot__label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text4);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Hide label once a real ad unit is injected */
+.ad-slot .adsbygoogle ~ .ad-slot__label,
+.ad-slot[data-ad-activated] .ad-slot__label {
+  display: none;
+}
+
+/* Slot-type size hints
+   (AdSense responsive units will override these automatically) */
+.ad-slot--article-top {
+  min-height: 90px;   /* Leaderboard */
+}
+.ad-slot--article-middle {
+  min-height: 250px;  /* In-article / Rectangle */
+}
+.ad-slot--sidebar {
+  min-height: 250px;  /* Rectangle */
+  min-width: 0;
+  width: 100%;
+}
+.ad-slot--footer {
+  min-height: 90px;   /* Leaderboard */
+}
+
+/* When a live ad unit is present, let it size naturally */
+.ad-slot .adsbygoogle {
+  display: block !important;
+  width: 100%;
+}
+
+/* Backward-compat: keep old class name working in case of cached pages */
 .adsense-placeholder {
   background: var(--bg-alt);
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
-  height: 90px;
+  min-height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text4);
   letter-spacing: 0.05em;
   margin: 32px 0;
