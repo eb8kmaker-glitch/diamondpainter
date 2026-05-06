@@ -177,6 +177,28 @@ ul { list-style: none; }
   transform: translateY(-1px);
   box-shadow: 0 4px 20px rgba(14,180,212,0.48);
 }
+.dp-lang-select {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(111,231,255,0.18);
+  color: rgba(255,255,255,0.72);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.18s, color 0.18s;
+  flex-shrink: 0;
+}
+.dp-lang-select:hover,
+.dp-lang-select:focus {
+  border-color: rgba(111,231,255,0.45);
+  color: white;
+}
+.dp-lang-select option {
+  background: #080e22;
+  color: rgba(255,255,255,0.9);
+}
 .nav-toggle {
   display: none;
   background: none;

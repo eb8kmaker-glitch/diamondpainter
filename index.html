@@ -409,13 +409,19 @@
       Diamond Painter
     </a>
     <ul class="nav-links" id="nav-links">
-      <li><a href="guide/index.html">Guide</a></li>
-      <li><a href="faq.html">FAQ</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="guide/index.html" data-i18n="nav_guide">Guide</a></li>
+      <li><a href="faq.html" data-i18n="nav_faq">FAQ</a></li>
+      <li><a href="about.html" data-i18n="nav_about">About</a></li>
+      <li><a href="contact.html" data-i18n="nav_contact">Contact</a></li>
     </ul>
     <div class="nav-spacer"></div>
-    <a href="create.html" class="nav-cta">Try Free →</a>
+    <select class="dp-lang-select" aria-label="Language">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+      <option value="zh">中文</option>
+    </select>
+    <a href="create.html" class="nav-cta" data-i18n="nav_try_free">Try Free →</a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
   </div>
 </nav>
@@ -426,20 +432,20 @@
     <div class="hero-inner">
       <div class="hero-content">
         <div class="hero-badge">
-          <span>●</span> 100% Free — No sign-up required
+          <span>●</span> <span data-i18n="home_badge">100% Free — No sign-up required</span>
         </div>
-        <h1 class="hero-title" id="hero-heading">
+        <h1 class="hero-title" id="hero-heading" data-i18n-html="home_hero_title">
           Turn Any Photo Into a<br>
           <em>Diamond Painting</em> Pattern
         </h1>
-        <p class="hero-desc">
+        <p class="hero-desc" data-i18n="home_hero_desc">
           Upload your photo, choose your canvas size, and instantly generate a full DMC color-coded diamond painting pattern — complete with bead counts and printable symbols.
         </p>
         <div class="hero-actions">
-          <a href="create.html" class="btn-primary">
+          <a href="create.html" class="btn-primary" data-i18n="home_btn_generate">
             ◆ Generate My Pattern
           </a>
-          <a href="guide/diamond-painting-beginner-guide.html" class="btn-secondary">
+          <a href="guide/diamond-painting-beginner-guide.html" class="btn-secondary" data-i18n="home_btn_learn">
             Learn the basics
           </a>
         </div>
@@ -449,21 +455,21 @@
               <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
               <path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            No download needed
+            <span data-i18n="home_trust_1">No download needed</span>
           </div>
           <div class="trust-item">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
               <path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            Works in your browser
+            <span data-i18n="home_trust_2">Works in your browser</span>
           </div>
           <div class="trust-item">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
               <path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            Round &amp; square drills
+            <span data-i18n="home_trust_3">Round &amp; square drills</span>
           </div>
         </div>
       </div>
@@ -488,19 +494,19 @@
   <div class="container">
     <div class="trust-bar-inner">
       <div class="trust-stat">
-        <strong>40+</strong> canvas sizes
+        <strong>40+</strong> <span data-i18n="home_stat_canvas">canvas sizes</span>
       </div>
       <div class="trust-stat">
-        <strong>457</strong> DMC colors
+        <strong>457</strong> <span data-i18n="home_stat_dmc">DMC colors</span>
       </div>
       <div class="trust-stat">
-        <strong>5+</strong> languages
+        <strong>5+</strong> <span data-i18n="home_stat_langs">languages</span>
       </div>
       <div class="trust-stat">
-        <strong>100%</strong> browser-based
+        <strong>100%</strong> <span data-i18n="home_stat_browser">browser-based</span>
       </div>
       <div class="trust-stat">
-        <strong>Free</strong> forever
+        <strong data-i18n="home_stat_free">Free forever</strong>
       </div>
     </div>
   </div>
@@ -510,40 +516,40 @@
 <section class="section" aria-labelledby="features-heading">
   <div class="container">
     <div class="section-header center">
-      <p class="section-label">Features</p>
-      <h2 class="section-title" id="features-heading">Everything you need to create a perfect pattern</h2>
-      <p class="section-subtitle">Diamond Painter converts your image using professional-grade color quantization algorithms, the same technology used by commercial diamond painting suppliers.</p>
+      <p class="section-label" data-i18n="home_feat_label">Features</p>
+      <h2 class="section-title" id="features-heading" data-i18n="home_feat_title">Everything you need to create a perfect pattern</h2>
+      <p class="section-subtitle" data-i18n="home_feat_subtitle">Diamond Painter converts your image using professional-grade color quantization algorithms, the same technology used by commercial diamond painting suppliers.</p>
     </div>
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon" style="background:#eff6ff;">🎨</div>
-        <h3>AI Color Quantization</h3>
-        <p>Our intelligent algorithm reduces your image to 5–80 perfectly matched DMC colors, preserving the essence of your photo while keeping the bead count manageable.</p>
+        <h3 data-i18n="home_feat1_title">AI Color Quantization</h3>
+        <p data-i18n="home_feat1_desc">Our intelligent algorithm reduces your image to 5–80 perfectly matched DMC colors, preserving the essence of your photo while keeping the bead count manageable.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon" style="background:#f0fdf4;">📐</div>
-        <h3>Custom Canvas Sizes</h3>
-        <p>Choose from standard sizes like A4, A3, 30×40cm, 40×50cm, or set your own custom dimensions. See bead counts and actual output size in real time.</p>
+        <h3 data-i18n="home_feat2_title">Custom Canvas Sizes</h3>
+        <p data-i18n="home_feat2_desc">Choose from standard sizes like A4, A3, 30×40cm, 40×50cm, or set your own custom dimensions. See bead counts and actual output size in real time.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon" style="background:#fdf4ff;">🔢</div>
-        <h3>DMC Color Codes</h3>
-        <p>Every color is matched to its official DMC thread and drill code, so you know exactly which beads to order. Includes color names, hex values, and drill counts.</p>
+        <h3 data-i18n="home_feat3_title">DMC Color Codes</h3>
+        <p data-i18n="home_feat3_desc">Every color is matched to its official DMC thread and drill code, so you know exactly which beads to order. Includes color names, hex values, and drill counts.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon" style="background:#fff7ed;">✏️</div>
-        <h3>Manual Editing Tools</h3>
-        <p>Refine your pattern with paint, erase, fill, and eyedropper tools. Undo and redo as many times as you need until the pattern looks exactly right.</p>
+        <h3 data-i18n="home_feat4_title">Manual Editing Tools</h3>
+        <p data-i18n="home_feat4_desc">Refine your pattern with paint, erase, fill, and eyedropper tools. Undo and redo as many times as you need until the pattern looks exactly right.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon" style="background:#f0fdf4;">◉</div>
-        <h3>Round &amp; Square Drills</h3>
-        <p>Switch between round (2.8mm) and square (2.5mm) drills. Each type has different visual characteristics and the tool calculates spacing accordingly.</p>
+        <h3 data-i18n="home_feat5_title">Round &amp; Square Drills</h3>
+        <p data-i18n="home_feat5_desc">Switch between round (2.8mm) and square (2.5mm) drills. Each type has different visual characteristics and the tool calculates spacing accordingly.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon" style="background:#eff6ff;">📤</div>
-        <h3>Export &amp; Save</h3>
-        <p>Download your finished pattern as a high-resolution image, or save your work as a project file to continue editing later. Print-ready output included.</p>
+        <h3 data-i18n="home_feat6_title">Export &amp; Save</h3>
+        <p data-i18n="home_feat6_desc">Download your finished pattern as a high-resolution image, or save your work as a project file to continue editing later. Print-ready output included.</p>
       </div>
     </div>
   </div>
@@ -553,29 +559,29 @@
 <section class="section how-section" aria-labelledby="how-heading">
   <div class="container">
     <div class="section-header center">
-      <p class="section-label">How It Works</p>
-      <h2 class="section-title" id="how-heading">From photo to pattern in three steps</h2>
-      <p class="section-subtitle">No software to install, no account to create. Just open the tool and start creating.</p>
+      <p class="section-label" data-i18n="home_how_label">How It Works</p>
+      <h2 class="section-title" id="how-heading" data-i18n="home_how_title">From photo to pattern in three steps</h2>
+      <p class="section-subtitle" data-i18n="home_how_subtitle">No software to install, no account to create. Just open the tool and start creating.</p>
     </div>
     <div class="steps-grid">
       <div class="step">
         <div class="step-number" aria-label="Step 1">1</div>
-        <h3>Upload Your Photo</h3>
-        <p>Drag and drop any image — a pet portrait, landscape, family photo, or your own artwork. JPG, PNG, and WebP all work perfectly.</p>
+        <h3 data-i18n="home_step1_title">Upload Your Photo</h3>
+        <p data-i18n="home_step1_desc">Drag and drop any image — a pet portrait, landscape, family photo, or your own artwork. JPG, PNG, and WebP all work perfectly.</p>
       </div>
       <div class="step">
         <div class="step-number" aria-label="Step 2">2</div>
-        <h3>Set Your Canvas Size</h3>
-        <p>Pick a canvas size and adjust the color count. The tool instantly previews your pattern and shows exactly how many beads you will need.</p>
+        <h3 data-i18n="home_step2_title">Set Your Canvas Size</h3>
+        <p data-i18n="home_step2_desc">Pick a canvas size and adjust the color count. The tool instantly previews your pattern and shows exactly how many beads you will need.</p>
       </div>
       <div class="step">
         <div class="step-number" aria-label="Step 3">3</div>
-        <h3>Download &amp; Create</h3>
-        <p>Export your DMC-coded pattern as an image. Order your drills, print your pattern, and enjoy the meditative process of diamond painting.</p>
+        <h3 data-i18n="home_step3_title">Download &amp; Create</h3>
+        <p data-i18n="home_step3_desc">Export your DMC-coded pattern as an image. Order your drills, print your pattern, and enjoy the meditative process of diamond painting.</p>
       </div>
     </div>
     <div class="text-center mt-48">
-      <a href="create.html" class="btn-primary">Start Generating Now →</a>
+      <a href="create.html" class="btn-primary" data-i18n="home_how_btn">Start Generating Now →</a>
     </div>
   </div>
 </section>
@@ -592,36 +598,36 @@
   <div class="container">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
       <div>
-        <p class="section-label">Why Diamond Painter</p>
-        <h2 class="section-title" id="benefits-heading">The pattern tool that actual crafters use</h2>
-        <p class="section-subtitle">Built by someone who knows what it is like to squint at a tiny pattern or waste an order because the color count was off.</p>
+        <p class="section-label" data-i18n="home_why_label">Why Diamond Painter</p>
+        <h2 class="section-title" id="benefits-heading" data-i18n="home_why_title">The pattern tool that actual crafters use</h2>
+        <p class="section-subtitle" data-i18n="home_why_subtitle">Built by someone who knows what it is like to squint at a tiny pattern or waste an order because the color count was off.</p>
         <div class="benefits-grid mt-32">
           <div class="benefit-item">
             <div class="benefit-icon" aria-hidden="true">⚡</div>
             <div>
-              <h4>Instant Preview</h4>
-              <p>See your pattern update live as you adjust settings — no waiting for renders.</p>
+              <h4 data-i18n="home_ben1_title">Instant Preview</h4>
+              <p data-i18n="home_ben1_desc">See your pattern update live as you adjust settings — no waiting for renders.</p>
             </div>
           </div>
           <div class="benefit-item">
             <div class="benefit-icon" aria-hidden="true">🎯</div>
             <div>
-              <h4>Accurate Colors</h4>
-              <p>DMC codes are matched using perceptual color distance, not just RGB proximity.</p>
+              <h4 data-i18n="home_ben2_title">Accurate Colors</h4>
+              <p data-i18n="home_ben2_desc">DMC codes are matched using perceptual color distance, not just RGB proximity.</p>
             </div>
           </div>
           <div class="benefit-item">
             <div class="benefit-icon" aria-hidden="true">🔒</div>
             <div>
-              <h4>Private &amp; Secure</h4>
-              <p>Your photos never leave your device. Processing happens entirely in your browser.</p>
+              <h4 data-i18n="home_ben3_title">Private &amp; Secure</h4>
+              <p data-i18n="home_ben3_desc">Your photos never leave your device. Processing happens entirely in your browser.</p>
             </div>
           </div>
           <div class="benefit-item">
             <div class="benefit-icon" aria-hidden="true">🌍</div>
             <div>
-              <h4>Multilingual</h4>
-              <p>Full support for English, Korean, Japanese, and Chinese interfaces.</p>
+              <h4 data-i18n="home_ben4_title">Multilingual</h4>
+              <p data-i18n="home_ben4_desc">Full support for English, Korean, Japanese, and Chinese interfaces.</p>
             </div>
           </div>
         </div>
@@ -672,35 +678,35 @@
 <section class="section" style="background:var(--bg-alt);" aria-labelledby="guide-heading">
   <div class="container">
     <div class="section-header">
-      <p class="section-label">Learn</p>
-      <h2 class="section-title" id="guide-heading">Diamond painting guides &amp; tutorials</h2>
-      <p class="section-subtitle">Whether you're just starting out or looking to improve your technique, our guides cover everything you need to know.</p>
+      <p class="section-label" data-i18n="home_learn_label">Learn</p>
+      <h2 class="section-title" id="guide-heading" data-i18n="home_learn_title">Diamond painting guides &amp; tutorials</h2>
+      <p class="section-subtitle" data-i18n="home_learn_subtitle">Whether you're just starting out or looking to improve your technique, our guides cover everything you need to know.</p>
     </div>
     <div class="guide-preview-grid">
       <a href="guide/diamond-painting-beginner-guide.html" class="guide-card">
         <div class="guide-card-icon" aria-hidden="true">📖</div>
-        <span class="guide-card-tag">Beginner</span>
-        <h3>Complete Beginner's Guide to Diamond Painting</h3>
-        <p>Everything you need to know before placing your first diamond — materials, technique, and what to expect.</p>
-        <span class="guide-card-link">Read guide →</span>
+        <span class="guide-card-tag" data-i18n="home_guide1_tag">Beginner</span>
+        <h3 data-i18n="home_guide1_title">Complete Beginner's Guide to Diamond Painting</h3>
+        <p data-i18n="home_guide1_desc">Everything you need to know before placing your first diamond — materials, technique, and what to expect.</p>
+        <span class="guide-card-link" data-i18n="home_guide1_link">Read guide →</span>
       </a>
       <a href="guide/custom-diamond-painting-tutorial.html" class="guide-card">
         <div class="guide-card-icon" aria-hidden="true">🖼️</div>
-        <span class="guide-card-tag">Tutorial</span>
-        <h3>How to Create a Custom Diamond Painting Pattern</h3>
-        <p>Step-by-step tutorial on turning your own photos into a custom diamond painting using our free tool.</p>
-        <span class="guide-card-link">Read tutorial →</span>
+        <span class="guide-card-tag" data-i18n="home_guide2_tag">Tutorial</span>
+        <h3 data-i18n="home_guide2_title">How to Create a Custom Diamond Painting Pattern</h3>
+        <p data-i18n="home_guide2_desc">Step-by-step tutorial on turning your own photos into a custom diamond painting using our free tool.</p>
+        <span class="guide-card-link" data-i18n="home_guide2_link">Read tutorial →</span>
       </a>
       <a href="guide/diamond-painting-tips.html" class="guide-card">
         <div class="guide-card-icon" aria-hidden="true">💡</div>
-        <span class="guide-card-tag">Tips</span>
-        <h3>20 Diamond Painting Tips That Actually Work</h3>
-        <p>Practical, tested tips for faster progress, fewer mistakes, and a more enjoyable painting experience.</p>
-        <span class="guide-card-link">Read tips →</span>
+        <span class="guide-card-tag" data-i18n="home_guide3_tag">Tips</span>
+        <h3 data-i18n="home_guide3_title">20 Diamond Painting Tips That Actually Work</h3>
+        <p data-i18n="home_guide3_desc">Practical, tested tips for faster progress, fewer mistakes, and a more enjoyable painting experience.</p>
+        <span class="guide-card-link" data-i18n="home_guide3_link">Read tips →</span>
       </a>
     </div>
     <div class="text-center mt-32">
-      <a href="guide/index.html" class="btn-secondary">View all guides →</a>
+      <a href="guide/index.html" class="btn-secondary" data-i18n="home_view_all_guides">View all guides →</a>
     </div>
   </div>
 </section>
@@ -710,37 +716,37 @@
   <div class="container">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;">
       <div>
-        <p class="section-label">FAQ</p>
-        <h2 class="section-title" id="faq-preview-heading">Common questions, honest answers</h2>
-        <p class="section-subtitle mt-16">New to diamond painting? Here are the questions we hear most often from beginners.</p>
-        <a href="faq.html" class="btn-primary mt-32">View all FAQs →</a>
+        <p class="section-label" data-i18n="home_faq_label">FAQ</p>
+        <h2 class="section-title" id="faq-preview-heading" data-i18n="home_faq_title">Common questions, honest answers</h2>
+        <p class="section-subtitle mt-16" data-i18n="home_faq_subtitle">New to diamond painting? Here are the questions we hear most often from beginners.</p>
+        <a href="faq.html" class="btn-primary mt-32" data-i18n="home_view_all_faqs">View all FAQs →</a>
       </div>
       <div>
         <div class="faq-list">
           <div class="faq-item">
             <button class="faq-question" aria-expanded="false">
-              Is Diamond Painter really free?
+              <span data-i18n="home_faq1_q">Is Diamond Painter really free?</span>
               <span class="faq-icon" aria-hidden="true">+</span>
             </button>
-            <div class="faq-answer">
+            <div class="faq-answer" data-i18n="home_faq1_a">
               Yes, completely free. There are no premium tiers, no watermarks on exports, and no account required. The tool runs entirely in your browser, so there are no server costs passed on to you.
             </div>
           </div>
           <div class="faq-item">
             <button class="faq-question" aria-expanded="false">
-              What image types work best?
+              <span data-i18n="home_faq2_q">What image types work best?</span>
               <span class="faq-icon" aria-hidden="true">+</span>
             </button>
-            <div class="faq-answer">
+            <div class="faq-answer" data-i18n="home_faq2_a">
               High-contrast images with clear focal points produce the best results. Pet portraits, single-subject photos, and simple landscapes typically convert beautifully. Very busy images or group photos with many small faces can be tricky — try reducing colors to 20–30 for complex images.
             </div>
           </div>
           <div class="faq-item">
             <button class="faq-question" aria-expanded="false">
-              What is a DMC color code?
+              <span data-i18n="home_faq3_q">What is a DMC color code?</span>
               <span class="faq-icon" aria-hidden="true">+</span>
             </button>
-            <div class="faq-answer">
+            <div class="faq-answer" data-i18n="home_faq3_a">
               DMC (Dollfus-Mieg et Compagnie) is the world's most widely used thread and drill numbering system. Diamond painting drills are sold using the same codes, so DMC 321 always refers to the same shade of red across all major suppliers. This makes ordering the exact right colors straightforward.
             </div>
           </div>
@@ -753,12 +759,12 @@
 <!-- ── CTA Section ── -->
 <section class="cta-section" aria-labelledby="cta-heading">
   <div class="container">
-    <p class="section-label" style="color:rgba(255,255,255,0.5);">Get Started</p>
-    <h2 class="section-title" id="cta-heading">Ready to create your first pattern?</h2>
-    <p class="section-subtitle">No account needed. Open the tool and you are creating in under a minute.</p>
+    <p class="section-label" style="color:rgba(255,255,255,0.5);" data-i18n="home_cta_label">Get Started</p>
+    <h2 class="section-title" id="cta-heading" data-i18n="home_cta_title">Ready to create your first pattern?</h2>
+    <p class="section-subtitle" data-i18n="home_cta_subtitle">No account needed. Open the tool and you are creating in under a minute.</p>
     <div class="cta-actions">
-      <a href="create.html" class="btn-white">◆ Create My Pattern</a>
-      <a href="guide/diamond-painting-beginner-guide.html" class="btn-ghost-white">Read the beginner guide</a>
+      <a href="create.html" class="btn-white" data-i18n="home_cta_btn">◆ Create My Pattern</a>
+      <a href="guide/diamond-painting-beginner-guide.html" class="btn-ghost-white" data-i18n="home_cta_btn2">Read the beginner guide</a>
     </div>
   </div>
 </section>
@@ -779,32 +785,32 @@
           <div class="nav-logo-icon" aria-hidden="true">◆</div>
           Diamond Painter
         </a>
-        <p class="footer-tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
+        <p class="footer-tagline" data-i18n="footer_tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
       </div>
       <div class="footer-col">
-        <h4>Tool</h4>
-        <a href="create.html">Create Pattern</a>
-        <a href="guide/diamond-painting-beginner-guide.html">Beginner Guide</a>
-        <a href="guide/custom-diamond-painting-tutorial.html">Custom Tutorial</a>
+        <h4 data-i18n="footer_tool">Tool</h4>
+        <a href="create.html" data-i18n="footer_create_pattern">Create Pattern</a>
+        <a href="guide/diamond-painting-beginner-guide.html" data-i18n="footer_beginner_guide">Beginner Guide</a>
+        <a href="guide/custom-diamond-painting-tutorial.html" data-i18n="footer_custom_tutorial">Custom Tutorial</a>
       </div>
       <div class="footer-col">
-        <h4>Guides</h4>
-        <a href="guide/index.html">All Guides</a>
-        <a href="guide/diamond-painting-tips.html">Tips &amp; Tricks</a>
-        <a href="guide/best-diamond-painting-accessories.html">Accessories</a>
-        <a href="guide/dmc-color-guide.html">DMC Color Guide</a>
+        <h4 data-i18n="footer_guides">Guides</h4>
+        <a href="guide/index.html" data-i18n="footer_all_guides">All Guides</a>
+        <a href="guide/diamond-painting-tips.html" data-i18n="footer_tips">Tips &amp; Tricks</a>
+        <a href="guide/best-diamond-painting-accessories.html" data-i18n="footer_accessories">Accessories</a>
+        <a href="guide/dmc-color-guide.html" data-i18n="footer_dmc_guide">DMC Color Guide</a>
       </div>
       <div class="footer-col">
-        <h4>Info</h4>
-        <a href="faq.html">FAQ</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-        <a href="privacy-policy.html">Privacy Policy</a>
+        <h4 data-i18n="footer_info">Info</h4>
+        <a href="faq.html" data-i18n="footer_faq">FAQ</a>
+        <a href="about.html" data-i18n="footer_about">About</a>
+        <a href="contact.html" data-i18n="footer_contact">Contact</a>
+        <a href="privacy-policy.html" data-i18n="footer_privacy">Privacy Policy</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 Diamond Painter. All rights reserved.</p>
-      <p>Made for diamond painting enthusiasts everywhere.</p>
+      <p data-i18n="footer_copyright">© 2025 Diamond Painter. All rights reserved.</p>
+      <p data-i18n="footer_made_for">Made for diamond painting enthusiasts everywhere.</p>
     </div>
   </div>
 </footer>
@@ -863,6 +869,7 @@
     });
   }
 </script>
+<script src="i18n.js"></script>
 <script src="ads.js" defer></script>
 </body>
 </html>

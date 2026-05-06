@@ -128,13 +128,19 @@
       Diamond Painter
     </a>
     <ul class="nav-links" id="nav-links">
-      <li><a href="index.html" class="active">Guide</a></li>
-      <li><a href="../faq.html">FAQ</a></li>
-      <li><a href="../about.html">About</a></li>
-      <li><a href="../contact.html">Contact</a></li>
+      <li><a href="index.html" class="active" data-i18n="nav_guide">Guide</a></li>
+      <li><a href="../faq.html" data-i18n="nav_faq">FAQ</a></li>
+      <li><a href="../about.html" data-i18n="nav_about">About</a></li>
+      <li><a href="../contact.html" data-i18n="nav_contact">Contact</a></li>
     </ul>
     <div class="nav-spacer"></div>
-    <a href="../create.html" class="nav-cta">Try Free →</a>
+    <select class="dp-lang-select" aria-label="Language">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+      <option value="zh">中文</option>
+    </select>
+    <a href="../create.html" class="nav-cta" data-i18n="nav_try_free">Try Free →</a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
   </div>
 </nav>
@@ -142,12 +148,12 @@
 <section class="guide-hero hero-dark" aria-labelledby="guide-hub-heading">
   <div class="container">
     <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="../index.html">Home</a>
+      <a href="../index.html" data-i18n="bc_home">Home</a>
       <span class="breadcrumb-sep" aria-hidden="true">›</span>
-      <span aria-current="page">Guide</span>
+      <span aria-current="page" data-i18n="bc_guide">Guide</span>
     </nav>
-    <h1 id="guide-hub-heading">Diamond Painting Guides &amp; Tutorials</h1>
-    <p>From your very first canvas to advanced custom patterns — everything you need to get the most out of diamond painting, explained clearly and honestly.</p>
+    <h1 id="guide-hub-heading" data-i18n="guide_hero_title">Diamond Painting Guides &amp; Tutorials</h1>
+    <p data-i18n="guide_hero_desc">From your very first canvas to advanced custom patterns — everything you need to get the most out of diamond painting, explained clearly and honestly.</p>
     <div class="topics-list" aria-label="Browse topics">
       <a href="diamond-painting-beginner-guide.html" class="topic-chip">📖 Beginner Guide</a>
       <a href="custom-diamond-painting-tutorial.html" class="topic-chip">🖼️ Custom Patterns</a>
@@ -160,7 +166,7 @@
 
 <section class="section" aria-labelledby="all-guides-heading">
   <div class="container">
-    <h2 id="all-guides-heading" class="section-title" style="margin-bottom:36px;">All Guides</h2>
+    <h2 id="all-guides-heading" class="section-title" style="margin-bottom:36px;" data-i18n="guide_all_title">All Guides</h2>
 
     <!-- AdSense: ArticleTopAd -->
 <div class="ad-slot ad-slot--article-top" aria-label="Advertisement" role="complementary">
@@ -222,10 +228,10 @@
 
 <section class="section" style="background:var(--bg-alt);padding-top:60px;padding-bottom:60px;" aria-labelledby="cta-guide-heading">
   <div class="container text-center">
-    <p class="section-label">Ready to create?</p>
-    <h2 class="section-title" id="cta-guide-heading">Generate your own pattern for free</h2>
-    <p class="section-subtitle" style="margin:14px auto 28px;">No account required. Upload any photo and have a full DMC-coded pattern in under a minute.</p>
-    <a href="../create.html" class="btn-primary">◆ Open the Pattern Generator</a>
+    <p class="section-label" data-i18n="guide_cta_label">Ready to create?</p>
+    <h2 class="section-title" id="cta-guide-heading" data-i18n="guide_cta_title">Generate your own pattern for free</h2>
+    <p class="section-subtitle" style="margin:14px auto 28px;" data-i18n="guide_cta_subtitle">No account required. Upload any photo and have a full DMC-coded pattern in under a minute.</p>
+    <a href="../create.html" class="btn-primary" data-i18n="guide_cta_btn">◆ Open the Pattern Generator</a>
   </div>
 </section>
 
@@ -237,32 +243,32 @@
           <div class="nav-logo-icon" aria-hidden="true">◆</div>
           Diamond Painter
         </a>
-        <p class="footer-tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
+        <p class="footer-tagline" data-i18n="footer_tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
       </div>
       <div class="footer-col">
-        <h4>Tool</h4>
-        <a href="../create.html">Create Pattern</a>
-        <a href="diamond-painting-beginner-guide.html">Beginner Guide</a>
-        <a href="custom-diamond-painting-tutorial.html">Custom Tutorial</a>
+        <h4 data-i18n="footer_tool">Tool</h4>
+        <a href="../create.html" data-i18n="footer_create_pattern">Create Pattern</a>
+        <a href="diamond-painting-beginner-guide.html" data-i18n="footer_beginner_guide">Beginner Guide</a>
+        <a href="custom-diamond-painting-tutorial.html" data-i18n="footer_custom_tutorial">Custom Tutorial</a>
       </div>
       <div class="footer-col">
-        <h4>Guides</h4>
-        <a href="index.html">All Guides</a>
-        <a href="diamond-painting-tips.html">Tips &amp; Tricks</a>
-        <a href="best-diamond-painting-accessories.html">Accessories</a>
-        <a href="dmc-color-guide.html">DMC Color Guide</a>
+        <h4 data-i18n="footer_guides">Guides</h4>
+        <a href="index.html" data-i18n="footer_all_guides">All Guides</a>
+        <a href="diamond-painting-tips.html" data-i18n="footer_tips">Tips &amp; Tricks</a>
+        <a href="best-diamond-painting-accessories.html" data-i18n="footer_accessories">Accessories</a>
+        <a href="dmc-color-guide.html" data-i18n="footer_dmc_guide">DMC Color Guide</a>
       </div>
       <div class="footer-col">
-        <h4>Info</h4>
-        <a href="../faq.html">FAQ</a>
-        <a href="../about.html">About</a>
-        <a href="../contact.html">Contact</a>
-        <a href="../privacy-policy.html">Privacy Policy</a>
+        <h4 data-i18n="footer_info">Info</h4>
+        <a href="../faq.html" data-i18n="footer_faq">FAQ</a>
+        <a href="../about.html" data-i18n="footer_about">About</a>
+        <a href="../contact.html" data-i18n="footer_contact">Contact</a>
+        <a href="../privacy-policy.html" data-i18n="footer_privacy">Privacy Policy</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 Diamond Painter. All rights reserved.</p>
-      <p>Made for diamond painting enthusiasts everywhere.</p>
+      <p data-i18n="footer_copyright">© 2025 Diamond Painter. All rights reserved.</p>
+      <p data-i18n="footer_made_for">Made for diamond painting enthusiasts everywhere.</p>
     </div>
   </div>
 </footer>
@@ -275,6 +281,7 @@
     toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
   });
 </script>
+<script src="../i18n.js"></script>
 <script src="../ads.js" defer></script>
 </body>
 </html>
