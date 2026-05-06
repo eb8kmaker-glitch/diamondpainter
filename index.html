@@ -1,0 +1,870 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8254204207118050"
+       crossorigin="anonymous"></script>
+  <title>Diamond Painter — Free Online Diamond Painting Pattern Generator</title>
+  <meta name="description" content="Turn any photo into a beautiful diamond painting pattern for free. Generate DMC color-coded patterns with custom canvas sizes, symbols, and drill counts — no sign-up required.">
+  <meta name="keywords" content="diamond painting pattern generator, custom diamond painting, DMC color guide, diamond painting tool, free diamond painting">
+  <link rel="canonical" href="https://diamondpainter.app/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://diamondpainter.app/">
+  <meta property="og:title" content="Diamond Painter — Free Online Diamond Painting Pattern Generator">
+  <meta property="og:description" content="Turn any photo into a beautiful diamond painting pattern in seconds. DMC color codes, custom canvas sizes, round or square drills — completely free.">
+  <meta property="og:image" content="https://diamondpainter.app/og-image.png">
+  <meta property="og:site_name" content="Diamond Painter">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Diamond Painter — Free Pattern Generator">
+  <meta name="twitter:description" content="Turn any photo into a diamond painting pattern for free. DMC colors, custom sizes, instant download.">
+
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(160deg, #f0f7ff 0%, #f8f9fc 50%, #f3f0ff 100%);
+      border-bottom: 1px solid var(--border-light);
+      padding: 80px 0 90px;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(14,165,233,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-light);
+      border: 1px solid rgba(14,165,233,0.25);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-dark);
+      margin-bottom: 22px;
+      letter-spacing: 0.04em;
+    }
+    .hero-badge span { color: var(--success); }
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(34px, 5vw, 56px);
+      font-weight: 600;
+      color: var(--primary);
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      margin-bottom: 20px;
+    }
+    .hero-title em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-desc {
+      font-size: 18px;
+      color: var(--text3);
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 480px;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .hero-trust {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text3);
+      font-weight: 500;
+    }
+    .trust-item svg { color: var(--success); flex-shrink: 0; }
+
+    /* ── Diamond Canvas Preview ── */
+    .hero-visual {
+      position: relative;
+    }
+    .canvas-preview {
+      background: #0d1638;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 0 0 1px rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .canvas-preview::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(111,231,255,0.08), transparent);
+    }
+    .canvas-preview-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red { background: #ff5f57; }
+    .dot-yellow { background: #febc2e; }
+    .dot-green { background: #28c840; }
+    .diamond-grid {
+      display: grid;
+      grid-template-columns: repeat(20, 1fr);
+      gap: 2px;
+    }
+    .dp {
+      aspect-ratio: 1;
+      border-radius: 2px;
+      transform: rotate(45deg) scale(0.65);
+    }
+
+    /* ── Trust Bar ── */
+    .trust-bar {
+      background: var(--primary);
+      padding: 16px 0;
+    }
+    .trust-bar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .trust-stat {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+    }
+    .trust-stat strong {
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    /* ── Features ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.22s, transform 0.22s;
+    }
+    .feature-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text3);
+      line-height: 1.7;
+    }
+
+    /* ── How it Works ── */
+    .how-section { background: var(--bg-alt); }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      position: relative;
+    }
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: calc(16.66% + 24px);
+      right: calc(16.66% + 24px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0.3;
+    }
+    .step {
+      text-align: center;
+      padding: 0 16px;
+    }
+    .step-number {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+      box-shadow: 0 6px 20px rgba(14,165,233,0.3);
+      position: relative;
+      z-index: 1;
+    }
+    .step h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    .step p {
+      font-size: 14px;
+      color: var(--text3);
+      line-height: 1.7;
+    }
+
+    /* ── Benefits ── */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .benefit-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .benefit-item h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    .benefit-item p {
+      font-size: 13px;
+      color: var(--text3);
+      line-height: 1.6;
+    }
+
+    /* ── Guide Preview ── */
+    .guide-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* ── FAQ Preview ── */
+    .faq-preview { background: var(--bg-alt); }
+
+    /* ── CTA Section ── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--primary) 0%, #2a4070 100%);
+      color: white;
+      padding: 80px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(14,165,233,0.15), transparent);
+    }
+    .cta-section .container { position: relative; z-index: 1; }
+    .cta-section .section-title { color: white; }
+    .cta-section .section-subtitle { color: rgba(255,255,255,0.7); margin: 0 auto; }
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+    .btn-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      background: white;
+      color: var(--primary);
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 100px;
+      border: none;
+      text-decoration: none;
+      transition: transform 0.18s, box-shadow 0.18s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+    .btn-ghost-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      background: rgba(255,255,255,0.12);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 100px;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      text-decoration: none;
+      transition: background 0.18s, transform 0.18s;
+    }
+    .btn-ghost-white:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-1px);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps-grid { grid-template-columns: 1fr; }
+      .steps-grid::before { display: none; }
+      .guide-preview-grid { grid-template-columns: repeat(2, 1fr); }
+      .benefits-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .guide-preview-grid { grid-template-columns: 1fr; }
+      .trust-bar-inner { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="container">
+    <a href="index.html" class="nav-logo" aria-label="Diamond Painter home">
+      <div class="nav-logo-icon" aria-hidden="true">◆</div>
+      Diamond Painter
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="guide/index.html">Guide</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-spacer"></div>
+    <a href="create.html" class="nav-cta">Try Free →</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span>●</span> 100% Free — No sign-up required
+        </div>
+        <h1 class="hero-title" id="hero-heading">
+          Turn Any Photo Into a<br>
+          <em>Diamond Painting</em> Pattern
+        </h1>
+        <p class="hero-desc">
+          Upload your photo, choose your canvas size, and instantly generate a full DMC color-coded diamond painting pattern — complete with bead counts and printable symbols.
+        </p>
+        <div class="hero-actions">
+          <a href="create.html" class="btn-primary">
+            ◆ Generate My Pattern
+          </a>
+          <a href="guide/diamond-painting-beginner-guide.html" class="btn-secondary">
+            Learn the basics
+          </a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-item">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            No download needed
+          </div>
+          <div class="trust-item">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Works in your browser
+          </div>
+          <div class="trust-item">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Round &amp; square drills
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Diamond Canvas Preview -->
+      <div class="hero-visual" aria-hidden="true">
+        <div class="canvas-preview">
+          <div class="canvas-preview-header">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+          </div>
+          <div class="diamond-grid" id="diamond-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Trust Bar ── -->
+<div class="trust-bar" aria-label="Key statistics">
+  <div class="container">
+    <div class="trust-bar-inner">
+      <div class="trust-stat">
+        <strong>40+</strong> canvas sizes
+      </div>
+      <div class="trust-stat">
+        <strong>457</strong> DMC colors
+      </div>
+      <div class="trust-stat">
+        <strong>5+</strong> languages
+      </div>
+      <div class="trust-stat">
+        <strong>100%</strong> browser-based
+      </div>
+      <div class="trust-stat">
+        <strong>Free</strong> forever
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Features ── -->
+<section class="section" aria-labelledby="features-heading">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-label">Features</p>
+      <h2 class="section-title" id="features-heading">Everything you need to create a perfect pattern</h2>
+      <p class="section-subtitle">Diamond Painter converts your image using professional-grade color quantization algorithms, the same technology used by commercial diamond painting suppliers.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#eff6ff;">🎨</div>
+        <h3>AI Color Quantization</h3>
+        <p>Our intelligent algorithm reduces your image to 5–80 perfectly matched DMC colors, preserving the essence of your photo while keeping the bead count manageable.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#f0fdf4;">📐</div>
+        <h3>Custom Canvas Sizes</h3>
+        <p>Choose from standard sizes like A4, A3, 30×40cm, 40×50cm, or set your own custom dimensions. See bead counts and actual output size in real time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#fdf4ff;">🔢</div>
+        <h3>DMC Color Codes</h3>
+        <p>Every color is matched to its official DMC thread and drill code, so you know exactly which beads to order. Includes color names, hex values, and drill counts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#fff7ed;">✏️</div>
+        <h3>Manual Editing Tools</h3>
+        <p>Refine your pattern with paint, erase, fill, and eyedropper tools. Undo and redo as many times as you need until the pattern looks exactly right.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#f0fdf4;">◉</div>
+        <h3>Round &amp; Square Drills</h3>
+        <p>Switch between round (2.8mm) and square (2.5mm) drills. Each type has different visual characteristics and the tool calculates spacing accordingly.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#eff6ff;">📤</div>
+        <h3>Export &amp; Save</h3>
+        <p>Download your finished pattern as a high-resolution image, or save your work as a project file to continue editing later. Print-ready output included.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How It Works ── -->
+<section class="section how-section" aria-labelledby="how-heading">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-label">How It Works</p>
+      <h2 class="section-title" id="how-heading">From photo to pattern in three steps</h2>
+      <p class="section-subtitle">No software to install, no account to create. Just open the tool and start creating.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-number" aria-label="Step 1">1</div>
+        <h3>Upload Your Photo</h3>
+        <p>Drag and drop any image — a pet portrait, landscape, family photo, or your own artwork. JPG, PNG, and WebP all work perfectly.</p>
+      </div>
+      <div class="step">
+        <div class="step-number" aria-label="Step 2">2</div>
+        <h3>Set Your Canvas Size</h3>
+        <p>Pick a canvas size and adjust the color count. The tool instantly previews your pattern and shows exactly how many beads you will need.</p>
+      </div>
+      <div class="step">
+        <div class="step-number" aria-label="Step 3">3</div>
+        <h3>Download &amp; Create</h3>
+        <p>Export your DMC-coded pattern as an image. Order your drills, print your pattern, and enjoy the meditative process of diamond painting.</p>
+      </div>
+    </div>
+    <div class="text-center mt-48">
+      <a href="create.html" class="btn-primary">Start Generating Now →</a>
+    </div>
+  </div>
+</section>
+
+<!-- AdSense: ArticleTopAd -->
+<div class="container">
+  <div class="ad-slot ad-slot--article-top" aria-label="Advertisement" role="complementary">
+    <span class="ad-slot__label">Advertisement</span>
+  </div>
+</div>
+
+<!-- ── Benefits ── -->
+<section class="section" aria-labelledby="benefits-heading">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
+      <div>
+        <p class="section-label">Why Diamond Painter</p>
+        <h2 class="section-title" id="benefits-heading">The pattern tool that actual crafters use</h2>
+        <p class="section-subtitle">Built by someone who knows what it is like to squint at a tiny pattern or waste an order because the color count was off.</p>
+        <div class="benefits-grid mt-32">
+          <div class="benefit-item">
+            <div class="benefit-icon" aria-hidden="true">⚡</div>
+            <div>
+              <h4>Instant Preview</h4>
+              <p>See your pattern update live as you adjust settings — no waiting for renders.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon" aria-hidden="true">🎯</div>
+            <div>
+              <h4>Accurate Colors</h4>
+              <p>DMC codes are matched using perceptual color distance, not just RGB proximity.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon" aria-hidden="true">🔒</div>
+            <div>
+              <h4>Private &amp; Secure</h4>
+              <p>Your photos never leave your device. Processing happens entirely in your browser.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon" aria-hidden="true">🌍</div>
+            <div>
+              <h4>Multilingual</h4>
+              <p>Full support for English, Korean, Japanese, and Chinese interfaces.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div aria-hidden="true">
+        <div style="background:linear-gradient(135deg,#eff6ff,#f0fdf4);border-radius:20px;padding:36px;border:1px solid var(--border-light);">
+          <div style="background:white;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow-sm);">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <div style="width:10px;height:10px;background:#0ea5e9;border-radius:50%;"></div>
+              <span style="font-size:13px;font-weight:600;color:var(--text2);">Color Palette — 32 DMC Colors</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px;">
+              <div style="aspect-ratio:1;border-radius:4px;background:#1a3a5c;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#2e6da4;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#5899cc;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#8bbfe0;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#b8d9ef;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#e8f4fc;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#f7d58c;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#e8a84c;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#c06020;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#8b3a1a;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#5a1a08;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#2d6a1a;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#4c9e38;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#7abf5e;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#aad988;"></div>
+              <div style="aspect-ratio:1;border-radius:4px;background:#d4efc0;"></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div style="background:white;border-radius:10px;padding:16px;box-shadow:var(--shadow-sm);">
+              <p style="font-size:11px;color:var(--text3);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">Grid Size</p>
+              <p style="font-size:18px;font-weight:700;color:var(--primary);">142 × 178</p>
+            </div>
+            <div style="background:white;border-radius:10px;padding:16px;box-shadow:var(--shadow-sm);">
+              <p style="font-size:11px;color:var(--text3);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">Total Drills</p>
+              <p style="font-size:18px;font-weight:700;color:var(--primary);">25,276</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Guide Preview ── -->
+<section class="section" style="background:var(--bg-alt);" aria-labelledby="guide-heading">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">Learn</p>
+      <h2 class="section-title" id="guide-heading">Diamond painting guides &amp; tutorials</h2>
+      <p class="section-subtitle">Whether you're just starting out or looking to improve your technique, our guides cover everything you need to know.</p>
+    </div>
+    <div class="guide-preview-grid">
+      <a href="guide/diamond-painting-beginner-guide.html" class="guide-card">
+        <div class="guide-card-icon" aria-hidden="true">📖</div>
+        <span class="guide-card-tag">Beginner</span>
+        <h3>Complete Beginner's Guide to Diamond Painting</h3>
+        <p>Everything you need to know before placing your first diamond — materials, technique, and what to expect.</p>
+        <span class="guide-card-link">Read guide →</span>
+      </a>
+      <a href="guide/custom-diamond-painting-tutorial.html" class="guide-card">
+        <div class="guide-card-icon" aria-hidden="true">🖼️</div>
+        <span class="guide-card-tag">Tutorial</span>
+        <h3>How to Create a Custom Diamond Painting Pattern</h3>
+        <p>Step-by-step tutorial on turning your own photos into a custom diamond painting using our free tool.</p>
+        <span class="guide-card-link">Read tutorial →</span>
+      </a>
+      <a href="guide/diamond-painting-tips.html" class="guide-card">
+        <div class="guide-card-icon" aria-hidden="true">💡</div>
+        <span class="guide-card-tag">Tips</span>
+        <h3>20 Diamond Painting Tips That Actually Work</h3>
+        <p>Practical, tested tips for faster progress, fewer mistakes, and a more enjoyable painting experience.</p>
+        <span class="guide-card-link">Read tips →</span>
+      </a>
+    </div>
+    <div class="text-center mt-32">
+      <a href="guide/index.html" class="btn-secondary">View all guides →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ Preview ── -->
+<section class="section faq-preview" aria-labelledby="faq-preview-heading">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;">
+      <div>
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title" id="faq-preview-heading">Common questions, honest answers</h2>
+        <p class="section-subtitle mt-16">New to diamond painting? Here are the questions we hear most often from beginners.</p>
+        <a href="faq.html" class="btn-primary mt-32">View all FAQs →</a>
+      </div>
+      <div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              Is Diamond Painter really free?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-answer">
+              Yes, completely free. There are no premium tiers, no watermarks on exports, and no account required. The tool runs entirely in your browser, so there are no server costs passed on to you.
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              What image types work best?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-answer">
+              High-contrast images with clear focal points produce the best results. Pet portraits, single-subject photos, and simple landscapes typically convert beautifully. Very busy images or group photos with many small faces can be tricky — try reducing colors to 20–30 for complex images.
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              What is a DMC color code?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-answer">
+              DMC (Dollfus-Mieg et Compagnie) is the world's most widely used thread and drill numbering system. Diamond painting drills are sold using the same codes, so DMC 321 always refers to the same shade of red across all major suppliers. This makes ordering the exact right colors straightforward.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA Section ── -->
+<section class="cta-section" aria-labelledby="cta-heading">
+  <div class="container">
+    <p class="section-label" style="color:rgba(255,255,255,0.5);">Get Started</p>
+    <h2 class="section-title" id="cta-heading">Ready to create your first pattern?</h2>
+    <p class="section-subtitle">No account needed. Open the tool and you are creating in under a minute.</p>
+    <div class="cta-actions">
+      <a href="create.html" class="btn-white">◆ Create My Pattern</a>
+      <a href="guide/diamond-painting-beginner-guide.html" class="btn-ghost-white">Read the beginner guide</a>
+    </div>
+  </div>
+</section>
+
+<!-- AdSense: ArticleTopAd -->
+<div class="container">
+  <div class="ad-slot ad-slot--article-middle" aria-label="Advertisement" role="complementary">
+    <span class="ad-slot__label">Advertisement</span>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:14px;display:inline-flex;">
+          <div class="nav-logo-icon" aria-hidden="true">◆</div>
+          Diamond Painter
+        </a>
+        <p class="footer-tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Tool</h4>
+        <a href="create.html">Create Pattern</a>
+        <a href="guide/diamond-painting-beginner-guide.html">Beginner Guide</a>
+        <a href="guide/custom-diamond-painting-tutorial.html">Custom Tutorial</a>
+      </div>
+      <div class="footer-col">
+        <h4>Guides</h4>
+        <a href="guide/index.html">All Guides</a>
+        <a href="guide/diamond-painting-tips.html">Tips &amp; Tricks</a>
+        <a href="guide/best-diamond-painting-accessories.html">Accessories</a>
+        <a href="guide/dmc-color-guide.html">DMC Color Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Diamond Painter. All rights reserved.</p>
+      <p>Made for diamond painting enthusiasts everywhere.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Mobile Nav Toggle ──
+  const toggle = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+  toggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+  });
+
+  // ── FAQ Accordion ──
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+      btn.setAttribute('aria-expanded', (!isOpen).toString());
+    });
+  });
+
+  // ── Hero Diamond Grid ──
+  const palette = [
+    '#1a3a5c','#2e6da4','#5899cc','#8bbfe0','#b8d9ef',
+    '#f7d58c','#e8a84c','#c06020','#8b3a1a','#5a1a08',
+    '#2d6a1a','#4c9e38','#7abf5e','#aad988','#d4efc0',
+    '#e0d4f0','#c8a8e0','#a07cc8','#7850a0','#502878',
+  ];
+  const grid = document.getElementById('diamond-grid');
+  if (grid) {
+    const pattern = [
+      2,2,1,1,0,0,1,1,2,2,3,3,4,4,3,3,2,2,1,1,
+      1,1,0,0,1,1,2,2,3,3,4,4,5,5,6,6,5,5,4,4,
+      0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,6,6,5,5,
+      1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,7,7,6,6,
+      2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,8,8,7,7,
+      3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,9,9,8,8,
+      4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,10,10,9,9,
+      5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,11,11,10,10,
+      6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,12,12,11,11,
+      7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,13,13,12,12,
+      8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,14,14,13,13,
+      9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,15,15,14,14,
+      10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,16,16,15,15,
+      11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,17,17,16,16,
+      12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,18,18,17,17,
+    ];
+    pattern.forEach(idx => {
+      const el = document.createElement('div');
+      el.className = 'dp';
+      el.style.background = palette[idx % palette.length];
+      grid.appendChild(el);
+    });
+  }
+</script>
+<script src="ads.js" defer></script>
+</body>
+</html>
