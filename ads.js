@@ -1,7 +1,7 @@
-/**
+﻿/**
  * Diamond Painter — AdSense Ad Slot Manager
  * ==========================================
- * Publisher ID: ca-pub-8254204207118050
+ * Publisher ID: ca-pub-8254204287118850
  *
  * CURRENT STATE:
  *   All ad slots render safe placeholder containers only.
@@ -36,7 +36,7 @@
 (function () {
   'use strict';
 
-  var AD_CLIENT = 'ca-pub-8254204207118050';
+  var AD_CLIENT = 'ca-pub-8254204287118850';
 
   /**
    * Configure slot IDs here once you have them from AdSense.
