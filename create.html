@@ -1,0 +1,3569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Diamond Painting Pattern — Diamond Painter</title>
+<meta name="description" content="Free online diamond painting pattern generator. Upload any photo and get a DMC color-coded pattern with bead counts and custom canvas sizes.">
+<link rel="canonical" href="https://eb8kmaker-glitch.github.io/diamondpainter/create.html">
+<meta property="og:title" content="Create Diamond Painting Pattern — Diamond Painter">
+<meta property="og:description" content="Turn any photo into a DMC color-coded diamond painting pattern for free.">
+<style>
+  .site-topbar {
+    height: 40px;
+    background: rgba(4,8,20,0.98);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    gap: 20px;
+    position: relative;
+    z-index: 200;
+    flex-shrink: 0;
+  }
+  .topbar-logo {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .topbar-logo-icon { color: #6fe7ff; font-size: 14px; }
+  .topbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: auto;
+  }
+  .topbar-nav a {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    padding: 4px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: color 0.15s, background 0.15s;
+  }
+  .topbar-nav a:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); }
+</style>
+<style>
+  /* ── Google Fonts: 영문 UI + CJK ── */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Noto+Sans+JP:wght@400;500&family=Noto+Sans+SC:wght@400;500&family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap');
+  /* Pretendard — jsDelivr CDN (한국어 최적화) */
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css');
+
+  /* ════════════════════════════════════════
+     키라키라 드림 오션 — 색상 시스템
+  ════════════════════════════════════════ */
+  :root {
+    /* 배경 — 깊은 밤바다 */
+    --bg-deep:    #080e22;
+    --bg-mid:     #0a1230;
+    --bg-surface: #0d1638;
+
+    /* 패널 — 유리 느낌 */
+    --glass:        rgba(255,255,255,0.04);
+    --glass-hover:  rgba(255,255,255,0.07);
+    --glass-active: rgba(111,231,255,0.06);
+    --glass-border: rgba(255,255,255,0.08);
+    --glass-border-glow: rgba(111,231,255,0.25);
+
+    /* 포인트 컬러 — 빛 */
+    --cyan:    #6fe7ff;
+    --lavender:#c8a6ff;
+    --pink:    #ffb3d9;
+
+    /* 보조 컬러 */
+    --blue-muted: #4a6fa5;
+    --violet:     #7b6fd6;
+    --mint:       #8fdde7;
+    --moonwhite:  #d8dcf5;
+
+    /* 텍스트 */
+    --text:   #e6ebff;
+    --text2:  #b8c2e0;
+    --text3:  #8f9bbd;
+
+    /* 상태 */
+    --danger:  #ff6b8a;
+    --success: #6fe7b8;
+
+    /* 레이아웃 */
+    --panel-w: 280px;
+    --header-h: 54px;
+    --radius: 12px;
+    --radius-sm: 8px;
+
+    /* 폰트 */
+    --mono:  'DM Mono', monospace;
+    --serif: 'Cormorant Garamond', serif;
+    --ui:    'Pretendard', 'Inter', 'Noto Sans JP', 'Noto Sans SC', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--ui);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 100%);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── 언어별 폰트 분기 ── */
+  html[lang="ko"] body { font-family: 'Pretendard', 'Inter', sans-serif; letter-spacing: -0.01em; }
+  html[lang="en"] body { font-family: 'Inter', 'Pretendard', sans-serif; letter-spacing: -0.02em; }
+  html[lang="ja"] body { font-family: 'Noto Sans JP', 'Inter', sans-serif; letter-spacing: 0; }
+  html[lang="zh"] body { font-family: 'Noto Sans SC', 'Inter', sans-serif; letter-spacing: 0; }
+
+  /* ── DM Mono는 코드성 요소(뱃지, 좌표 등)에만 유지 ── */
+  .value-badge, #coords, #zoom-indicator, .palette-dmc, .palette-count,
+  .color-entry span { font-family: var(--mono); }
+
+  /* ── 별빛 파티클 레이어 ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 15% 20%, rgba(111,231,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 32% 65%, rgba(200,166,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 58% 12%, rgba(255,179,217,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 72% 48%, rgba(111,231,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 88% 30%, rgba(143,221,231,0.5) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 45% 80%, rgba(200,166,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 8%  75%, rgba(111,231,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 93% 85%, rgba(255,179,217,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 40%, rgba(143,221,231,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 65% 90%, rgba(200,166,255,0.35) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+    animation: starTwinkle 8s ease-in-out infinite alternate;
+  }
+  @keyframes starTwinkle {
+    0%   { opacity: 0.6; }
+    50%  { opacity: 1; }
+    100% { opacity: 0.5; }
+  }
+
+  /* ── 해저 발광 오로라 ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 35% at 20% 90%, rgba(74,111,165,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 30% at 80% 85%, rgba(123,111,214,0.10) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 20% at 50% 95%, rgba(111,231,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    animation: auroraShift 12s ease-in-out infinite alternate;
+  }
+  @keyframes auroraShift {
+    0%   { transform: translateX(-3%) scaleY(1); }
+    100% { transform: translateX(3%) scaleY(1.05); }
+  }
+
+  /* ════ HEADER ════ */
+  header {
+    height: var(--header-h);
+    background: rgba(8,14,34,0.7);
+    border-bottom: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    gap: 16px;
+    flex-shrink: 0;
+    z-index: 100;
+    position: relative;
+  }
+
+  .logo {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--cyan), var(--lavender));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 8px rgba(111,231,255,0.4));
+  }
+  .logo-sub {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--text3);
+    -webkit-text-fill-color: var(--text3);
+    filter: none;
+    font-style: normal;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    flex-wrap: nowrap;
+  }
+
+  /* ── 버튼 ── */
+  .btn {
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    color: var(--text);
+    font-family: var(--ui);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    backdrop-filter: blur(8px);
+  }
+  .btn:hover {
+    background: var(--glass-hover);
+    border-color: rgba(111,231,255,0.35);
+    color: var(--cyan);
+    box-shadow: 0 0 10px rgba(111,231,255,0.2), 0 2px 8px rgba(0,0,0,0.3);
+    transform: translateY(-1px);
+  }
+  .btn.primary {
+    background: linear-gradient(135deg, rgba(111,231,255,0.15), rgba(200,166,255,0.15));
+    border-color: rgba(111,231,255,0.4);
+    color: var(--cyan);
+    box-shadow: 0 0 12px rgba(111,231,255,0.15);
+  }
+  .btn.primary:hover {
+    background: linear-gradient(135deg, rgba(111,231,255,0.25), rgba(200,166,255,0.25));
+    box-shadow: 0 0 18px rgba(111,231,255,0.35), 0 2px 12px rgba(0,0,0,0.3);
+    color: var(--cyan);
+  }
+  .btn.danger { border-color: rgba(255,107,138,0.3); color: var(--danger); }
+  .btn.danger:hover {
+    background: rgba(255,107,138,0.08);
+    box-shadow: 0 0 10px rgba(255,107,138,0.2);
+  }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* ════ WORKSPACE ════ */
+  .workspace {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ════ 사이드 패널 공통 ════ */
+  .left-panel {
+    width: var(--panel-w);
+    background: rgba(8,14,34,0.65);
+    border-right: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .panel-section {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .panel-title {
+    font-size: 9px;
+    font-family: var(--ui);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--glass-border), transparent);
+  }
+
+  /* ── 필드 ── */
+  .field { margin-bottom: 10px; }
+  .field label {
+    display: block;
+    font-family: var(--ui);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text2);
+    margin-bottom: 5px;
+  }
+  .field input[type=range] {
+    width: 100%;
+    accent-color: var(--cyan);
+    height: 3px;
+    cursor: pointer;
+  }
+  .field-row { display: flex; gap: 8px; align-items: center; }
+
+  .field input[type=number] {
+    width: 70px; height: 28px;
+    padding: 0 8px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .field input[type=number]:focus {
+    outline: none;
+    border-color: rgba(111,231,255,0.4);
+    box-shadow: 0 0 8px rgba(111,231,255,0.15);
+  }
+  .field select {
+    width: 100%; height: 28px;
+    padding: 0 8px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 10.5px;
+  }
+  .field select:focus {
+    outline: none;
+    border-color: rgba(111,231,255,0.4);
+  }
+
+  .value-badge {
+    font-size: 11px;
+    color: var(--cyan);
+    min-width: 28px;
+    text-align: right;
+    text-shadow: 0 0 8px rgba(111,231,255,0.5);
+  }
+
+  .checkbox-row {
+    display: flex; align-items: center;
+    gap: 8px;
+    font-family: var(--ui);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text2); cursor: pointer;
+  }
+  .checkbox-row input[type=checkbox] { accent-color: var(--cyan); }
+
+  /* ── 업로드 존 ── */
+  .upload-zone {
+    border: 1px dashed rgba(111,231,255,0.2);
+    border-radius: var(--radius);
+    padding: 18px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    color: var(--text2);
+    font-size: 10.5px;
+    line-height: 1.8;
+    background: var(--glass);
+  }
+  .upload-zone:hover {
+    border-color: rgba(111,231,255,0.5);
+    color: var(--cyan);
+    background: var(--glass-active);
+    box-shadow: 0 0 16px rgba(111,231,255,0.1) inset;
+  }
+  .upload-zone.dragging {
+    border-color: var(--lavender);
+    background: rgba(200,166,255,0.07);
+    color: var(--lavender);
+    box-shadow: 0 0 20px rgba(200,166,255,0.15) inset;
+  }
+  .upload-zone .icon { font-size: 22px; display: block; margin-bottom: 6px; opacity: 0.7; }
+
+  #preview-img {
+    width: 100%;
+    border-radius: var(--radius-sm);
+    display: none;
+    border: 1px solid var(--glass-border);
+    margin-top: 8px;
+    max-height: 110px;
+    object-fit: contain;
+    background: rgba(0,0,0,0.4);
+  }
+
+  /* ── 팔레트 ── */
+  .palette-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    min-height: 0;
+  }
+  .palette-scroll::-webkit-scrollbar { width: 3px; }
+  .palette-scroll::-webkit-scrollbar-track { background: transparent; }
+  .palette-scroll::-webkit-scrollbar-thumb {
+    background: rgba(111,231,255,0.2);
+    border-radius: 4px;
+  }
+
+  .palette-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 7px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: 1px solid transparent;
+    margin-bottom: 2px;
+  }
+  .palette-item:hover {
+    background: var(--glass-hover);
+    transform: translateX(2px);
+  }
+  .palette-item.active {
+    background: var(--glass-active);
+    border-color: rgba(200,166,255,0.4);
+    box-shadow:
+      0 0 0 1px rgba(200,166,255,0.2),
+      0 0 10px rgba(200,166,255,0.15);
+    transform: scale(1.02);
+  }
+
+  .palette-swatch {
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.12);
+    flex-shrink: 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+  .palette-symbol {
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+    flex-shrink: 0;
+    color: var(--text2);
+  }
+  .palette-info { flex: 1; min-width: 0; }
+  .palette-dmc  { font-size: 9.5px; color: var(--lavender); }
+  .palette-name { font-family: var(--ui); font-size: 10px; font-weight: 400; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .palette-count{ font-family: var(--mono); font-size: 8.5px; color: var(--text3); flex-shrink: 0; }
+
+  /* ── 툴 버튼 ── */
+  .tool-group { display: flex; gap: 5px; }
+  .tool-btn {
+    flex: 1; height: 34px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    color: var(--text2);
+    transition: all 0.25s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tool-btn:hover {
+    border-color: rgba(111,231,255,0.35);
+    color: var(--cyan);
+    box-shadow: 0 0 8px rgba(111,231,255,0.15);
+    transform: translateY(-1px);
+  }
+  .tool-btn.active {
+    background: rgba(111,231,255,0.1);
+    border-color: rgba(111,231,255,0.5);
+    color: var(--cyan);
+    box-shadow:
+      0 0 0 1px rgba(111,231,255,0.2),
+      0 0 12px rgba(111,231,255,0.2);
+  }
+
+  /* ── 프로그레스 바 ── */
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    height: 5px;
+    overflow: hidden;
+    margin-top: 5px;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan), var(--lavender), var(--pink));
+    border-radius: 10px;
+    transition: width 0.4s ease;
+    box-shadow: 0 0 8px rgba(111,231,255,0.5);
+  }
+  .progress-text {
+    font-size: 9.5px;
+    color: var(--text2);
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ── 상태 표시 ── */
+  #status {
+    font-family: var(--ui);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--text2);
+    padding: 7px 14px;
+    border-top: 1px solid var(--glass-border);
+    display: flex; align-items: center; gap: 7px;
+    flex-shrink: 0;
+    background: rgba(8,14,34,0.5);
+  }
+  #status .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--text3);
+    flex-shrink: 0;
+  }
+  #status.processing .dot {
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  #status.done .dot {
+    background: var(--success);
+    box-shadow: 0 0 6px var(--success);
+  }
+  #status.error .dot {
+    background: var(--danger);
+    box-shadow: 0 0 6px var(--danger);
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  /* ════ 캔버스 영역 ════ */
+  .canvas-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #060c1e 0%, #080e28 100%);
+  }
+
+  /* 캔버스 배경 은은한 빛 */
+  .canvas-area::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 50% 40% at 30% 60%, rgba(74,111,165,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 75% 40%, rgba(123,111,214,0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #canvas-container {
+    position: absolute;
+    top: 0; left: 0;
+    transform-origin: 0 0;
+    cursor: crosshair;
+    z-index: 1;
+  }
+
+  #pattern-canvas, #user-canvas, #overlay-canvas {
+    position: absolute;
+    top: 0; left: 0;
+  }
+
+  #overlay-canvas { pointer-events: none; }
+
+  /* ── 빈 화면 안내 ── */
+  .empty-state {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .empty-state .big-icon {
+    font-size: 52px;
+    display: block;
+    margin-bottom: 18px;
+    filter: drop-shadow(0 0 16px rgba(111,231,255,0.4));
+    animation: floatGem 4s ease-in-out infinite;
+  }
+  @keyframes floatGem {
+    0%,100% { transform: translateY(0px); }
+    50%      { transform: translateY(-8px); }
+  }
+  .empty-state h2 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--moonwhite);
+    margin-bottom: 8px;
+    opacity: 0.5;
+    letter-spacing: 0.05em;
+  }
+  .empty-state p {
+    font-size: 10.5px;
+    color: var(--text3);
+    line-height: 1.8;
+    opacity: 0.7;
+  }
+
+  /* ── 미니맵 ── */
+  #minimap-canvas {
+    position: absolute;
+    bottom: 16px; right: 16px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    background: rgba(8,14,34,0.8);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.25s;
+    z-index: 10;
+  }
+  #minimap-canvas:hover { opacity: 1; box-shadow: 0 0 12px rgba(111,231,255,0.2); }
+
+  /* ── 줌 표시 ── */
+  #zoom-indicator {
+    position: absolute;
+    bottom: 16px; left: 16px;
+    background: rgba(8,14,34,0.75);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 10px;
+    color: var(--text2);
+    z-index: 10;
+  }
+
+  /* ── 좌표 ── */
+  #coords {
+    position: absolute;
+    top: 12px; left: 12px;
+    background: rgba(8,14,34,0.75);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 9.5px;
+    color: var(--text2);
+  }
+
+  /* ── 알림 토스트 ── */
+  #notification {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(16px);
+    background: rgba(10,18,48,0.9);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px);
+    border-radius: 24px;
+    padding: 10px 22px;
+    font-size: 11.5px;
+    color: var(--text);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+  }
+  #notification.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  #notification.success {
+    border-color: rgba(111,231,184,0.4);
+    color: var(--success);
+    box-shadow: 0 0 16px rgba(111,231,184,0.15);
+  }
+  #notification.error {
+    border-color: rgba(255,107,138,0.4);
+    color: var(--danger);
+    box-shadow: 0 0 16px rgba(255,107,138,0.15);
+  }
+
+  /* ── 처리 오버레이 ── */
+  #processing-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(6,12,30,0.88);
+    backdrop-filter: blur(8px);
+    z-index: 50;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 18px;
+  }
+  #processing-overlay.visible { display: flex; }
+
+  .spinner {
+    width: 40px; height: 40px;
+    border: 1.5px solid rgba(111,231,255,0.15);
+    border-top-color: var(--cyan);
+    border-right-color: var(--lavender);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    box-shadow: 0 0 16px rgba(111,231,255,0.2);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #processing-label { font-size: 11px; color: var(--text2); letter-spacing: 0.05em; }
+  #processing-pct {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 300;
+    color: transparent;
+    background: linear-gradient(135deg, var(--cyan), var(--lavender));
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: drop-shadow(0 0 12px rgba(111,231,255,0.5));
+  }
+
+  /* ════ 오른쪽 패널 ════ */
+  .right-panel {
+    width: 220px;
+    background: rgba(8,14,34,0.65);
+    border-left: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* ── 통계 카드 ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 10px;
+  }
+  .stat-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    padding: 9px 10px;
+    transition: all 0.25s ease;
+  }
+  .stat-card:hover {
+    background: var(--glass-hover);
+    box-shadow: 0 0 10px rgba(111,231,255,0.08);
+  }
+  .stat-card .val {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--cyan);
+    text-shadow: 0 0 10px rgba(111,231,255,0.4);
+  }
+  .stat-card .lbl { font-family: var(--ui); font-size: 9px; font-weight: 400; color: var(--text2); margin-top: 2px; }
+
+  /* ── 컬러 리스트 ── */
+  .color-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px 10px;
+    min-height: 0;
+  }
+  .color-list::-webkit-scrollbar { width: 3px; }
+  .color-list::-webkit-scrollbar-thumb {
+    background: rgba(111,231,255,0.15);
+    border-radius: 4px;
+  }
+
+  .color-entry {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-family: var(--ui);
+    font-size: 10px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .color-entry:last-child { border-bottom: none; }
+  .color-entry:hover { color: var(--moonwhite); }
+  .color-entry .swatch {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 4px rgba(0,0,0,0.4);
+  }
+  /* color-entry.highlighted — 팔레트에서 선택된 색상 강조 */
+
+  /* ── 비즈 타입 선택 ── */
+  .bead-type-group {
+    display: flex;
+    gap: 6px;
+  }
+  .bead-radio {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    user-select: none;
+  }
+  .bead-radio input[type=radio] { display: none; }
+  .bead-radio .bead-icon {
+    font-size: 13px;
+    color: var(--text3);
+    transition: color 0.25s;
+  }
+  .bead-radio .bead-label {
+    font-size: 10px;
+    color: var(--text2);
+    line-height: 1.2;
+    transition: color 0.25s;
+  }
+  .bead-radio.active {
+    background: var(--glass-active);
+    border-color: rgba(111,231,255,0.4);
+    box-shadow: 0 0 10px rgba(111,231,255,0.12);
+  }
+  .bead-radio.active .bead-icon { color: var(--cyan); }
+  .bead-radio.active .bead-label { color: var(--cyan); }
+  .bead-radio:hover:not(.active) {
+    background: var(--glass-hover);
+    border-color: rgba(111,231,255,0.2);
+  }
+
+  /* ── 캔버스 크기 버튼 그룹 ── */
+  .canvas-size-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5px;
+  }
+  .size-btn {
+    padding: 6px 4px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    color: var(--text2);
+    font-family: var(--ui);
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .size-btn:hover:not(.active) {
+    background: var(--glass-hover);
+    border-color: rgba(111,231,255,0.25);
+    color: var(--text);
+  }
+  .size-btn.active {
+    background: rgba(111,231,255,0.1);
+    border-color: rgba(111,231,255,0.5);
+    color: var(--cyan);
+    box-shadow: 0 0 10px rgba(111,231,255,0.15);
+  }
+  .size-btn-custom {
+    grid-column: span 3;
+    font-size: 9.5px;
+    color: var(--text3);
+  }
+  .size-btn-custom.active {
+    color: var(--lavender);
+    border-color: rgba(200,166,255,0.5);
+    background: rgba(200,166,255,0.08);
+    box-shadow: 0 0 10px rgba(200,166,255,0.12);
+  }
+
+  /* ── 계산 결과 카드 ── */
+  .calc-result-card {
+    background: rgba(111,231,255,0.04);
+    border: 1px solid rgba(111,231,255,0.12);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .calc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .calc-label {
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 0.05em;
+  }
+  .calc-value {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--cyan);
+    text-shadow: 0 0 8px rgba(111,231,255,0.3);
+    font-weight: 400;
+  }
+
+  /* ── 도구 설명 카드 ── */
+  .tool-desc-card {
+    margin-top: 10px;
+    background: rgba(111,231,255,0.03);
+    border: 1px solid rgba(111,231,255,0.1);
+    border-radius: var(--radius-sm);
+    padding: 12px 13px;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+  .tool-desc-card.erase-active  {
+    background: rgba(255,107,138,0.04);
+    border-color: rgba(255,107,138,0.18);
+  }
+  .tool-desc-card.fill-active   {
+    background: rgba(143,221,231,0.04);
+    border-color: rgba(143,221,231,0.18);
+  }
+  .tool-desc-card.pick-active   {
+    background: rgba(200,166,255,0.04);
+    border-color: rgba(200,166,255,0.18);
+  }
+  .tool-desc-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+  }
+  .tool-desc-icon {
+    font-size: 16px;
+    line-height: 1;
+    filter: drop-shadow(0 0 6px rgba(111,231,255,0.35));
+    transition: filter 0.3s ease;
+    flex-shrink: 0;
+  }
+  .tool-desc-card.erase-active .tool-desc-icon { filter: drop-shadow(0 0 6px rgba(255,107,138,0.45)); }
+  .tool-desc-card.fill-active  .tool-desc-icon { filter: drop-shadow(0 0 6px rgba(143,221,231,0.45)); }
+  .tool-desc-card.pick-active  .tool-desc-icon { filter: drop-shadow(0 0 6px rgba(200,166,255,0.45)); }
+
+  .tool-desc-name {
+    font-family: var(--ui);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--cyan);
+    transition: color 0.3s ease;
+  }
+  .tool-desc-card.erase-active .tool-desc-name { color: var(--danger); }
+  .tool-desc-card.fill-active  .tool-desc-name { color: var(--mint); }
+  .tool-desc-card.pick-active  .tool-desc-name { color: var(--lavender); }
+
+  .tool-desc-text {
+    font-family: var(--ui);
+    font-size: 10.5px;
+    font-weight: 400;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .tool-desc-hint {
+    font-family: var(--ui);
+    font-size: 9.5px;
+    color: var(--text3);
+    line-height: 1.5;
+    padding-top: 7px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  /* ── 편집 상태 행 ── */
+  .edit-state-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .edit-state-label {
+    font-size: 10px;
+    color: var(--text2);
+  }
+
+  /* ── 표시 옵션 ── */
+  .view-option-row { display: flex; flex-direction: column; }
+
+  /* ── DMC 팔레트 색상 항목 — 편집 툴 강화 ── */
+  .color-entry {
+    position: relative;
+  }
+  .color-entry .dmc-code {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--lavender);
+    flex-shrink: 0;
+  }
+  .color-entry .cell-count {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text3);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .color-entry .edit-badge {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 5px rgba(111,231,255,0.6);
+    flex-shrink: 0;
+  }
+  /* 선택된 색상 강조 (하이라이트 모드) */
+  .color-entry.highlighted {
+    background: rgba(111,231,255,0.06);
+    border-radius: 5px;
+  }
+  /* 패턴 셀 하이라이트 오버레이 */
+  #highlight-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    pointer-events: none;
+  }
+
+  /* ── 색상 교체 모달 ── */
+  .replace-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(6,12,30,0.75);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+  }
+  .replace-modal.open { display: flex; }
+  .replace-modal-inner {
+    background: rgba(13,22,56,0.97);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 22px;
+    width: 320px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 30px rgba(111,231,255,0.05);
+  }
+  .replace-modal-title {
+    font-family: var(--ui);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .replace-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .replace-row label {
+    font-size: 10px;
+    color: var(--text2);
+    width: 55px;
+    flex-shrink: 0;
+  }
+  .replace-select {
+    flex: 1;
+    height: 30px;
+    padding: 0 8px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 10px;
+  }
+  .replace-select:focus { outline: none; border-color: rgba(111,231,255,0.4); }
+  .replace-modal-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    justify-content: flex-end;
+  }
+
+  /* ── 언어 선택 ── */
+  .lang-select {
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    color: var(--text2);
+    font-family: var(--mono);
+    font-size: 10.5px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 22px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238f9bbd' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    min-width: 88px;
+  }
+  .lang-select:hover {
+    border-color: rgba(111,231,255,0.35);
+    color: var(--cyan);
+    box-shadow: 0 0 10px rgba(111,231,255,0.15);
+  }
+  .lang-select:focus { outline: none; border-color: rgba(111,231,255,0.4); }
+  .lang-select option { background: #0d1638; color: var(--text); }
+
+  /* Hidden inputs */
+  input[type=file] { display: none; }
+
+  /* ── 스크롤바 전역 ── */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(111,231,255,0.15); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- Site Top Navigation -->
+<div class="site-topbar">
+  <a href="../index.html" class="topbar-logo">
+    <span class="topbar-logo-icon">&#9670;</span>
+    Diamond Painter
+  </a>
+  <nav class="topbar-nav" aria-label="Site navigation">
+    <a href="../index.html">Home</a>
+    <a href="../guide/index.html">Guide</a>
+    <a href="../faq.html">FAQ</a>
+    <a href="../about.html">About</a>
+  </nav>
+</div>
+
+<!-- ─── Header ─── -->
+<header>
+  <a href="../index.html" class="logo" style="text-decoration:none;">
+    ✦ Diamond Painter
+
+  </a>
+
+  <div class="header-actions">
+    <button class="btn" id="btn-generate" disabled data-i18n="btn_generate">⚡ 도안 생성</button>
+    <button class="btn" id="btn-undo" disabled title="Undo (Ctrl+Z)">↩ Undo</button>
+    <button class="btn" id="btn-redo" disabled title="Redo (Ctrl+Y)">↪ Redo</button>
+    <button class="btn" id="btn-autofill" disabled data-i18n="btn_autofill">🎨 색상 일괄 적용</button>
+    <button class="btn btn-replace-color" id="btn-replace-color" disabled data-i18n="btn_replace_color">🔄 색상 교체</button>
+    <button class="btn" id="btn-clear-progress" disabled data-i18n="btn_clear">🗑 편집 초기화</button>
+    <button class="btn" id="btn-load" data-i18n="btn_load">📂 불러오기</button>
+    <button class="btn" id="btn-save" disabled data-i18n="btn_save">💾 저장</button>
+    <button class="btn primary" id="btn-export" disabled data-i18n="btn_export">📤 이미지 저장</button>
+    <select id="lang-select" class="lang-select">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+      <option value="zh">中文</option>
+    </select>
+  </div>
+</header>
+
+<!-- ─── Workspace ─── -->
+<div class="workspace">
+
+  <!-- Left Panel -->
+  <div class="left-panel">
+
+    <!-- Image Upload -->
+    <div class="panel-section">
+      <div class="panel-title" data-i18n="section_upload">이미지 업로드</div>
+      <div class="upload-zone" id="upload-zone">
+        <span class="icon">🖼</span>
+        <span data-i18n="upload_hint">클릭하거나 이미지를 드롭하세요</span><br>
+        <small>PNG, JPG, GIF, WebP</small>
+      </div>
+      <img id="preview-img" alt="preview">
+      <input type="file" id="file-input" accept="image/*">
+    </div>
+
+    <!-- Settings -->
+    <div class="panel-section">
+      <div class="panel-title" data-i18n="section_settings">패턴 설정</div>
+
+      <!-- 비즈 종류 -->
+      <div class="field">
+        <label data-i18n="label_bead_type">비즈 종류</label>
+        <div class="bead-type-group">
+          <label class="bead-radio active" id="bead-round-label">
+            <input type="radio" name="bead-type" id="bead-round" value="2.8" checked>
+            <span class="bead-icon">●</span>
+            <span class="bead-label" data-i18n="bead_round">원형 (2.8mm)</span>
+          </label>
+          <label class="bead-radio" id="bead-square-label">
+            <input type="radio" name="bead-type" id="bead-square" value="2.5">
+            <span class="bead-icon">■</span>
+            <span class="bead-label" data-i18n="bead_square">사각 (2.5mm)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 캔버스 크기 -->
+      <div class="field">
+        <label data-i18n="label_canvas_size">캔버스 크기</label>
+        <div class="canvas-size-grid">
+          <button class="size-btn" data-w="210" data-h="297">A4</button>
+          <button class="size-btn" data-w="297" data-h="420">A3</button>
+          <button class="size-btn" data-w="300" data-h="400">30×40</button>
+          <button class="size-btn active" data-w="400" data-h="500">40×50</button>
+          <button class="size-btn" data-w="500" data-h="700">50×70</button>
+          <button class="size-btn" data-w="500" data-h="800">50×80</button>
+          <button class="size-btn size-btn-custom" id="btn-custom-size" data-w="0" data-h="0" data-i18n="size_custom">사용자 지정</button>
+        </div>
+      </div>
+
+      <!-- 사용자 지정 크기 입력 -->
+      <div class="field" id="custom-size-fields" style="display:none">
+        <div class="field-row" style="gap:6px">
+          <div style="flex:1">
+            <label style="font-size:9px;margin-bottom:3px;display:block" data-i18n="label_custom_w">가로 (mm)</label>
+            <input type="number" id="custom-w" value="400" min="50" max="2000" style="width:100%">
+          </div>
+          <div style="flex:1">
+            <label style="font-size:9px;margin-bottom:3px;display:block" data-i18n="label_custom_h">세로 (mm)</label>
+            <input type="number" id="custom-h" value="500" min="50" max="2000" style="width:100%">
+          </div>
+        </div>
+      </div>
+
+      <!-- 계산 결과 카드 -->
+      <div class="calc-result-card">
+        <div class="calc-row">
+          <span class="calc-label" data-i18n="calc_bead_grid">격자 크기</span>
+          <span class="calc-value" id="calc-grid">— × —</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label" data-i18n="calc_total_beads">총 비즈 수</span>
+          <span class="calc-value" id="calc-total">—</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label" data-i18n="calc_actual_size">실제 제작 크기</span>
+          <span class="calc-value" id="calc-size">— cm</span>
+        </div>
+      </div>
+
+      <!-- 색상 수 -->
+      <div class="field" style="margin-top:10px">
+        <label data-i18n="label_colors">색상 수</label>
+        <div class="field-row">
+          <input type="range" id="k-colors" min="5" max="80" value="35">
+          <span class="value-badge" id="k-val">35</span>
+        </div>
+      </div>
+
+      <!-- 체크박스 옵션 -->
+      <div class="field">
+        <label>
+          <div class="checkbox-row">
+            <input type="checkbox" id="show-symbols" checked>
+            <span data-i18n="label_show_symbols">기호 표시</span>
+          </div>
+        </label>
+      </div>
+
+    </div>
+
+    <!-- Tools -->
+    <div class="panel-section">
+      <div class="panel-title" data-i18n="section_tools">도구</div>
+
+      <!-- 도구 버튼 -->
+      <div class="tool-group">
+        <button class="tool-btn active" id="tool-paint" data-tool="paint">🖊</button>
+        <button class="tool-btn" id="tool-erase" data-tool="erase">🗑</button>
+        <button class="tool-btn" id="tool-fill" data-tool="fill">🪣</button>
+        <button class="tool-btn" id="tool-pick" data-tool="pick">💉</button>
+      </div>
+
+      <!-- 도구 설명 카드 -->
+      <div class="tool-desc-card" id="tool-desc-card">
+        <div class="tool-desc-header">
+          <span class="tool-desc-icon" id="tool-desc-icon">🖊</span>
+          <span class="tool-desc-name" id="tool-desc-name" data-i18n="tool_name_paint">그리기</span>
+        </div>
+        <p class="tool-desc-text" id="tool-desc-text" data-i18n="tool_desc_paint">
+          선택한 색상의 비즈를 배치합니다. 클릭하거나 드래그하세요.
+        </p>
+        <div class="tool-desc-hint" id="tool-desc-hint" data-i18n="tool_hint_paint">
+          💡 Shift+클릭으로 지울 수 있습니다
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit State -->
+    <div class="panel-section">
+      <div class="panel-title" data-i18n="section_edit_state">편집 상태</div>
+      <div class="edit-state-row">
+        <span class="edit-state-label" data-i18n="edit_modified_cells">수정된 셀</span>
+        <span class="value-badge" id="edit-modified-count">0</span>
+      </div>
+      <div class="edit-state-row" style="margin-top:5px">
+        <span class="edit-state-label" data-i18n="edit_history">편집 기록</span>
+        <span class="value-badge" id="edit-history-count">0 / 0</span>
+      </div>
+      <div class="progress-bar-wrap" style="margin-top:8px">
+        <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="progress-text">
+        <span id="progress-label" data-i18n="edit_coverage">셀 적용률</span>
+        <span id="progress-pct">0%</span>
+      </div>
+    </div>
+
+    <!-- Palette -->
+    <div class="panel-title" style="padding: 10px 14px 0; margin-bottom:0">
+      <span data-i18n="section_palette">색상표</span>
+      <span id="palette-count" style="color:var(--accent);font-size:10px;margin-left:4px"></span>
+    </div>
+    <div class="palette-scroll" id="palette-list"></div>
+
+    <!-- Status -->
+    <div id="status">
+      <div class="dot"></div>
+      <span id="status-text" data-i18n="status_ready">준비 완료 — 이미지를 업로드하세요</span>
+    </div>
+  </div>
+
+  <!-- Canvas Area -->
+  <div class="canvas-area" id="canvas-area">
+    <div class="empty-state" id="empty-state">
+      <span class="big-icon">💎</span>
+      <h2 data-i18n="empty_title">보석십자수</h2>
+      <p data-i18n="empty_desc">이미지를 업로드하고 설정 후<br>도안 생성 버튼을 눌러주세요</p>
+    </div>
+
+    <div id="canvas-container">
+      <canvas id="pattern-canvas"></canvas>
+      <canvas id="user-canvas"></canvas>
+      <canvas id="overlay-canvas"></canvas>
+    </div>
+
+    <canvas id="minimap-canvas" width="140" height="100"></canvas>
+    <div id="zoom-indicator">100%</div>
+    <div id="coords">— , —</div>
+
+    <!-- Processing Overlay -->
+    <div id="processing-overlay">
+      <div class="spinner"></div>
+      <div id="processing-pct">0%</div>
+      <div id="processing-label" data-i18n="proc_init">초기화 중...</div>
+    </div>
+  </div>
+
+  <!-- Right Panel: Pattern Info -->
+  <div class="right-panel">
+    <div class="panel-section">
+      <div class="panel-title" data-i18n="section_pattern_info">패턴 정보</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="val" id="stat-total">0</div>
+          <div class="lbl" data-i18n="stat_total">전체 셀</div>
+        </div>
+        <div class="stat-card">
+          <div class="val" id="stat-colors">0</div>
+          <div class="lbl" data-i18n="stat_colors">DMC 색상</div>
+        </div>
+        <div class="stat-card">
+          <div class="val" id="stat-modified">0</div>
+          <div class="lbl" data-i18n="stat_modified">수정 셀</div>
+        </div>
+        <div class="stat-card">
+          <div class="val" id="stat-remaining">0</div>
+          <div class="lbl" data-i18n="stat_unedited">미편집 셀</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 필터 + 하이라이트 -->
+    <div class="panel-section">
+      <div class="panel-title" data-i18n="section_view_options">표시 옵션</div>
+      <div class="view-option-row">
+        <label class="checkbox-row">
+          <input type="checkbox" id="opt-show-symbols" checked>
+          <span data-i18n="opt_symbols">기호 표시</span>
+        </label>
+        <label class="checkbox-row" style="margin-top:5px">
+          <input type="checkbox" id="opt-show-grid">
+          <span data-i18n="opt_grid">강한 격자선</span>
+        </label>
+        <label class="checkbox-row" style="margin-top:5px">
+          <input type="checkbox" id="opt-highlight-color">
+          <span data-i18n="opt_highlight">선택 색상 강조</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- DMC 팔레트 관리 -->
+    <div class="panel-title" style="padding: 10px 14px 0; margin-bottom:0" data-i18n="section_dmc_palette">DMC 팔레트</div>
+    <div class="color-list" id="color-list"></div>
+  </div>
+</div>
+
+<div id="notification"></div>
+<input type="file" id="load-input" accept=".json">
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// i18n — 다국어 번역 시스템
+// ═══════════════════════════════════════════════════════════════
+const i18n = {
+  ko: {
+    // 헤더 버튼
+    btn_generate:      '⚡ 도안 생성',
+    btn_autofill:      '🎨 색상 일괄 적용',
+    btn_replace_color: '🔄 색상 교체',
+    btn_clear:         '🗑 편집 초기화',
+    btn_load:          '📂 불러오기',
+    btn_save:          '💾 저장',
+    btn_export:        '📤 이미지 저장',
+    // 패널 제목
+    section_upload:      '이미지 가져오기',
+    section_settings:    '도안 설정',
+    section_tools:       '편집 도구',
+    section_edit_state:  '편집 현황',
+    section_palette:     '색상표',
+    section_pattern_info:'패턴 정보',
+    section_view_options:'표시 옵션',
+    section_dmc_palette: 'DMC 팔레트',
+    section_color_list:  'DMC 팔레트',
+    section_stats:       '패턴 정보',
+    section_progress:    '편집 현황',
+    // 라벨
+    label_bead_type:   '비즈 종류',
+    bead_round:        '원형 (2.8mm)',
+    bead_square:       '사각 (2.5mm)',
+    label_canvas_size: '도안 크기',
+    size_custom:       '사용자 지정',
+    label_custom_w:    '가로 (mm)',
+    label_custom_h:    '세로 (mm)',
+    label_colors:      'DMC 색상 수',
+    label_keep_ratio:  '비율 유지',
+    label_show_symbols:'기호 표시',
+    label_cell_size:   '셀 크기 (px)',
+    // 계산 결과
+    calc_bead_grid:   '격자 크기',
+    calc_total_beads: '총 셀 수',
+    calc_actual_size: '실제 도안 크기',
+    // 표시 옵션
+    opt_symbols:    '기호 표시',
+    opt_grid:       '강한 격자선',
+    opt_highlight:  '선택 색상 강조',
+    // 도구 이름
+    tool_name_paint: '색상 입력',
+    tool_name_erase: '색상 제거',
+    tool_name_fill:  '영역 채우기',
+    tool_name_pick:  'DMC 색상 선택',
+    // 도구 설명
+    tool_desc_paint: '선택한 DMC 색상으로 셀을 수정합니다. 클릭하거나 드래그하세요.',
+    tool_desc_erase: '현재 셀의 색상을 제거하거나 초기화합니다.',
+    tool_desc_fill:  '같은 색상 영역을 한 번에 다른 색상으로 변경합니다.',
+    tool_desc_pick:  '패턴에서 사용된 DMC 색상을 선택합니다.',
+    // 도구 힌트
+    tool_hint_paint: '💡 Shift+클릭으로 색상을 제거할 수 있습니다',
+    tool_hint_erase: '💡 드래그하면 여러 셀을 한 번에 초기화합니다',
+    tool_hint_fill:  '💡 동일 색상 영역 전체를 빠르게 변경합니다',
+    tool_hint_pick:  '💡 색상 선택 후 자동으로 입력 도구로 전환됩니다',
+    // 툴팁
+    tool_paint: '색상 입력',
+    tool_erase: '색상 제거',
+    tool_fill:  '영역 채우기',
+    tool_pick:  'DMC 색상 선택',
+    // 통계
+    stat_total:     '전체 셀',
+    stat_colors:    'DMC 색상',
+    stat_modified:  '수정 셀',
+    stat_remaining: '미편집 셀',
+    stat_placed:    '수정 셀',
+    stat_unedited:  '미편집 셀',
+    // 편집 현황
+    edit_modified_cells: '수정된 셀',
+    edit_history:        '편집 기록',
+    edit_coverage:       '셀 적용률',
+    // 업로드
+    upload_hint: '클릭하거나 이미지를 드롭하세요',
+    // 상태 메시지
+    status_ready:        '준비 완료 — 이미지를 가져오세요',
+    status_generating:   '도안 생성 중...',
+    status_done_pattern: '도안 생성 완료',
+    status_img_loaded:   '이미지 로드됨',
+    status_loaded:       '도안 불러오기 완료',
+    status_restored:     '이전 편집 내용 복원됨',
+    // 처리 단계
+    proc_init:      '초기화 중...',
+    proc_analyzing: '이미지 분석 중...',
+    proc_kmeans:    'K-평균 색상 분류 중...',
+    proc_clustering:'색상 클러스터링 중...',
+    proc_dmc:       'DMC 색상 매핑 중...',
+    proc_grid:      '격자 패턴 구성 중...',
+    proc_rendering: '도안 렌더링 중...',
+    // 알림
+    notif_pattern_ready:  '도안 생성 완료! 편집을 시작하세요.',
+    notif_autofill_done:  '모든 셀에 색상이 일괄 적용되었습니다.',
+    notif_cleared:        '편집 내용이 초기화되었습니다.',
+    notif_saved:          '도안이 저장되었습니다.',
+    notif_loaded:         '도안을 불러왔습니다!',
+    notif_exported:       'PNG로 내보냈습니다.',
+    notif_restored:       '이전 편집 내용을 복원했습니다!',
+    notif_invalid:        '올바르지 않은 파일 형식입니다.',
+    notif_picked:         '선택한 색상',
+    notif_replaced:       '색상 교체 완료',
+    notif_undo:           '실행 취소',
+    notif_redo:           '다시 실행',
+    // 색상 교체 모달
+    replace_title:     '색상 교체',
+    replace_from:      '교체할 색상',
+    replace_to:        '바꿀 색상',
+    replace_confirm:   '교체',
+    replace_cancel:    '취소',
+    // 빈 화면
+    empty_title: '보석십자수 도안 편집기',
+    empty_desc:  '이미지를 가져온 후 도안을 생성하고<br>DMC 색상을 편집하세요',
+    // progress
+    progress_placed: '적용됨',
+  },
+  en: {
+    btn_generate:      '⚡ Generate Pattern',
+    btn_autofill:      '🎨 Apply All Colors',
+    btn_replace_color: '🔄 Replace Color',
+    btn_clear:         '🗑 Reset Edits',
+    btn_load:          '📂 Load JSON',
+    btn_save:          '💾 Save JSON',
+    btn_export:        '📤 Export PNG',
+    section_upload:      'Import Image',
+    section_settings:    'Pattern Setup',
+    section_tools:       'Edit Tools',
+    section_edit_state:  'Edit Status',
+    section_palette:     'Palette',
+    section_pattern_info:'Pattern Info',
+    section_view_options:'View Options',
+    section_dmc_palette: 'DMC Palette',
+    section_color_list:  'DMC Palette',
+    section_stats:       'Pattern Info',
+    section_progress:    'Edit Status',
+    label_bead_type:   'Bead Type',
+    bead_round:        'Round (2.8mm)',
+    bead_square:       'Square (2.5mm)',
+    label_canvas_size: 'Pattern Size',
+    size_custom:       'Custom',
+    label_custom_w:    'Width (mm)',
+    label_custom_h:    'Height (mm)',
+    label_colors:      'DMC Color Count',
+    label_keep_ratio:  'Maintain ratio',
+    label_show_symbols:'Show symbols',
+    label_cell_size:   'Cell size (px)',
+    calc_bead_grid:    'Grid Size',
+    calc_total_beads:  'Total Cells',
+    calc_actual_size:  'Actual Pattern Size',
+    opt_symbols:   'Show symbols',
+    opt_grid:      'Strong grid lines',
+    opt_highlight: 'Highlight selected color',
+    tool_name_paint: 'Paint Color',
+    tool_name_erase: 'Remove Color',
+    tool_name_fill:  'Fill Region',
+    tool_name_pick:  'Pick DMC Color',
+    tool_desc_paint: 'Edit cells with the selected DMC color. Click or drag to apply.',
+    tool_desc_erase: 'Remove the color from cells, reverting to the pattern default.',
+    tool_desc_fill:  'Replace all cells of the same color in a region at once.',
+    tool_desc_pick:  'Select a DMC color directly from the pattern.',
+    tool_hint_paint: '💡 Shift+click to erase while painting',
+    tool_hint_erase: '💡 Drag to reset multiple cells at once',
+    tool_hint_fill:  '💡 Efficiently changes entire same-color regions',
+    tool_hint_pick:  '💡 Switches back to Paint tool automatically',
+    tool_paint: 'Paint Color',
+    tool_erase: 'Remove Color',
+    tool_fill:  'Fill Region',
+    tool_pick:  'Pick DMC Color',
+    stat_total:     'Total Cells',
+    stat_colors:    'DMC Colors',
+    stat_modified:  'Edited Cells',
+    stat_remaining: 'Unedited Cells',
+    stat_placed:    'Edited Cells',
+    stat_unedited:  'Unedited Cells',
+    edit_modified_cells: 'Edited cells',
+    edit_history:        'Edit history',
+    edit_coverage:       'Coverage',
+    upload_hint: 'Click or drop image here',
+    status_ready:        'Ready — import an image to begin',
+    status_generating:   'Generating pattern...',
+    status_done_pattern: 'Pattern generated',
+    status_img_loaded:   'Image imported',
+    status_loaded:       'Pattern loaded',
+    status_restored:     'Previous edits restored',
+    proc_init:       'Initializing...',
+    proc_analyzing:  'Analyzing image...',
+    proc_kmeans:     'Running k-means clustering...',
+    proc_clustering: 'Clustering colors...',
+    proc_dmc:        'Mapping to DMC colors...',
+    proc_grid:       'Building pattern grid...',
+    proc_rendering:  'Rendering pattern...',
+    notif_pattern_ready:  'Pattern ready! Start editing.',
+    notif_autofill_done:  'All cells filled with pattern colors.',
+    notif_cleared:        'All edits have been reset.',
+    notif_saved:          'Pattern saved.',
+    notif_loaded:         'Pattern loaded!',
+    notif_exported:       'Exported as PNG.',
+    notif_restored:       'Previous edits restored!',
+    notif_invalid:        'Invalid file format.',
+    notif_picked:         'Selected color',
+    notif_replaced:       'Color replaced',
+    notif_undo:           'Undo',
+    notif_redo:           'Redo',
+    replace_title:   'Replace Color',
+    replace_from:    'From',
+    replace_to:      'To',
+    replace_confirm: 'Replace',
+    replace_cancel:  'Cancel',
+    empty_title: 'Diamond Painting Pattern Editor',
+    empty_desc:  'Import an image, generate a pattern,<br>and edit DMC colors',
+    progress_placed: 'applied',
+  },
+  ja: {
+    btn_generate:      '⚡ 図案生成',
+    btn_autofill:      '🎨 一括色適用',
+    btn_replace_color: '🔄 色置換',
+    btn_clear:         '🗑 編集リセット',
+    btn_load:          '📂 読み込み',
+    btn_save:          '💾 保存',
+    btn_export:        '📤 画像保存',
+    section_upload:      '画像インポート',
+    section_settings:    '図案設定',
+    section_tools:       '編集ツール',
+    section_edit_state:  '編集状況',
+    section_palette:     'カラーパレット',
+    section_pattern_info:'図案情報',
+    section_view_options:'表示オプション',
+    section_dmc_palette: 'DMCパレット',
+    section_color_list:  'DMCパレット',
+    section_stats:       '図案情報',
+    section_progress:    '編集状況',
+    label_bead_type:   'ビーズの種類',
+    bead_round:        '丸ビーズ (2.8mm)',
+    bead_square:       '角ビーズ (2.5mm)',
+    label_canvas_size: '図案サイズ',
+    size_custom:       'カスタム',
+    label_custom_w:    '幅 (mm)',
+    label_custom_h:    '高さ (mm)',
+    label_colors:      'DMC色数',
+    label_keep_ratio:  '縦横比を維持',
+    label_show_symbols:'記号を表示',
+    label_cell_size:   'セルサイズ (px)',
+    calc_bead_grid:    'グリッドサイズ',
+    calc_total_beads:  '総セル数',
+    calc_actual_size:  '実際の図案サイズ',
+    opt_symbols:   '記号を表示',
+    opt_grid:      '強いグリッド線',
+    opt_highlight: '選択色をハイライト',
+    tool_name_paint: '色入力',
+    tool_name_erase: '色削除',
+    tool_name_fill:  '領域塗りつぶし',
+    tool_name_pick:  'DMC色選択',
+    tool_desc_paint: '選択したDMC色でセルを編集します。クリックまたはドラッグで適用。',
+    tool_desc_erase: '現在のセルの色を削除・初期化します。',
+    tool_desc_fill:  '同じ色の領域を一括で別の色に変更します。',
+    tool_desc_pick:  '図案から使用済みDMC色を選択します。',
+    tool_hint_paint: '💡 Shift+クリックで色を削除できます',
+    tool_hint_erase: '💡 ドラッグで複数セルを一括初期化できます',
+    tool_hint_fill:  '💡 同色領域全体を素早く変更できます',
+    tool_hint_pick:  '💡 選択後、自動的に入力ツールに切り替わります',
+    tool_paint: '色入力',
+    tool_erase: '色削除',
+    tool_fill:  '領域塗りつぶし',
+    tool_pick:  'DMC色選択',
+    stat_total:     '総セル数',
+    stat_colors:    'DMC色数',
+    stat_modified:  '編集済みセル',
+    stat_remaining: '未編集セル',
+    stat_placed:    '編集済みセル',
+    stat_unedited:  '未編集セル',
+    edit_modified_cells: '編集済みセル',
+    edit_history:        '編集履歴',
+    edit_coverage:       '適用率',
+    upload_hint: 'クリックまたは画像をドロップ',
+    status_ready:        '準備完了 — 画像をインポートしてください',
+    status_generating:   '図案生成中...',
+    status_done_pattern: '図案生成完了',
+    status_img_loaded:   '画像インポート完了',
+    status_loaded:       '読み込み完了',
+    status_restored:     '前回の編集を復元しました',
+    proc_init:       '初期化中...',
+    proc_analyzing:  '画像解析中...',
+    proc_kmeans:     'クラスタリング実行中...',
+    proc_clustering: '色の分類中...',
+    proc_dmc:        'DMCカラーマッピング中...',
+    proc_grid:       'グリッド構成中...',
+    proc_rendering:  'レンダリング中...',
+    notif_pattern_ready:  '図案生成完了！編集を開始してください。',
+    notif_autofill_done:  '全セルに色を一括適用しました。',
+    notif_cleared:        '編集内容をリセットしました。',
+    notif_saved:          '図案を保存しました。',
+    notif_loaded:         '図案を読み込みました！',
+    notif_exported:       'PNG保存しました。',
+    notif_restored:       '前回の編集を復元しました！',
+    notif_invalid:        '無効なファイル形式です。',
+    notif_picked:         '選択色',
+    notif_replaced:       '色置換完了',
+    notif_undo:           '元に戻す',
+    notif_redo:           'やり直し',
+    replace_title:   '色置換',
+    replace_from:    '変更前',
+    replace_to:      '変更後',
+    replace_confirm: '置換',
+    replace_cancel:  'キャンセル',
+    empty_title: 'ダイヤモンドアート図案エディタ',
+    empty_desc:  '画像をインポートして図案を生成し、<br>DMC色を編集してください',
+    progress_placed: '適用済み',
+  },
+  zh: {
+    btn_generate:      '⚡ 生成图案',
+    btn_autofill:      '🎨 批量应用颜色',
+    btn_replace_color: '🔄 替换颜色',
+    btn_clear:         '🗑 重置编辑',
+    btn_load:          '📂 加载',
+    btn_save:          '💾 保存',
+    btn_export:        '📤 导出图片',
+    section_upload:      '导入图片',
+    section_settings:    '图案设置',
+    section_tools:       '编辑工具',
+    section_edit_state:  '编辑状态',
+    section_palette:     '调色板',
+    section_pattern_info:'图案信息',
+    section_view_options:'显示选项',
+    section_dmc_palette: 'DMC调色板',
+    section_color_list:  'DMC调色板',
+    section_stats:       '图案信息',
+    section_progress:    '编辑状态',
+    label_bead_type:   '钻石类型',
+    bead_round:        '圆钻 (2.8mm)',
+    bead_square:       '方钻 (2.5mm)',
+    label_canvas_size: '图案尺寸',
+    size_custom:       '自定义',
+    label_custom_w:    '宽度 (mm)',
+    label_custom_h:    '高度 (mm)',
+    label_colors:      'DMC颜色数量',
+    label_keep_ratio:  '保持纵横比',
+    label_show_symbols:'显示符号',
+    label_cell_size:   '格子大小 (px)',
+    calc_bead_grid:    '网格尺寸',
+    calc_total_beads:  '总格数',
+    calc_actual_size:  '实际图案尺寸',
+    opt_symbols:   '显示符号',
+    opt_grid:      '加强网格线',
+    opt_highlight: '高亮选中颜色',
+    tool_name_paint: '填色',
+    tool_name_erase: '清除颜色',
+    tool_name_fill:  '区域填充',
+    tool_name_pick:  '选取DMC颜色',
+    tool_desc_paint: '用选定的DMC颜色编辑格子。点击或拖拽即可应用。',
+    tool_desc_erase: '清除格子中的颜色，恢复到图案默认状态。',
+    tool_desc_fill:  '一次性将同色区域全部替换为新颜色。',
+    tool_desc_pick:  '从图案中直接选取DMC颜色。',
+    tool_hint_paint: '💡 Shift+点击可以清除颜色',
+    tool_hint_erase: '💡 拖拽可以一次重置多个格子',
+    tool_hint_fill:  '💡 可以高效地更改整个同色区域',
+    tool_hint_pick:  '💡 选取后自动切换回填色工具',
+    tool_paint: '填色',
+    tool_erase: '清除颜色',
+    tool_fill:  '区域填充',
+    tool_pick:  '选取DMC颜色',
+    stat_total:     '总格数',
+    stat_colors:    'DMC颜色',
+    stat_modified:  '已编辑格',
+    stat_remaining: '未编辑格',
+    stat_placed:    '已编辑格',
+    stat_unedited:  '未编辑格',
+    edit_modified_cells: '已编辑格',
+    edit_history:        '编辑历史',
+    edit_coverage:       '覆盖率',
+    upload_hint: '点击或拖拽图片到此处',
+    status_ready:        '准备就绪 — 请导入图片',
+    status_generating:   '生成图案中...',
+    status_done_pattern: '图案生成完成',
+    status_img_loaded:   '图片导入完成',
+    status_loaded:       '加载完成',
+    status_restored:     '已恢复上次编辑',
+    proc_init:       '初始化中...',
+    proc_analyzing:  '分析图片中...',
+    proc_kmeans:     '运行聚类算法...',
+    proc_clustering: '颜色聚类中...',
+    proc_dmc:        'DMC颜色映射中...',
+    proc_grid:       '构建网格图案...',
+    proc_rendering:  '渲染中...',
+    notif_pattern_ready:  '图案已就绪！开始编辑吧。',
+    notif_autofill_done:  '已批量应用所有格子的颜色。',
+    notif_cleared:        '所有编辑已重置。',
+    notif_saved:          '图案已保存。',
+    notif_loaded:         '图案加载成功！',
+    notif_exported:       '已导出为PNG。',
+    notif_restored:       '已恢复上次的编辑！',
+    notif_invalid:        '无效的文件格式。',
+    notif_picked:         '已选色',
+    notif_replaced:       '颜色替换完成',
+    notif_undo:           '撤销',
+    notif_redo:           '重做',
+    replace_title:   '替换颜色',
+    replace_from:    '原颜色',
+    replace_to:      '新颜色',
+    replace_confirm: '替换',
+    replace_cancel:  '取消',
+    empty_title: '钻石画图案编辑器',
+    empty_desc:  '导入图片并生成图案，<br>然后编辑DMC颜色',
+    progress_placed: '已应用',
+  },
+};
+
+let currentLang = localStorage.getItem('dp_lang') || 'ko';
+
+function t(key) {
+  return i18n[currentLang][key] || i18n['en'][key] || key;
+}
+
+function applyTranslations() {
+  // data-i18n → textContent
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    el.textContent = t(key);
+  });
+  // data-i18n-title → title 속성
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    el.title = t(el.dataset.i18nTitle);
+  });
+  // 언어 셀렉트 동기화
+  const sel = document.getElementById('lang-select');
+  if (sel) sel.value = currentLang;
+  // 도구 설명 카드 텍스트 재적용 (언어 전환 시 즉시 반영)
+  _refreshToolDesc();
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('dp_lang', lang);
+  document.documentElement.lang = lang; // html[lang] CSS 폰트 분기 트리거
+  applyTranslations();
+  if (!state || !state.pattern) {
+    document.getElementById('status-text').textContent = t('status_ready');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DMC COLOR DATABASE (450+ colors)
+// ═══════════════════════════════════════════════════════════════
+const DMC_COLORS = [
+  {code:"blanc",name:"White",rgb:[255,255,255]},
+  {code:"310",name:"Black",rgb:[0,0,0]},
+  {code:"317",name:"Pewter Gray",rgb:[129,124,128]},
+  {code:"318",name:"Light Steel Gray",rgb:[175,176,178]},
+  {code:"319",name:"Very Dark Pistachio Green",rgb:[52,98,69]},
+  {code:"320",name:"Medium Pistachio Green",rgb:[103,145,103]},
+  {code:"321",name:"Red",rgb:[193,56,56]},
+  {code:"322",name:"Dark Baby Blue",rgb:[94,138,192]},
+  {code:"326",name:"Very Dark Rose",rgb:[185,75,90]},
+  {code:"327",name:"Dark Violet",rgb:[100,62,100]},
+  {code:"333",name:"Very Dark Blue Violet",rgb:[93,84,135]},
+  {code:"334",name:"Medium Baby Blue",rgb:[100,152,196]},
+  {code:"335",name:"Rose",rgb:[226,103,120]},
+  {code:"336",name:"Navy Blue",rgb:[52,68,115]},
+  {code:"340",name:"Medium Blue Violet",rgb:[163,154,196]},
+  {code:"341",name:"Light Blue Violet",rgb:[188,183,218]},
+  {code:"347",name:"Very Dark Salmon",rgb:[196,70,75]},
+  {code:"349",name:"Dark Coral",rgb:[205,65,60]},
+  {code:"350",name:"Medium Coral",rgb:[220,90,80]},
+  {code:"351",name:"Coral",rgb:[230,120,107]},
+  {code:"352",name:"Light Coral",rgb:[240,150,130]},
+  {code:"353",name:"Peach",rgb:[255,195,165]},
+  {code:"355",name:"Dark Terra Cotta",rgb:[163,88,74]},
+  {code:"356",name:"Medium Terra Cotta",rgb:[190,120,98]},
+  {code:"367",name:"Dark Pistachio Green",rgb:[90,130,90]},
+  {code:"368",name:"Light Pistachio Green",rgb:[147,185,147]},
+  {code:"369",name:"Very Light Pistachio Green",rgb:[200,226,200]},
+  {code:"370",name:"Medium Mustard",rgb:[168,140,86]},
+  {code:"371",name:"Mustard",rgb:[183,158,100]},
+  {code:"372",name:"Light Mustard",rgb:[199,176,116]},
+  {code:"400",name:"Dark Mahogany",rgb:[153,80,40]},
+  {code:"402",name:"Very Light Mahogany",rgb:[230,163,115]},
+  {code:"407",name:"Dark Desert Sand",rgb:[185,130,100]},
+  {code:"413",name:"Dark Pewter Gray",rgb:[108,104,112]},
+  {code:"414",name:"Dark Steel Gray",rgb:[145,143,148]},
+  {code:"415",name:"Pearl Gray",rgb:[211,211,211]},
+  {code:"420",name:"Dark Hazelnut Brown",rgb:[161,117,74]},
+  {code:"422",name:"Light Hazelnut Brown",rgb:[200,160,105]},
+  {code:"433",name:"Medium Brown",rgb:[145,94,56]},
+  {code:"434",name:"Light Brown",rgb:[170,115,75]},
+  {code:"435",name:"Very Light Brown",rgb:[195,145,100]},
+  {code:"436",name:"Tan",rgb:[218,168,118]},
+  {code:"437",name:"Light Tan",rgb:[235,197,158]},
+  {code:"444",name:"Dark Lemon",rgb:[255,220,0]},
+  {code:"445",name:"Light Lemon",rgb:[255,245,130]},
+  {code:"451",name:"Dark Shell Gray",rgb:[172,158,153]},
+  {code:"452",name:"Medium Shell Gray",rgb:[198,184,180]},
+  {code:"453",name:"Light Shell Gray",rgb:[218,208,203]},
+  {code:"469",name:"Avocado Green",rgb:[120,143,74]},
+  {code:"470",name:"Light Avocado Green",rgb:[145,172,93]},
+  {code:"471",name:"Very Light Avocado Green",rgb:[168,194,115]},
+  {code:"472",name:"Ultra Light Avocado Green",rgb:[209,224,165]},
+  {code:"498",name:"Dark Red",rgb:[175,36,50]},
+  {code:"500",name:"Very Dark Blue Green",rgb:[38,80,60]},
+  {code:"501",name:"Dark Blue Green",rgb:[62,110,90]},
+  {code:"502",name:"Blue Green",rgb:[86,140,114]},
+  {code:"503",name:"Medium Blue Green",rgb:[140,185,162]},
+  {code:"504",name:"Very Light Blue Green",rgb:[185,218,200]},
+  {code:"517",name:"Dark Wedgwood",rgb:[70,120,160]},
+  {code:"518",name:"Light Wedgwood",rgb:[78,145,186]},
+  {code:"519",name:"Sky Blue",rgb:[128,188,216]},
+  {code:"520",name:"Dark Fern Green",rgb:[95,110,72]},
+  {code:"522",name:"Fern Green",rgb:[142,154,125]},
+  {code:"523",name:"Light Fern Green",rgb:[163,176,147]},
+  {code:"524",name:"Very Light Fern Green",rgb:[186,200,172]},
+  {code:"535",name:"Very Light Ash Gray",rgb:[103,106,109]},
+  {code:"543",name:"Ultra Very Light Beige Brown",rgb:[236,220,200]},
+  {code:"550",name:"Very Dark Violet",rgb:[98,54,108]},
+  {code:"552",name:"Medium Violet",rgb:[136,87,145]},
+  {code:"553",name:"Violet",rgb:[165,120,176]},
+  {code:"554",name:"Light Violet",rgb:[205,170,218]},
+  {code:"561",name:"Very Dark Jade",rgb:[52,110,84]},
+  {code:"562",name:"Medium Jade",rgb:[83,148,115]},
+  {code:"563",name:"Light Jade",rgb:[130,186,158]},
+  {code:"564",name:"Very Light Jade",rgb:[173,215,194]},
+  {code:"580",name:"Dark Moss Green",rgb:[100,118,52]},
+  {code:"581",name:"Moss Green",rgb:[126,148,66]},
+  {code:"597",name:"Turquoise",rgb:[66,164,174]},
+  {code:"598",name:"Light Turquoise",rgb:[116,196,204]},
+  {code:"600",name:"Very Dark Cranberry",rgb:[206,72,110]},
+  {code:"601",name:"Dark Cranberry",rgb:[218,88,126]},
+  {code:"602",name:"Medium Cranberry",rgb:[228,108,142]},
+  {code:"603",name:"Cranberry",rgb:[238,128,158]},
+  {code:"604",name:"Light Cranberry",rgb:[248,170,190]},
+  {code:"605",name:"Very Light Cranberry",rgb:[255,204,218]},
+  {code:"606",name:"Bright Orange Red",rgb:[255,62,0]},
+  {code:"608",name:"Bright Orange",rgb:[255,112,42]},
+  {code:"610",name:"Dark Drab Brown",rgb:[134,107,82]},
+  {code:"611",name:"Drab Brown",rgb:[159,131,100]},
+  {code:"612",name:"Light Drab Brown",rgb:[185,163,130]},
+  {code:"613",name:"Very Light Drab Brown",rgb:[210,192,165]},
+  {code:"632",name:"Ultra Very Dark Desert Sand",rgb:[148,96,70]},
+  {code:"640",name:"Very Dark Beige Gray",rgb:[148,142,125]},
+  {code:"642",name:"Dark Beige Gray",rgb:[170,163,147]},
+  {code:"644",name:"Medium Beige Gray",rgb:[218,213,198]},
+  {code:"645",name:"Very Dark Beaver Gray",rgb:[130,126,122]},
+  {code:"646",name:"Dark Beaver Gray",rgb:[163,160,155]},
+  {code:"647",name:"Medium Beaver Gray",rgb:[183,180,175]},
+  {code:"648",name:"Light Beaver Gray",rgb:[200,198,194]},
+  {code:"666",name:"Bright Red",rgb:[220,40,55]},
+  {code:"677",name:"Very Light Old Gold",rgb:[243,226,190]},
+  {code:"680",name:"Dark Old Gold",rgb:[196,160,74]},
+  {code:"699",name:"Green",rgb:[35,110,50]},
+  {code:"700",name:"Bright Green",rgb:[43,130,60]},
+  {code:"701",name:"Light Green",rgb:[68,158,80]},
+  {code:"702",name:"Kelly Green",rgb:[80,180,90]},
+  {code:"703",name:"Chartreuse",rgb:[112,198,100]},
+  {code:"704",name:"Bright Chartreuse",rgb:[144,216,110]},
+  {code:"712",name:"Cream",rgb:[255,245,228]},
+  {code:"718",name:"Plum",rgb:[160,72,124]},
+  {code:"720",name:"Dark Orange Spice",rgb:[218,100,38]},
+  {code:"721",name:"Medium Orange Spice",rgb:[234,120,56]},
+  {code:"722",name:"Light Orange Spice",rgb:[248,150,80]},
+  {code:"725",name:"Topaz",rgb:[255,205,80]},
+  {code:"726",name:"Light Topaz",rgb:[255,220,110]},
+  {code:"727",name:"Very Light Topaz",rgb:[255,238,165]},
+  {code:"728",name:"Golden Yellow",rgb:[236,185,80]},
+  {code:"729",name:"Medium Old Gold",rgb:[214,172,88]},
+  {code:"730",name:"Very Dark Olive Green",rgb:[128,128,52]},
+  {code:"731",name:"Dark Olive Green",rgb:[143,143,63]},
+  {code:"732",name:"Olive Green",rgb:[159,158,75]},
+  {code:"733",name:"Medium Olive Green",rgb:[180,180,88]},
+  {code:"734",name:"Light Olive Green",rgb:[200,200,110]},
+  {code:"738",name:"Very Light Tan",rgb:[244,212,168]},
+  {code:"739",name:"Ultra Very Light Tan",rgb:[255,230,200]},
+  {code:"740",name:"Tangerine",rgb:[255,155,0]},
+  {code:"741",name:"Medium Tangerine",rgb:[255,175,30]},
+  {code:"742",name:"Light Tangerine",rgb:[255,198,80]},
+  {code:"743",name:"Medium Yellow",rgb:[255,220,105]},
+  {code:"744",name:"Pale Yellow",rgb:[255,238,155]},
+  {code:"745",name:"Light Pale Yellow",rgb:[255,245,190]},
+  {code:"746",name:"Off White",rgb:[255,250,235]},
+  {code:"747",name:"Very Light Sky Blue",rgb:[225,245,248]},
+  {code:"754",name:"Light Peach",rgb:[252,212,185]},
+  {code:"758",name:"Very Light Terra Cotta",rgb:[230,175,152]},
+  {code:"760",name:"Salmon",rgb:[240,162,145]},
+  {code:"761",name:"Light Salmon",rgb:[252,192,178]},
+  {code:"762",name:"Very Light Pearl Gray",rgb:[230,230,230]},
+  {code:"772",name:"Very Light Yellow Green",rgb:[214,228,182]},
+  {code:"775",name:"Very Light Baby Blue",rgb:[214,235,248]},
+  {code:"776",name:"Medium Pink",rgb:[252,172,176]},
+  {code:"778",name:"Very Light Antique Mauve",rgb:[220,183,185]},
+  {code:"780",name:"Ultra Very Dark Topaz",rgb:[174,120,48]},
+  {code:"781",name:"Very Dark Topaz",rgb:[185,137,64]},
+  {code:"782",name:"Dark Topaz",rgb:[198,152,76]},
+  {code:"783",name:"Medium Topaz",rgb:[215,168,88]},
+  {code:"791",name:"Very Dark Cornflower Blue",rgb:[66,76,132]},
+  {code:"792",name:"Dark Cornflower Blue",rgb:[88,100,158]},
+  {code:"793",name:"Medium Cornflower Blue",rgb:[116,130,184]},
+  {code:"794",name:"Light Cornflower Blue",rgb:[154,166,210]},
+  {code:"796",name:"Dark Royal Blue",rgb:[40,76,140]},
+  {code:"797",name:"Royal Blue",rgb:[48,92,166]},
+  {code:"798",name:"Dark Delft Blue",rgb:[80,120,190]},
+  {code:"799",name:"Medium Delft Blue",rgb:[105,148,210]},
+  {code:"800",name:"Pale Delft Blue",rgb:[165,190,228]},
+  {code:"801",name:"Dark Coffee Brown",rgb:[128,78,45]},
+  {code:"806",name:"Dark Peacock Blue",rgb:[50,148,165]},
+  {code:"807",name:"Peacock Blue",rgb:[80,175,190]},
+  {code:"809",name:"Delft Blue",rgb:[132,162,215]},
+  {code:"813",name:"Light Blue",rgb:[150,192,220]},
+  {code:"814",name:"Dark Garnet",rgb:[156,36,58]},
+  {code:"815",name:"Medium Garnet",rgb:[175,50,70]},
+  {code:"816",name:"Garnet",rgb:[196,64,80]},
+  {code:"817",name:"Very Dark Coral Red",rgb:[205,52,52]},
+  {code:"818",name:"Baby Pink",rgb:[255,218,215]},
+  {code:"819",name:"Light Baby Pink",rgb:[255,232,230]},
+  {code:"820",name:"Very Dark Royal Blue",rgb:[32,62,130]},
+  {code:"822",name:"Light Beige Gray",rgb:[232,226,212]},
+  {code:"823",name:"Dark Navy Blue",rgb:[40,50,110]},
+  {code:"824",name:"Very Dark Blue",rgb:[56,100,155]},
+  {code:"825",name:"Dark Blue",rgb:[70,120,175]},
+  {code:"826",name:"Medium Blue",rgb:[95,148,195]},
+  {code:"827",name:"Very Light Blue",rgb:[170,210,235]},
+  {code:"828",name:"Ultra Very Light Blue",rgb:[196,228,240]},
+  {code:"829",name:"Very Dark Golden Olive",rgb:[138,115,60]},
+  {code:"830",name:"Dark Golden Olive",rgb:[157,132,72]},
+  {code:"831",name:"Medium Golden Olive",rgb:[176,150,86]},
+  {code:"832",name:"Golden Olive",rgb:[195,168,100]},
+  {code:"833",name:"Light Golden Olive",rgb:[212,188,120]},
+  {code:"834",name:"Very Light Golden Olive",rgb:[228,208,142]},
+  {code:"838",name:"Very Dark Beige Brown",rgb:[100,78,56]},
+  {code:"839",name:"Dark Beige Brown",rgb:[122,96,72]},
+  {code:"840",name:"Medium Beige Brown",rgb:[148,118,90]},
+  {code:"841",name:"Light Beige Brown",rgb:[178,150,120]},
+  {code:"842",name:"Very Light Beige Brown",rgb:[208,188,162]},
+  {code:"844",name:"Ultra Dark Beaver Gray",rgb:[100,99,98]},
+  {code:"869",name:"Very Dark Hazelnut Brown",rgb:[138,96,60]},
+  {code:"890",name:"Ultra Dark Pistachio Green",rgb:[38,82,56]},
+  {code:"891",name:"Dark Carnation",rgb:[246,98,110]},
+  {code:"892",name:"Medium Carnation",rgb:[252,126,130]},
+  {code:"893",name:"Light Carnation",rgb:[255,158,162]},
+  {code:"894",name:"Very Light Carnation",rgb:[255,192,192]},
+  {code:"895",name:"Very Dark Hunter Green",rgb:[38,90,52]},
+  {code:"898",name:"Very Dark Coffee Brown",rgb:[105,62,36]},
+  {code:"899",name:"Medium Rose",rgb:[245,130,140]},
+  {code:"900",name:"Dark Burnt Orange",rgb:[210,78,28]},
+  {code:"902",name:"Very Dark Garnet",rgb:[143,34,52]},
+  {code:"904",name:"Very Dark Parrot Green",rgb:[70,135,60]},
+  {code:"905",name:"Dark Parrot Green",rgb:[88,162,72]},
+  {code:"906",name:"Medium Parrot Green",rgb:[110,188,88]},
+  {code:"907",name:"Light Parrot Green",rgb:[158,214,120]},
+  {code:"909",name:"Very Dark Emerald Green",rgb:[32,120,68]},
+  {code:"910",name:"Dark Emerald Green",rgb:[40,148,84]},
+  {code:"911",name:"Medium Emerald Green",rgb:[52,168,98]},
+  {code:"912",name:"Light Emerald Green",rgb:[68,192,112]},
+  {code:"913",name:"Medium Nile Green",rgb:[110,200,148]},
+  {code:"915",name:"Dark Plum",rgb:[152,28,80]},
+  {code:"917",name:"Medium Plum",rgb:[185,52,110]},
+  {code:"918",name:"Dark Red Copper",rgb:[168,78,46]},
+  {code:"919",name:"Red Copper",rgb:[185,92,58]},
+  {code:"920",name:"Medium Copper",rgb:[188,105,68]},
+  {code:"921",name:"Copper",rgb:[202,118,78]},
+  {code:"922",name:"Light Copper",rgb:[220,140,96]},
+  {code:"924",name:"Very Dark Gray Green",rgb:[90,118,112]},
+  {code:"926",name:"Medium Gray Green",rgb:[140,170,162]},
+  {code:"927",name:"Light Gray Green",rgb:[175,200,192]},
+  {code:"928",name:"Very Light Gray Green",rgb:[210,225,218]},
+  {code:"930",name:"Dark Antique Blue",rgb:[82,108,135]},
+  {code:"931",name:"Medium Antique Blue",rgb:[108,140,168]},
+  {code:"932",name:"Light Antique Blue",rgb:[145,172,200]},
+  {code:"934",name:"Black Avocado Green",rgb:[60,82,44]},
+  {code:"935",name:"Dark Avocado Green",rgb:[75,103,56]},
+  {code:"936",name:"Very Dark Avocado Green",rgb:[86,118,65]},
+  {code:"937",name:"Medium Avocado Green",rgb:[100,135,75]},
+  {code:"938",name:"Ultra Dark Coffee Brown",rgb:[82,48,28]},
+  {code:"939",name:"Very Dark Navy Blue",rgb:[28,38,95]},
+  {code:"943",name:"Medium Aquamarine",rgb:[65,190,162]},
+  {code:"945",name:"Tawny",rgb:[255,210,175]},
+  {code:"946",name:"Medium Burnt Orange",rgb:[238,100,28]},
+  {code:"947",name:"Burnt Orange",rgb:[252,125,46]},
+  {code:"948",name:"Very Light Peach",rgb:[255,230,215]},
+  {code:"950",name:"Light Desert Sand",rgb:[234,196,170]},
+  {code:"951",name:"Light Tawny",rgb:[255,222,192]},
+  {code:"954",name:"Nile Green",rgb:[125,205,162]},
+  {code:"955",name:"Light Nile Green",rgb:[158,222,188]},
+  {code:"956",name:"Geranium",rgb:[255,135,125]},
+  {code:"957",name:"Pale Geranium",rgb:[255,180,170]},
+  {code:"958",name:"Dark Seagreen",rgb:[50,182,162]},
+  {code:"959",name:"Medium Seagreen",rgb:[72,200,178]},
+  {code:"961",name:"Dark Dusty Rose",rgb:[205,120,125]},
+  {code:"962",name:"Medium Dusty Rose",rgb:[228,148,150]},
+  {code:"963",name:"Ultra Very Light Dusty Rose",rgb:[255,215,210]},
+  {code:"964",name:"Light Seagreen",rgb:[148,222,208]},
+  {code:"966",name:"Medium Baby Green",rgb:[175,218,190]},
+  {code:"970",name:"Light Pumpkin",rgb:[255,155,42]},
+  {code:"971",name:"Pumpkin",rgb:[255,130,20]},
+  {code:"972",name:"Deep Canary",rgb:[255,190,20]},
+  {code:"973",name:"Bright Canary",rgb:[255,215,40]},
+  {code:"975",name:"Dark Golden Brown",rgb:[158,92,38]},
+  {code:"976",name:"Medium Golden Brown",rgb:[198,128,68]},
+  {code:"977",name:"Light Golden Brown",rgb:[222,158,95]},
+  {code:"986",name:"Very Dark Forest Green",rgb:[64,100,62]},
+  {code:"987",name:"Dark Forest Green",rgb:[88,130,82]},
+  {code:"988",name:"Medium Forest Green",rgb:[112,158,104]},
+  {code:"989",name:"Forest Green",rgb:[138,182,128]},
+  {code:"991",name:"Dark Aquamarine",rgb:[52,138,120]},
+  {code:"992",name:"Medium Aquamarine",rgb:[72,175,152]},
+  {code:"993",name:"Light Aquamarine",rgb:[100,198,175]},
+  {code:"995",name:"Dark Electric Blue",rgb:[32,148,196]},
+  {code:"996",name:"Medium Electric Blue",rgb:[52,182,228]},
+  {code:"3011",name:"Dark Khaki Green",rgb:[140,145,92]},
+  {code:"3012",name:"Medium Khaki Green",rgb:[168,175,110]},
+  {code:"3013",name:"Light Khaki Green",rgb:[195,203,140]},
+  {code:"3021",name:"Very Dark Brown Gray",rgb:[100,92,80]},
+  {code:"3022",name:"Medium Brown Gray",rgb:[152,148,128]},
+  {code:"3023",name:"Light Brown Gray",rgb:[180,174,156]},
+  {code:"3024",name:"Very Light Brown Gray",rgb:[220,218,208]},
+  {code:"3031",name:"Very Dark Mocha Brown",rgb:[112,90,64]},
+  {code:"3032",name:"Medium Mocha Brown",rgb:[185,162,130]},
+  {code:"3033",name:"Very Light Mocha Brown",rgb:[228,215,196]},
+  {code:"3041",name:"Medium Antique Violet",rgb:[165,140,158]},
+  {code:"3042",name:"Light Antique Violet",rgb:[200,178,194]},
+  {code:"3045",name:"Dark Yellow Beige",rgb:[196,160,108]},
+  {code:"3046",name:"Medium Yellow Beige",rgb:[218,188,142]},
+  {code:"3047",name:"Light Yellow Beige",rgb:[238,218,186]},
+  {code:"3051",name:"Dark Green Gray",rgb:[96,108,80]},
+  {code:"3052",name:"Medium Green Gray",rgb:[130,148,108]},
+  {code:"3053",name:"Green Gray",rgb:[160,175,142]},
+  {code:"3064",name:"Desert Sand",rgb:[210,162,128]},
+  {code:"3072",name:"Very Light Beaver Gray",rgb:[228,228,224]},
+  {code:"3078",name:"Very Light Golden Yellow",rgb:[255,245,188]},
+  {code:"3325",name:"Light Baby Blue",rgb:[182,218,238]},
+  {code:"3326",name:"Light Rose",rgb:[255,185,188]},
+  {code:"3328",name:"Dark Salmon",rgb:[218,120,112]},
+  {code:"3340",name:"Medium Apricot",rgb:[252,145,105]},
+  {code:"3341",name:"Apricot",rgb:[255,175,140]},
+  {code:"3345",name:"Dark Hunter Green",rgb:[55,108,58]},
+  {code:"3346",name:"Hunter Green",rgb:[78,140,80]},
+  {code:"3347",name:"Medium Yellow Green",rgb:[110,168,100]},
+  {code:"3348",name:"Light Yellow Green",rgb:[162,208,152]},
+  {code:"3350",name:"Ultra Dark Dusty Rose",rgb:[190,86,100]},
+  {code:"3354",name:"Light Dusty Rose",rgb:[235,175,175]},
+  {code:"3362",name:"Dark Pine Green",rgb:[88,112,78]},
+  {code:"3363",name:"Medium Pine Green",rgb:[112,142,100]},
+  {code:"3364",name:"Pine Green",rgb:[138,170,120]},
+  {code:"3371",name:"Black Brown",rgb:[50,30,20]},
+  {code:"3607",name:"Light Plum",rgb:[212,100,162]},
+  {code:"3608",name:"Very Light Plum",rgb:[238,160,200]},
+  {code:"3609",name:"Ultra Light Plum",rgb:[255,200,230]},
+  {code:"3685",name:"Very Dark Mauve",rgb:[158,52,80]},
+  {code:"3687",name:"Mauve",rgb:[205,128,145]},
+  {code:"3688",name:"Medium Mauve",rgb:[228,168,178]},
+  {code:"3689",name:"Light Mauve",rgb:[248,198,208]},
+  {code:"3705",name:"Dark Melon",rgb:[255,122,110]},
+  {code:"3706",name:"Medium Melon",rgb:[255,168,155]},
+  {code:"3708",name:"Light Melon",rgb:[255,208,202]},
+  {code:"3712",name:"Medium Salmon",rgb:[245,148,130]},
+  {code:"3713",name:"Very Light Salmon",rgb:[255,214,205]},
+  {code:"3716",name:"Very Light Dusty Rose",rgb:[255,190,190]},
+  {code:"3721",name:"Dark Shell Pink",rgb:[178,94,100]},
+  {code:"3722",name:"Medium Shell Pink",rgb:[198,118,115]},
+  {code:"3726",name:"Dark Antique Mauve",rgb:[172,110,120]},
+  {code:"3727",name:"Light Antique Mauve",rgb:[228,182,188]},
+  {code:"3731",name:"Very Dark Dusty Rose",rgb:[210,102,116]},
+  {code:"3733",name:"Dusty Rose",rgb:[238,148,158]},
+  {code:"3740",name:"Dark Antique Violet",rgb:[130,102,122]},
+  {code:"3743",name:"Very Light Antique Violet",rgb:[218,208,218]},
+  {code:"3746",name:"Dark Blue Violet",rgb:[122,112,168]},
+  {code:"3747",name:"Very Light Blue Violet",rgb:[212,210,238]},
+  {code:"3750",name:"Very Dark Antique Blue",rgb:[58,84,115]},
+  {code:"3752",name:"Very Light Antique Blue",rgb:[193,210,228]},
+  {code:"3753",name:"Ultra Very Light Antique Blue",rgb:[218,228,238]},
+  {code:"3755",name:"Baby Blue",rgb:[125,182,228]},
+  {code:"3756",name:"Ultra Very Light Baby Blue",rgb:[235,250,255]},
+  {code:"3760",name:"Medium Wedgwood",rgb:[66,140,185]},
+  {code:"3761",name:"Light Sky Blue",rgb:[148,210,235]},
+  {code:"3765",name:"Very Dark Peacock Blue",rgb:[38,138,155]},
+  {code:"3766",name:"Light Peacock Blue",rgb:[108,195,210]},
+  {code:"3768",name:"Dark Gray Green",rgb:[110,140,138]},
+  {code:"3770",name:"Very Light Tawny",rgb:[255,240,220]},
+  {code:"3771",name:"Ultra Very Light Terra Cotta",rgb:[245,198,178]},
+  {code:"3772",name:"Very Dark Desert Sand",rgb:[175,128,98]},
+  {code:"3773",name:"Medium Desert Sand",rgb:[198,148,115]},
+  {code:"3774",name:"Very Light Desert Sand",rgb:[248,224,205]},
+  {code:"3776",name:"Light Mahogany",rgb:[210,130,78]},
+  {code:"3777",name:"Very Dark Terra Cotta",rgb:[148,68,58]},
+  {code:"3778",name:"Light Terra Cotta",rgb:[218,145,120]},
+  {code:"3779",name:"Ultra Very Light Rosewood",rgb:[250,200,195]},
+  {code:"3781",name:"Dark Mocha Brown",rgb:[128,100,76]},
+  {code:"3782",name:"Light Mocha Brown",rgb:[213,192,170]},
+  {code:"3787",name:"Dark Brown Gray",rgb:[122,116,104]},
+  {code:"3790",name:"Ultra Dark Beige Gray",rgb:[130,120,100]},
+  {code:"3799",name:"Very Dark Pewter Gray",rgb:[74,73,78]},
+  {code:"3801",name:"Very Dark Melon",rgb:[230,78,90]},
+  {code:"3802",name:"Very Dark Antique Mauve",rgb:[148,84,96]},
+  {code:"3803",name:"Dark Mauve",rgb:[178,74,106]},
+  {code:"3804",name:"Dark Cyclamen Pink",rgb:[230,54,110]},
+  {code:"3805",name:"Cyclamen Pink",rgb:[248,90,140]},
+  {code:"3806",name:"Light Cyclamen Pink",rgb:[255,140,178]},
+  {code:"3807",name:"Cornflower Blue",rgb:[95,112,168]},
+  {code:"3808",name:"Ultra Very Dark Turquoise",rgb:[58,118,130]},
+  {code:"3809",name:"Very Dark Turquoise",rgb:[68,145,158]},
+  {code:"3810",name:"Dark Turquoise",rgb:[78,170,185]},
+  {code:"3811",name:"Very Light Turquoise",rgb:[180,228,230]},
+  {code:"3812",name:"Very Dark Seagreen",rgb:[42,158,145]},
+  {code:"3813",name:"Light Blue Green",rgb:[168,218,198]},
+  {code:"3814",name:"Aquamarine",rgb:[60,158,138]},
+  {code:"3815",name:"Dark Celadon Green",rgb:[75,135,108]},
+  {code:"3816",name:"Celadon Green",rgb:[100,165,135]},
+  {code:"3817",name:"Light Celadon Green",rgb:[150,198,175]},
+  {code:"3818",name:"Ultra Very Dark Emerald Green",rgb:[25,95,58]},
+  {code:"3819",name:"Light Moss Green",rgb:[195,212,110]},
+  {code:"3820",name:"Dark Straw",rgb:[224,185,100]},
+  {code:"3821",name:"Straw",rgb:[240,210,130]},
+  {code:"3822",name:"Light Straw",rgb:[248,228,168]},
+  {code:"3823",name:"Ultra Pale Yellow",rgb:[255,250,220]},
+  {code:"3824",name:"Light Apricot",rgb:[255,200,175]},
+  {code:"3825",name:"Pale Pumpkin",rgb:[255,180,120]},
+  {code:"3826",name:"Golden Brown",rgb:[178,120,60]},
+  {code:"3827",name:"Pale Golden Brown",rgb:[238,188,120]},
+  {code:"3828",name:"Hazelnut Brown",rgb:[182,142,88]},
+  {code:"3829",name:"Very Dark Old Gold",rgb:[180,144,56]},
+  {code:"3830",name:"Terra Cotta",rgb:[200,108,85]},
+  {code:"3831",name:"Dark Raspberry",rgb:[188,56,80]},
+  {code:"3832",name:"Medium Raspberry",rgb:[215,88,108]},
+  {code:"3833",name:"Light Raspberry",rgb:[238,128,145]},
+  {code:"3834",name:"Dark Grape",rgb:[118,68,108]},
+  {code:"3835",name:"Medium Grape",rgb:[150,100,142]},
+  {code:"3836",name:"Light Grape",rgb:[188,148,182]},
+  {code:"3837",name:"Ultra Dark Lavender",rgb:[98,64,120]},
+  {code:"3838",name:"Dark Lavender Blue",rgb:[92,108,160]},
+  {code:"3839",name:"Medium Lavender Blue",rgb:[120,136,185]},
+  {code:"3840",name:"Light Lavender Blue",rgb:[162,175,215]},
+  {code:"3841",name:"Pale Baby Blue",rgb:[200,220,240]},
+  {code:"3842",name:"Dark Wedgwood",rgb:[62,115,162]},
+  {code:"3843",name:"Electric Blue",rgb:[32,168,218]},
+  {code:"3844",name:"Dark Bright Turquoise",rgb:[28,195,210]},
+  {code:"3845",name:"Medium Bright Turquoise",rgb:[42,215,222]},
+  {code:"3846",name:"Light Bright Turquoise",rgb:[70,228,235]},
+  {code:"3847",name:"Dark Teal Green",rgb:[52,138,128]},
+  {code:"3848",name:"Medium Teal Green",rgb:[72,165,152]},
+  {code:"3849",name:"Light Teal Green",rgb:[95,192,175]},
+  {code:"3850",name:"Dark Bright Green",rgb:[48,158,120]},
+  {code:"3851",name:"Bright Green",rgb:[68,195,148]},
+  {code:"3852",name:"Very Dark Straw",rgb:[208,168,78]},
+  {code:"3853",name:"Dark Autumn Gold",rgb:[240,148,62]},
+  {code:"3854",name:"Medium Autumn Gold",rgb:[248,175,100]},
+  {code:"3855",name:"Light Autumn Gold",rgb:[255,210,148]},
+  {code:"3856",name:"Ultra Very Light Mahogany",rgb:[255,215,185]},
+  {code:"3857",name:"Very Dark Rosewood",rgb:[100,48,38]},
+  {code:"3858",name:"Dark Rosewood",rgb:[145,78,68]},
+  {code:"3859",name:"Light Rosewood",rgb:[195,150,138]},
+  {code:"3860",name:"Cocoa",rgb:[128,102,98]},
+  {code:"3861",name:"Light Cocoa",rgb:[170,148,142]},
+  {code:"3862",name:"Dark Mocha Beige",rgb:[148,120,90]},
+  {code:"3863",name:"Medium Mocha Beige",rgb:[175,148,115]},
+  {code:"3864",name:"Light Mocha Beige",rgb:[210,190,162]},
+  {code:"3865",name:"Winter White",rgb:[255,252,248]},
+  {code:"3866",name:"Ultra Very Light Mocha Brown",rgb:[250,242,235]},
+];
+
+// ═══════════════════════════════════════════════════════════════
+// SYMBOL SET
+// ═══════════════════════════════════════════════════════════════
+const SYMBOLS = ['●','■','▲','★','♦','♥','♠','♣','◆','○','□','△','☆','◇','♡','✦','✚','✖','⊕','⊗','∎','⬟','⬡','⬢','⌘','⍟','⎔','⌖','⌀','⌂','⊞','⊟','⊠','⊡','⋆','⊛','⊙','⊚','⊜','⊝','⊐','⊏','⊑','⊒','⊓','⊔','⊕','⊖','⊘','⊤','⊥','⊦','⊧','⊨','⊩','⊪','⊫','⊬','⊭','⊮','⊯','⊰','⊱','⊲','⊳','⊴','⊵','⊶','⊷','⊸','⊹','⊺','⊻','⊼','⊽','⊾','⊿'];
+
+// ═══════════════════════════════════════════════════════════════
+// COLOR MATH — RGB ↔ LAB
+// ═══════════════════════════════════════════════════════════════
+function rgbToXyz(r, g, b) {
+  let sr = r / 255, sg = g / 255, sb = b / 255;
+  sr = sr > 0.04045 ? Math.pow((sr + 0.055) / 1.055, 2.4) : sr / 12.92;
+  sg = sg > 0.04045 ? Math.pow((sg + 0.055) / 1.055, 2.4) : sg / 12.92;
+  sb = sb > 0.04045 ? Math.pow((sb + 0.055) / 1.055, 2.4) : sb / 12.92;
+  return [
+    sr * 0.4124564 + sg * 0.3575761 + sb * 0.1804375,
+    sr * 0.2126729 + sg * 0.7151522 + sb * 0.0721750,
+    sr * 0.0193339 + sg * 0.1191920 + sb * 0.9503041
+  ];
+}
+
+function xyzToLab([x, y, z]) {
+  const f = v => v > 0.008856 ? Math.cbrt(v) : 7.787 * v + 16/116;
+  const fx = f(x / 0.95047), fy = f(y / 1.00000), fz = f(z / 1.08883);
+  return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
+}
+
+function rgbToLab(r, g, b) { return xyzToLab(rgbToXyz(r, g, b)); }
+
+function deltaE(lab1, lab2) {
+  return Math.sqrt((lab1[0]-lab2[0])**2 + (lab1[1]-lab2[1])**2 + (lab1[2]-lab2[2])**2);
+}
+
+// Precompute LAB for all DMC colors
+const DMC_LAB = DMC_COLORS.map(c => rgbToLab(...c.rgb));
+
+function nearestDMC(r, g, b) {
+  const lab = rgbToLab(r, g, b);
+  let best = 0, bestDist = Infinity;
+  for (let i = 0; i < DMC_LAB.length; i++) {
+    const d = deltaE(lab, DMC_LAB[i]);
+    if (d < bestDist) { bestDist = d; best = i; }
+  }
+  return best;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// K-MEANS COLOR QUANTIZATION
+// ═══════════════════════════════════════════════════════════════
+function kMeans(pixels, k, maxIter = 20, onProgress) {
+  // Sample for speed
+  const maxSamples = 8000;
+  let samples = pixels;
+  if (pixels.length > maxSamples) {
+    const step = Math.ceil(pixels.length / maxSamples);
+    samples = pixels.filter((_, i) => i % step === 0);
+  }
+
+  // Init centroids with k-means++ style
+  const centroids = [];
+  centroids.push([...samples[Math.floor(Math.random() * samples.length)]]);
+
+  for (let c = 1; c < k; c++) {
+    const dists = samples.map(p => {
+      let minD = Infinity;
+      for (const cent of centroids) {
+        const d = (p[0]-cent[0])**2 + (p[1]-cent[1])**2 + (p[2]-cent[2])**2;
+        if (d < minD) minD = d;
+      }
+      return minD;
+    });
+    const total = dists.reduce((a, b) => a + b, 0);
+    let r = Math.random() * total, acc = 0;
+    let chosen = 0;
+    for (let i = 0; i < dists.length; i++) {
+      acc += dists[i];
+      if (acc >= r) { chosen = i; break; }
+    }
+    centroids.push([...samples[chosen]]);
+  }
+
+  let assignments = new Int32Array(samples.length);
+
+  for (let iter = 0; iter < maxIter; iter++) {
+    onProgress && onProgress(Math.round((iter / maxIter) * 60));
+
+    // Assign
+    for (let i = 0; i < samples.length; i++) {
+      const p = samples[i];
+      let best = 0, bestD = Infinity;
+      for (let c = 0; c < k; c++) {
+        const d = (p[0]-centroids[c][0])**2 + (p[1]-centroids[c][1])**2 + (p[2]-centroids[c][2])**2;
+        if (d < bestD) { bestD = d; best = c; }
+      }
+      assignments[i] = best;
+    }
+
+    // Update centroids
+    const sums = Array.from({length: k}, () => [0,0,0,0]);
+    for (let i = 0; i < samples.length; i++) {
+      const c = assignments[i];
+      sums[c][0] += samples[i][0];
+      sums[c][1] += samples[i][1];
+      sums[c][2] += samples[i][2];
+      sums[c][3]++;
+    }
+
+    let moved = false;
+    for (let c = 0; c < k; c++) {
+      if (sums[c][3] > 0) {
+        const nr = sums[c][0]/sums[c][3], ng = sums[c][1]/sums[c][3], nb = sums[c][2]/sums[c][3];
+        if (Math.abs(nr - centroids[c][0]) + Math.abs(ng - centroids[c][1]) + Math.abs(nb - centroids[c][2]) > 0.5) moved = true;
+        centroids[c] = [nr, ng, nb];
+      }
+    }
+    if (!moved) break;
+  }
+
+  return centroids.map(c => c.map(Math.round));
+}
+
+// ═══════════════════════════════════════════════════════════════
+// APP STATE
+// ═══════════════════════════════════════════════════════════════
+const state = {
+  sourceImage: null,
+  pattern: null,       // {width, height, grid}
+  userGrid: null,      // Int16Array, -1 = empty, >=0 = palette index
+  palette: [],         // [{dmc, name, color, symbol, count}]
+  activePaletteIdx: 0,
+  tool: 'paint',
+
+  // Viewport
+  viewX: 0, viewY: 0,
+  zoom: 1,
+  cellSize: 14,
+  showSymbols: true,
+
+  // Interaction
+  isPainting: false,
+  lastCell: null,
+  isDragging: false,
+  dragStartX: 0, dragStartY: 0,
+  viewStartX: 0, viewStartY: 0,
+  highlightPaletteIdx: -1,  // 선택 색상 하이라이트
+  // Undo/Redo
+  undoStack: [],
+  redoStack: [],
+};
+
+// ═══════════════════════════════════════════════════════════════
+// DOM REFS
+// ═══════════════════════════════════════════════════════════════
+const patternCanvas = document.getElementById('pattern-canvas');
+const userCanvas    = document.getElementById('user-canvas');
+const overlayCanvas = document.getElementById('overlay-canvas');
+const pCtx = patternCanvas.getContext('2d');
+const uCtx = userCanvas.getContext('2d');
+const oCtx = overlayCanvas.getContext('2d');
+const minimapCanvas = document.getElementById('minimap-canvas');
+const mmCtx = minimapCanvas.getContext('2d');
+const canvasArea    = document.getElementById('canvas-area');
+const container     = document.getElementById('canvas-container');
+const emptyState    = document.getElementById('empty-state');
+const procOverlay   = document.getElementById('processing-overlay');
+const procPct       = document.getElementById('processing-pct');
+const procLabel     = document.getElementById('processing-label');
+
+// ─── Auto-save timer ───
+let autoSaveTimer = null;
+
+// ═══════════════════════════════════════════════════════════════
+// CANVAS MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
+function resizeCanvases(w, h) {
+  [patternCanvas, userCanvas, overlayCanvas].forEach(c => {
+    c.width = w; c.height = h;
+  });
+  container.style.width = w + 'px';
+  container.style.height = h + 'px';
+}
+
+function getCanvasSize() {
+  if (!state.pattern) return {w:0, h:0};
+  const cs = state.cellSize;
+  return {
+    w: state.pattern.width * cs,
+    h: state.pattern.height * cs
+  };
+}
+
+// ─── Center viewport ───
+function centerView() {
+  const {w, h} = getCanvasSize();
+  const aw = canvasArea.clientWidth, ah = canvasArea.clientHeight;
+  state.viewX = (aw - w * state.zoom) / 2;
+  state.viewY = (ah - h * state.zoom) / 2;
+  applyTransform();
+}
+
+function applyTransform() {
+  container.style.transform = `translate(${state.viewX}px, ${state.viewY}px) scale(${state.zoom})`;
+  document.getElementById('zoom-indicator').textContent = Math.round(state.zoom * 100) + '%';
+  drawMinimap();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PATTERN RENDERING
+// ═══════════════════════════════════════════════════════════════
+function drawPatternFull() {
+  if (!state.pattern) return;
+  const {width, height, grid} = state.pattern;
+  const cs = state.cellSize;
+
+  pCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height);
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const cell = grid[y * width + x];
+      const px = x * cs, py = y * cs;
+      drawPatternCell(pCtx, px, py, cs, cell);
+    }
+  }
+}
+
+function drawPatternCell(ctx, px, py, cs, cell) {
+  const pal = state.palette[cell.palIdx];
+  if (!pal) return;
+
+  const [r,g,b] = pal.color;
+
+  // Background
+  ctx.fillStyle = `rgb(${r},${g},${b})`;
+  ctx.fillRect(px, py, cs, cs);
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+  ctx.lineWidth = 0.5;
+  ctx.strokeRect(px + 0.5, py + 0.5, cs - 1, cs - 1);
+
+  // Symbol
+  if (state.showSymbols && cs >= 8) {
+    const lum = 0.299*r + 0.587*g + 0.114*b;
+    ctx.fillStyle = lum > 140 ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.7)';
+    ctx.font = `${Math.max(6, cs - 4)}px monospace`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(pal.symbol, px + cs/2, py + cs/2);
+  }
+}
+
+function drawUserCell(x, y) {
+  if (!state.pattern) return;
+  const {width} = state.pattern;
+  const cs = state.cellSize;
+  const px = x * cs, py = y * cs;
+  const editVal = state.userGrid[y * width + x];
+
+  uCtx.clearRect(px, py, cs, cs);
+
+  if (editVal < 0) return; // 미편집 — pattern-canvas 원본 그대로 노출
+
+  const pal = state.palette[editVal];
+  if (!pal) return;
+  const [r, g, b] = pal.color;
+
+  // 1. 배경색 — 완전 불투명으로 pattern-canvas를 덮어씀
+  uCtx.fillStyle = `rgb(${r},${g},${b})`;
+  uCtx.fillRect(px, py, cs, cs);
+
+  // 2. 격자선 — pattern-canvas 와 일관된 스타일
+  uCtx.strokeStyle = 'rgba(0,0,0,0.18)';
+  uCtx.lineWidth = 0.5;
+  uCtx.strokeRect(px + 0.5, py + 0.5, cs - 1, cs - 1);
+
+  // 3. 심볼(Symbol) — showSymbols 옵션과 동기화
+  if (state.showSymbols && cs >= 8) {
+    const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+    uCtx.fillStyle = lum > 140 ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.7)';
+    uCtx.font = `${Math.max(6, cs - 4)}px monospace`;
+    uCtx.textAlign = 'center';
+    uCtx.textBaseline = 'middle';
+    uCtx.fillText(pal.symbol, px + cs / 2, py + cs / 2);
+  }
+
+  // 4. 편집된 셀 강조 테두리 (원본 셀과 구분)
+  uCtx.strokeStyle = 'rgba(111,231,255,0.4)';
+  uCtx.lineWidth = 1;
+  uCtx.strokeRect(px + 0.5, py + 0.5, cs - 1, cs - 1);
+
+  // 5. 선택 색상 하이라이트 모드
+  if (state.highlightPaletteIdx >= 0 && editVal === state.highlightPaletteIdx) {
+    uCtx.strokeStyle = 'rgba(111,231,255,0.95)';
+    uCtx.lineWidth = 2;
+    uCtx.strokeRect(px + 1, py + 1, cs - 2, cs - 2);
+  }
+}
+
+function redrawAllUserCells() {
+  if (!state.pattern) return;
+  uCtx.clearRect(0, 0, userCanvas.width, userCanvas.height);
+  const {width, height} = state.pattern;
+  for (let y = 0; y < height; y++)
+    for (let x = 0; x < width; x++)
+      if (state.userGrid[y * width + x] >= 0) drawUserCell(x, y);
+}
+
+// ─── Hover overlay ───
+let lastHoverCell = null;
+function drawHoverCell(cx, cy) {
+  if (!state.pattern) return;
+  const cs = state.cellSize;
+  const {width, height} = state.pattern;
+
+  oCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+  if (cx < 0 || cy < 0 || cx >= width || cy >= height) return;
+  lastHoverCell = {cx, cy};
+
+  const px = cx * cs, py = cy * cs;
+  oCtx.strokeStyle = 'rgba(255,255,255,0.7)';
+  oCtx.lineWidth = 2;
+  oCtx.strokeRect(px+1, py+1, cs-2, cs-2);
+}
+
+// ─── Minimap ───
+function drawMinimap() {
+  if (!state.pattern) return;
+  const {width, height} = state.pattern;
+  const mw = minimapCanvas.width, mh = minimapCanvas.height;
+  mmCtx.clearRect(0, 0, mw, mh);
+
+  // Draw pattern miniature
+  const scaleX = mw / width, scaleY = mh / height;
+  const scale = Math.min(scaleX, scaleY);
+  const offX = (mw - width * scale) / 2, offY = (mh - height * scale) / 2;
+
+  // Use pattern canvas as source scaled
+  mmCtx.drawImage(patternCanvas, offX, offY, width * scale, height * scale);
+
+  // Viewport rect
+  const cs = state.cellSize;
+  const aw = canvasArea.clientWidth, ah = canvasArea.clientHeight;
+  const vx = (-state.viewX / state.zoom) * scale / cs + offX;
+  const vy = (-state.viewY / state.zoom) * scale / cs + offY;
+  const vw = (aw / state.zoom) * scale / cs;
+  const vh = (ah / state.zoom) * scale / cs;
+
+  mmCtx.strokeStyle = 'rgba(200,169,110,0.8)';
+  mmCtx.lineWidth = 1.5;
+  mmCtx.strokeRect(vx, vy, vw, vh);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// IMAGE PROCESSING & PATTERN GENERATION
+// ═══════════════════════════════════════════════════════════════
+async function generatePattern() {
+  if (!state.sourceImage) return;
+
+  showProcessing(true, t('proc_analyzing'), 0);
+  setStatus('processing', t('status_generating'));
+
+  await sleep(30); // UI flush
+
+  const { gridW, gridH } = getGridDimensions();
+  if (!gridW || !gridH) return;
+  const k = parseInt(document.getElementById('k-colors').value);
+  const img = state.sourceImage;
+
+  // Step 1: Resize image to grid dimensions
+  const offscreen = document.createElement('canvas');
+  offscreen.width = gridW; offscreen.height = gridH;
+  const ctx2 = offscreen.getContext('2d');
+  ctx2.imageSmoothingEnabled = false;
+  ctx2.drawImage(img, 0, 0, gridW, gridH);
+
+  const imgData = ctx2.getImageData(0, 0, gridW, gridH);
+  const data = imgData.data;
+
+  // Extract pixel array
+  const pixels = [];
+  for (let i = 0; i < data.length; i += 4) {
+    pixels.push([data[i], data[i+1], data[i+2]]);
+  }
+
+  showProcessing(true, t('proc_kmeans'), 10);
+  await sleep(30);
+
+  // Step 2: K-means
+  const centroids = kMeans(pixels, k, 20, pct => {
+    showProcessing(true, t('proc_clustering'), 10 + pct * 0.6);
+  });
+
+  showProcessing(true, t('proc_dmc'), 70);
+  await sleep(30);
+
+  // Step 3: Map centroids to nearest DMC
+  const dmcIndices = centroids.map(([r,g,b]) => nearestDMC(r,g,b));
+
+  // Deduplicate: if two centroids map to same DMC, merge
+  const dmcToFirstCentroid = new Map();
+  const centroidToDmc = [];
+  for (let i = 0; i < centroids.length; i++) {
+    const di = dmcIndices[i];
+    if (!dmcToFirstCentroid.has(di)) {
+      dmcToFirstCentroid.set(di, i);
+    }
+    centroidToDmc.push(di);
+  }
+
+  // Build palette
+  const paletteDmcs = [...new Set(centroidToDmc)];
+  const paletteMap = new Map(); // dmcIdx -> paletteIdx
+  paletteDmcs.forEach((di, pi) => paletteMap.set(di, pi));
+
+  state.palette = paletteDmcs.map((di, pi) => ({
+    dmc: DMC_COLORS[di].code,
+    name: DMC_COLORS[di].name,
+    color: DMC_COLORS[di].rgb,
+    symbol: SYMBOLS[pi % SYMBOLS.length],
+    count: 0,
+  }));
+
+  showProcessing(true, t('proc_grid'), 80);
+  await sleep(30);
+
+  // Step 4: Assign each pixel to nearest centroid then palette index
+  const grid = [];
+  for (let i = 0; i < pixels.length; i++) {
+    const [r,g,b] = pixels[i];
+    // Find nearest centroid (fast)
+    let best = 0, bestD = Infinity;
+    for (let c = 0; c < centroids.length; c++) {
+      const d = (r-centroids[c][0])**2 + (g-centroids[c][1])**2 + (b-centroids[c][2])**2;
+      if (d < bestD) { bestD = d; best = c; }
+    }
+    const dmcIdx = centroidToDmc[best];
+    const palIdx = paletteMap.get(dmcIdx);
+    state.palette[palIdx].count++;
+    grid.push({ palIdx });
+  }
+
+  // Sort palette by count desc
+  const sortedPaletteWithOldIdx = state.palette
+    .map((p, i) => ({...p, oldIdx: i}))
+    .sort((a, b) => b.count - a.count);
+
+  const oldToNew = new Map(sortedPaletteWithOldIdx.map((p, ni) => [p.oldIdx, ni]));
+  state.palette = sortedPaletteWithOldIdx.map((p, i) => ({...p, symbol: SYMBOLS[i % SYMBOLS.length]}));
+
+  // Remap grid
+  grid.forEach(cell => { cell.palIdx = oldToNew.get(cell.palIdx); });
+
+  state.pattern = { width: gridW, height: gridH, grid };
+  state.userGrid = new Int16Array(gridW * gridH).fill(-1);
+
+  showProcessing(true, t('proc_rendering'), 90);
+  await sleep(30);
+
+  // Resize canvases
+  const cs = state.cellSize;
+  resizeCanvases(gridW * cs, gridH * cs);
+
+  // Draw
+  drawPatternFull();
+  redrawAllUserCells();
+  updateUI();
+  centerView();
+  emptyState.style.display = 'none';
+  enableButtons();
+  startAutoSave();
+
+  showProcessing(false);
+  setStatus('done', `${t('status_done_pattern')} — ${gridW}×${gridH}, ${state.palette.length} ${t('stat_colors')}`);
+  showNotif(t('notif_pattern_ready'), 'success');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UI UPDATES
+// ═══════════════════════════════════════════════════════════════
+function updateUI() {
+  updatePaletteUI();
+  updateColorList();
+  updateStats();
+  updateProgress();
+}
+
+function updatePaletteUI() {
+  const list = document.getElementById('palette-list');
+  list.innerHTML = '';
+  document.getElementById('palette-count').textContent = `(${state.palette.length})`;
+
+  state.palette.forEach((p, i) => {
+    const el = document.createElement('div');
+    el.className = 'palette-item' + (i === state.activePaletteIdx ? ' active' : '');
+    el.innerHTML = `
+      <div class="palette-swatch" style="background:rgb(${p.color[0]},${p.color[1]},${p.color[2]})"></div>
+      <div class="palette-symbol">${p.symbol}</div>
+      <div class="palette-info">
+        <div class="palette-dmc">DMC ${p.dmc}</div>
+        <div class="palette-name">${p.name}</div>
+      </div>
+      <div class="palette-count">${p.count.toLocaleString()}</div>
+    `;
+    el.onclick = () => {
+      state.activePaletteIdx = i;
+      state.tool = 'paint';
+      setActiveTool('paint');
+      updatePaletteUI();
+    };
+    list.appendChild(el);
+  });
+}
+
+function updateColorList() {
+  const list = document.getElementById('color-list');
+  list.innerHTML = '';
+  if (!state.pattern) return;
+
+  // 각 색상의 편집 셀 수 계산
+  const editCount = new Array(state.palette.length).fill(0);
+  if (state.userGrid) {
+    for (let i = 0; i < state.userGrid.length; i++) {
+      const u = state.userGrid[i];
+      if (u >= 0) editCount[u]++;
+    }
+  }
+
+  state.palette.forEach((p, i) => {
+    const hasEdits = editCount[i] > 0;
+    const isHighlighted = state.highlightPaletteIdx === i;
+    const el = document.createElement('div');
+    el.className = 'color-entry' + (isHighlighted ? ' highlighted' : '');
+    el.innerHTML = `
+      <div class="swatch" style="background:rgb(${p.color[0]},${p.color[1]},${p.color[2]})"></div>
+      <span>${p.symbol}</span>
+      <span class="dmc-code">DMC ${p.dmc}</span>
+      <span class="cell-count">${p.count.toLocaleString()}</span>
+      ${hasEdits ? `<div class="edit-badge" title="${editCount[i]} edited"></div>` : ''}
+    `;
+    el.onclick = () => {
+      state.activePaletteIdx = i;
+      // 하이라이트 토글
+      state.highlightPaletteIdx = (state.highlightPaletteIdx === i) ? -1 : i;
+      state.tool = 'paint';
+      setActiveTool('paint');
+      updatePaletteUI();
+      updateColorList();
+      if (state.pattern) redrawAllUserCells();
+    };
+    list.appendChild(el);
+  });
+}
+
+function updateStats() {
+  if (!state.pattern) return;
+  const total = state.pattern.grid.length;
+  let modified = 0;
+  if (state.userGrid) {
+    for (let i = 0; i < state.userGrid.length; i++) {
+      if (state.userGrid[i] >= 0) modified++;
+    }
+  }
+  document.getElementById('stat-total').textContent    = total.toLocaleString();
+  document.getElementById('stat-colors').textContent   = state.palette.length;
+  const modEl = document.getElementById('stat-modified');
+  if (modEl) modEl.textContent = modified.toLocaleString();
+  document.getElementById('stat-remaining').textContent = (total - modified).toLocaleString();
+}
+
+function updateProgress() {
+  if (!state.pattern || !state.userGrid) return;
+  const total = state.pattern.grid.length;
+  let modified = 0;
+  for (let i = 0; i < state.userGrid.length; i++) {
+    if (state.userGrid[i] >= 0) modified++;
+  }
+  const pct = total > 0 ? (modified / total * 100) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct.toFixed(1) + '%';
+
+  const modCountEl = document.getElementById('edit-modified-count');
+  if (modCountEl) modCountEl.textContent = modified.toLocaleString();
+
+  const histEl = document.getElementById('edit-history-count');
+  if (histEl) histEl.textContent = `${state.undoStack.length} / 50`;
+
+  const undoBtn = document.getElementById('btn-undo');
+  const redoBtn = document.getElementById('btn-redo');
+  if (undoBtn) undoBtn.disabled = state.undoStack.length === 0;
+  if (redoBtn) redoBtn.disabled = state.redoStack.length === 0;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INTERACTION
+// ═══════════════════════════════════════════════════════════════
+function canvasToCell(clientX, clientY) {
+  const rect = canvasArea.getBoundingClientRect();
+  const mx = clientX - rect.left, my = clientY - rect.top;
+  const lx = (mx - state.viewX) / state.zoom;
+  const ly = (my - state.viewY) / state.zoom;
+  const cs = state.cellSize;
+  return { cx: Math.floor(lx / cs), cy: Math.floor(ly / cs) };
+}
+
+function placeBead(cx, cy, erase = false) {
+  if (!state.pattern) return;
+  const {width, height} = state.pattern;
+  if (cx < 0 || cy < 0 || cx >= width || cy >= height) return;
+
+  const idx = cy * width + cx;
+
+  if (state.tool === 'pick') {
+    const palIdx = state.pattern.grid[idx].palIdx;
+    state.activePaletteIdx = palIdx;
+    state.tool = 'paint';
+    setActiveTool('paint');
+    updatePaletteUI();
+    showNotif(`${t('notif_picked')}: DMC ${state.palette[palIdx].dmc}`, 'success');
+    return;
+  }
+
+  if (state.tool === 'fill') {
+    floodFill(cx, cy, state.activePaletteIdx);
+    return;
+  }
+
+  const shouldErase = erase || state.tool === 'erase';
+  const newVal = shouldErase ? -1 : state.activePaletteIdx;
+
+  if (state.userGrid[idx] === newVal) return;
+  state.userGrid[idx] = newVal;
+  drawUserCell(cx, cy);
+}
+
+function floodFill(startX, startY, paletteIdx) {
+  if (!state.pattern) return;
+  const {width, height, grid} = state.pattern;
+
+  // 시작 셀의 현재 색상 (편집값 우선, 없으면 패턴 원본)
+  const startIdx = startY * width + startX;
+  const startCurrent = state.userGrid[startIdx] >= 0
+    ? state.userGrid[startIdx]
+    : grid[startIdx].palIdx;
+
+  const stack = [[startX, startY]];
+  const visited = new Uint8Array(width * height);
+
+  while (stack.length > 0) {
+    const [x, y] = stack.pop();
+    if (x < 0 || y < 0 || x >= width || y >= height) continue;
+    const idx = y * width + x;
+    if (visited[idx]) continue;
+
+    // 현재 셀의 실제 팔레트 인덱스 (편집값 우선)
+    const currentPal = state.userGrid[idx] >= 0
+      ? state.userGrid[idx]
+      : grid[idx].palIdx;
+    if (currentPal !== startCurrent) continue;
+
+    visited[idx] = 1;
+    state.userGrid[idx] = paletteIdx;
+    drawUserCell(x, y);
+    stack.push([x+1, y], [x-1, y], [x, y+1], [x, y-1]);
+  }
+
+  updateUI();
+}
+
+// ─── Mouse events ───
+let spaceHeld = false;
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space') { spaceHeld = true; canvasArea.style.cursor = 'grab'; }
+});
+document.addEventListener('keyup', e => {
+  if (e.code === 'Space') { spaceHeld = false; canvasArea.style.cursor = state.pattern ? 'crosshair' : 'default'; }
+});
+
+canvasArea.addEventListener('mousedown', e => {
+  if (!state.pattern) return;
+  e.preventDefault();
+
+  if (spaceHeld || e.button === 1) {
+    state.isDragging = true;
+    state.dragStartX = e.clientX;
+    state.dragStartY = e.clientY;
+    state.viewStartX = state.viewX;
+    state.viewStartY = state.viewY;
+    canvasArea.style.cursor = 'grabbing';
+    return;
+  }
+
+  if (e.button === 0) {
+    const {cx, cy} = canvasToCell(e.clientX, e.clientY);
+    state.isPainting = true;
+    state.lastCell = {cx, cy};
+    pushUndo(); // 편집 시작 전 스냅샷
+    placeBead(cx, cy, e.shiftKey);
+    updateUI();
+  }
+});
+
+canvasArea.addEventListener('mousemove', e => {
+  if (!state.pattern) return;
+
+  const {cx, cy} = canvasToCell(e.clientX, e.clientY);
+  document.getElementById('coords').textContent = `${cx}, ${cy}`;
+  drawHoverCell(cx, cy);
+
+  if (state.isDragging) {
+    state.viewX = state.viewStartX + (e.clientX - state.dragStartX);
+    state.viewY = state.viewStartY + (e.clientY - state.dragStartY);
+    applyTransform();
+    return;
+  }
+
+  if (state.isPainting) {
+    if (!state.lastCell || state.lastCell.cx !== cx || state.lastCell.cy !== cy) {
+      state.lastCell = {cx, cy};
+      placeBead(cx, cy, e.shiftKey);
+      updateProgress();
+      updateStats();
+    }
+  }
+});
+
+canvasArea.addEventListener('mouseup', e => {
+  if (state.isDragging) {
+    state.isDragging = false;
+    canvasArea.style.cursor = spaceHeld ? 'grab' : (state.pattern ? 'crosshair' : 'default');
+  }
+  if (state.isPainting) {
+    state.isPainting = false;
+    updateUI();
+  }
+});
+
+canvasArea.addEventListener('mouseleave', () => {
+  state.isPainting = false;
+  state.isDragging = false;
+  oCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+  document.getElementById('coords').textContent = '— , —';
+});
+
+// ─── Zoom ───
+canvasArea.addEventListener('wheel', e => {
+  if (!state.pattern) return;
+  e.preventDefault();
+
+  const rect = canvasArea.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const factor = e.deltaY < 0 ? 1.12 : 1/1.12;
+  const newZoom = Math.min(Math.max(state.zoom * factor, 0.1), 12);
+
+  state.viewX = mx - (mx - state.viewX) * (newZoom / state.zoom);
+  state.viewY = my - (my - state.viewY) * (newZoom / state.zoom);
+  state.zoom = newZoom;
+  applyTransform();
+}, { passive: false });
+
+// ─── Minimap click ───
+minimapCanvas.addEventListener('click', e => {
+  if (!state.pattern) return;
+  const rect = minimapCanvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const {width, height} = state.pattern;
+  const mw = minimapCanvas.width, mh = minimapCanvas.height;
+  const scale = Math.min(mw / width, mh / height);
+  const offX = (mw - width * scale) / 2, offY = (mh - height * scale) / 2;
+
+  const fracX = (mx - offX) / (width * scale);
+  const fracY = (my - offY) / (height * scale);
+
+  const {w, h} = getCanvasSize();
+  const aw = canvasArea.clientWidth, ah = canvasArea.clientHeight;
+  state.viewX = aw/2 - fracX * w * state.zoom;
+  state.viewY = ah/2 - fracY * h * state.zoom;
+  applyTransform();
+});
+
+// ─── Tool buttons ───
+['paint','erase','fill','pick'].forEach(t => {
+  document.getElementById('tool-'+t).addEventListener('click', () => {
+    state.tool = t;
+    setActiveTool(t);
+  });
+});
+
+function setActiveTool(tool) {
+  // 버튼 active 상태
+  ['paint','erase','fill','pick'].forEach(id =>
+    document.getElementById('tool-'+id).classList.toggle('active', id === tool)
+  );
+  // 도구 설명 카드 갱신 (state.tool 기준으로 읽음)
+  _refreshToolDesc();
+}
+
+// ── 도구 설명 카드 텍스트 갱신 (내부 헬퍼) ──
+function _refreshToolDesc() {
+  if (!document.getElementById('tool-desc-card')) return;
+  const tool = (state && state.tool) ? state.tool : 'paint';
+  const icons = { paint: '🖊', erase: '🗑', fill: '🪣', pick: '💉' };
+
+  const card = document.getElementById('tool-desc-card');
+  card.className = 'tool-desc-card';
+  if (tool === 'erase') card.classList.add('erase-active');
+  if (tool === 'fill')  card.classList.add('fill-active');
+  if (tool === 'pick')  card.classList.add('pick-active');
+
+  document.getElementById('tool-desc-icon').textContent = icons[tool];
+  document.getElementById('tool-desc-name').textContent = t('tool_name_' + tool);
+  document.getElementById('tool-desc-text').textContent = t('tool_desc_' + tool);
+  document.getElementById('tool-desc-hint').textContent = t('tool_hint_' + tool);
+}
+
+// ─── Settings ───
+
+// ── 비즈/캔버스 계산 시스템 ──
+const CANVAS_PRESETS = {
+  'A4':   { w: 210,  h: 297,  label: 'A4 (21×29.7cm)' },
+  'A3':   { w: 297,  h: 420,  label: 'A3 (29.7×42cm)' },
+  '30×40':{ w: 300,  h: 400,  label: '30×40cm' },
+  '40×50':{ w: 400,  h: 500,  label: '40×50cm' },
+  '50×70':{ w: 500,  h: 700,  label: '50×70cm' },
+  '50×80':{ w: 500,  h: 800,  label: '50×80cm' },
+};
+
+// 현재 선택 상태
+let canvasState = {
+  beadMm: 2.8,
+  canvasW: 400,
+  canvasH: 500,
+  isCustom: false,
+};
+
+function getGridDimensions() {
+  const img = state.sourceImage;
+  const { beadMm, canvasW, canvasH } = canvasState;
+
+  // 캔버스 기준 최대 격자
+  let gW = Math.round(canvasW / beadMm);
+  let gH = Math.round(canvasH / beadMm);
+
+  // 이미지 비율에 맞게 조정 (캔버스 안에 맞추되 비율 유지)
+  if (img) {
+    const imgRatio = img.width / img.height;
+    const canvasRatio = canvasW / canvasH;
+    if (imgRatio > canvasRatio) {
+      gH = Math.round(gW / imgRatio);
+    } else {
+      gW = Math.round(gH * imgRatio);
+    }
+  }
+
+  gW = Math.max(10, Math.min(800, gW));
+  gH = Math.max(10, Math.min(800, gH));
+  return { gridW: gW, gridH: gH };
+}
+
+function updateCalcDisplay() {
+  const { beadMm, canvasW, canvasH } = canvasState;
+  const gW = Math.round(canvasW / beadMm);
+  const gH = Math.round(canvasH / beadMm);
+  const total = gW * gH;
+
+  document.getElementById('calc-grid').textContent  = `${gW} × ${gH}`;
+  document.getElementById('calc-total').textContent = total.toLocaleString();
+
+  const wCm = (canvasW / 10).toFixed(0);
+  const hCm = (canvasH / 10).toFixed(0);
+  document.getElementById('calc-size').textContent  = `${wCm} × ${hCm} cm`;
+}
+
+// 비즈 타입 라디오
+document.querySelectorAll('input[name="bead-type"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    canvasState.beadMm = parseFloat(this.value);
+    document.getElementById('bead-round-label').classList.toggle('active', this.id === 'bead-round');
+    document.getElementById('bead-square-label').classList.toggle('active', this.id === 'bead-square');
+    updateCalcDisplay();
+  });
+});
+
+// 캔버스 크기 버튼
+document.querySelectorAll('.size-btn:not(#btn-custom-size)').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('custom-size-fields').style.display = 'none';
+    canvasState.canvasW  = parseInt(this.dataset.w);
+    canvasState.canvasH  = parseInt(this.dataset.h);
+    canvasState.isCustom = false;
+    updateCalcDisplay();
+  });
+});
+
+// 사용자 지정 버튼
+document.getElementById('btn-custom-size').addEventListener('click', function() {
+  document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+  this.classList.add('active');
+  document.getElementById('custom-size-fields').style.display = 'block';
+  canvasState.isCustom = true;
+  const w = parseInt(document.getElementById('custom-w').value) || 400;
+  const h = parseInt(document.getElementById('custom-h').value) || 500;
+  canvasState.canvasW = w;
+  canvasState.canvasH = h;
+  updateCalcDisplay();
+});
+
+// 사용자 지정 입력 필드
+document.getElementById('custom-w').addEventListener('input', function() {
+  canvasState.canvasW = Math.max(50, parseInt(this.value) || 400);
+  updateCalcDisplay();
+});
+document.getElementById('custom-h').addEventListener('input', function() {
+  canvasState.canvasH = Math.max(50, parseInt(this.value) || 500);
+  updateCalcDisplay();
+});
+
+// 초기 계산 표시
+updateCalcDisplay();
+document.getElementById('k-colors').addEventListener('input', function() {
+  document.getElementById('k-val').textContent = this.value;
+});
+// show-symbols 체크박스는 우측 패널 opt-show-symbols로 통합
+
+// ═══════════════════════════════════════════════════════════════
+// IMAGE UPLOAD
+// ═══════════════════════════════════════════════════════════════
+const uploadZone = document.getElementById('upload-zone');
+const fileInput  = document.getElementById('file-input');
+const previewImg = document.getElementById('preview-img');
+
+uploadZone.addEventListener('click', () => fileInput.click());
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragging'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragging'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragging');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) loadImageFile(file);
+});
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) loadImageFile(e.target.files[0]);
+});
+
+function loadImageFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      state.sourceImage = img;
+      previewImg.src = ev.target.result;
+      previewImg.style.display = 'block';
+      document.getElementById('btn-generate').disabled = false;
+      setStatus('done', `${t('status_img_loaded')}: ${img.width}×${img.height}px`);
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GENERATE BUTTON
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('btn-generate').addEventListener('click', generatePattern);
+
+// ═══════════════════════════════════════════════════════════════
+// AUTO FILL
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('btn-autofill').addEventListener('click', () => {
+  if (!state.pattern || !state.userGrid) return;
+  for (let i = 0; i < state.pattern.grid.length; i++) {
+    state.userGrid[i] = state.pattern.grid[i].palIdx;
+  }
+  redrawAllUserCells();
+  updateUI();
+  showNotif(t('notif_autofill_done'), 'success');
+});
+
+// ═══════════════════════════════════════════════════════════════
+// UNDO / REDO
+// ═══════════════════════════════════════════════════════════════
+const MAX_UNDO = 50;
+
+function pushUndo() {
+  state.undoStack.push(state.userGrid.slice());
+  if (state.undoStack.length > MAX_UNDO) state.undoStack.shift();
+  state.redoStack = [];
+  updateProgress();
+}
+
+function undo() {
+  if (!state.undoStack.length) return;
+  state.redoStack.push(state.userGrid.slice());
+  state.userGrid = state.undoStack.pop();
+  redrawAllUserCells();
+  updateUI();
+  showNotif(t('notif_undo'));
+}
+
+function redo() {
+  if (!state.redoStack.length) return;
+  state.undoStack.push(state.userGrid.slice());
+  state.userGrid = state.redoStack.pop();
+  redrawAllUserCells();
+  updateUI();
+  showNotif(t('notif_redo'));
+}
+
+document.getElementById('btn-undo').addEventListener('click', undo);
+document.getElementById('btn-redo').addEventListener('click', redo);
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); redo(); }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// 색상 교체 모달
+// ═══════════════════════════════════════════════════════════════
+// 모달 HTML 동적 생성
+const replaceModal = document.createElement('div');
+replaceModal.className = 'replace-modal';
+replaceModal.id = 'replace-modal';
+replaceModal.innerHTML = `
+  <div class="replace-modal-inner">
+    <div class="replace-modal-title" data-i18n="replace_title">색상 교체</div>
+    <div class="replace-row">
+      <label data-i18n="replace_from">교체할 색상</label>
+      <select id="replace-from" class="replace-select"></select>
+    </div>
+    <div class="replace-row">
+      <label data-i18n="replace_to">바꿀 색상</label>
+      <select id="replace-to" class="replace-select"></select>
+    </div>
+    <div class="replace-modal-actions">
+      <button class="btn" id="replace-cancel" data-i18n="replace_cancel">취소</button>
+      <button class="btn primary" id="replace-confirm" data-i18n="replace_confirm">교체</button>
+    </div>
+  </div>
+`;
+document.body.appendChild(replaceModal);
+
+function openReplaceModal() {
+  if (!state.pattern) return;
+  const fromSel = document.getElementById('replace-from');
+  const toSel   = document.getElementById('replace-to');
+  const opts    = state.palette.map((p, i) =>
+    `<option value="${i}">${p.symbol} DMC ${p.dmc} — ${p.name}</option>`).join('');
+  fromSel.innerHTML = opts;
+  toSel.innerHTML   = opts;
+  if (state.activePaletteIdx < state.palette.length) fromSel.value = state.activePaletteIdx;
+  // i18n 적용
+  replaceModal.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  replaceModal.classList.add('open');
+}
+
+document.getElementById('btn-replace-color').addEventListener('click', openReplaceModal);
+document.getElementById('replace-cancel').addEventListener('click', () => replaceModal.classList.remove('open'));
+document.getElementById('replace-confirm').addEventListener('click', () => {
+  const fromIdx = parseInt(document.getElementById('replace-from').value);
+  const toIdx   = parseInt(document.getElementById('replace-to').value);
+  if (fromIdx === toIdx) { replaceModal.classList.remove('open'); return; }
+  pushUndo();
+  for (let i = 0; i < state.userGrid.length; i++) {
+    if (state.userGrid[i] === fromIdx) state.userGrid[i] = toIdx;
+  }
+  // 패턴 그리드도 교체
+  for (let i = 0; i < state.pattern.grid.length; i++) {
+    if (state.pattern.grid[i].palIdx === fromIdx) state.pattern.grid[i].palIdx = toIdx;
+  }
+  replaceModal.classList.remove('open');
+  drawPatternFull();
+  redrawAllUserCells();
+  updateUI();
+  showNotif(t('notif_replaced'), 'success');
+});
+replaceModal.addEventListener('click', e => { if (e.target === replaceModal) replaceModal.classList.remove('open'); });
+
+// ═══════════════════════════════════════════════════════════════
+// 표시 옵션 (우측 패널)
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('opt-show-symbols').addEventListener('change', function() {
+  state.showSymbols = this.checked;
+  if (state.pattern) {
+    drawPatternFull();       // pattern-canvas: 미편집 셀 심볼
+    redrawAllUserCells();    // user-canvas: 편집된 셀 심볼 동기화
+  }
+});
+
+document.getElementById('opt-show-grid').addEventListener('change', function() {
+  state.strongGrid = this.checked;
+  if (state.pattern) {
+    drawPatternFull();
+    redrawAllUserCells();
+  }
+});
+
+document.getElementById('opt-highlight-color').addEventListener('change', function() {
+  state.highlightEnabled = this.checked;
+  if (!this.checked) state.highlightPaletteIdx = -1;
+  if (state.pattern) redrawAllUserCells();
+});
+document.getElementById('btn-clear-progress').addEventListener('click', () => {
+  if (!state.userGrid) return;
+  state.userGrid.fill(-1);
+  uCtx.clearRect(0, 0, userCanvas.width, userCanvas.height);
+  updateUI();
+  showNotif(t('notif_cleared'));
+});
+
+// ═══════════════════════════════════════════════════════════════
+// SAVE / LOAD
+// ═══════════════════════════════════════════════════════════════
+function saveToJSON() {
+  if (!state.pattern) return;
+  const saveData = {
+    version: 1,
+    pattern: state.pattern,
+    palette: state.palette,
+    userGrid: Array.from(state.userGrid),
+  };
+  const blob = new Blob([JSON.stringify(saveData)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'diamond-pattern.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showNotif(t('notif_saved'), 'success');
+}
+
+function loadFromJSON(data) {
+  state.pattern = data.pattern;
+  state.palette = data.palette;
+  state.userGrid = new Int16Array(data.userGrid);
+  state.cellSize = 14; // 기본 셀 크기 고정
+
+  const {width, height} = state.pattern;
+  const cs = state.cellSize;
+  resizeCanvases(width * cs, height * cs);
+  drawPatternFull();
+  redrawAllUserCells();
+  updateUI();
+  centerView();
+  emptyState.style.display = 'none';
+  enableButtons();
+  startAutoSave();
+  showNotif(t('notif_loaded'), 'success');
+  setStatus('done', `${t('status_loaded')}: ${width}×${height}`);
+}
+
+document.getElementById('btn-save').addEventListener('click', saveToJSON);
+
+document.getElementById('btn-load').addEventListener('click', () => {
+  document.getElementById('load-input').click();
+});
+document.getElementById('load-input').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      loadFromJSON(data);
+    } catch(err) {
+      showNotif(t('notif_invalid'), 'error');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+// ═══════════════════════════════════════════════════════════════
+// EXPORT PNG
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('btn-export').addEventListener('click', () => {
+  if (!state.pattern) return;
+  const exp = document.createElement('canvas');
+  exp.width  = patternCanvas.width;
+  exp.height = patternCanvas.height;
+  const ctx = exp.getContext('2d');
+  ctx.drawImage(patternCanvas, 0, 0);
+  ctx.drawImage(userCanvas, 0, 0);
+
+  exp.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'diamond-pattern.png';
+    a.click();
+    URL.revokeObjectURL(url);
+    showNotif(t('notif_exported'), 'success');
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════
+// AUTO SAVE
+// ═══════════════════════════════════════════════════════════════
+function startAutoSave() {
+  if (autoSaveTimer) clearInterval(autoSaveTimer);
+  autoSaveTimer = setInterval(() => {
+    if (!state.pattern) return;
+    try {
+      const saveData = {
+        version: 1,
+        pattern: state.pattern,
+        palette: state.palette,
+        userGrid: Array.from(state.userGrid),
+      };
+      localStorage.setItem('diamond_painter_autosave', JSON.stringify(saveData));
+    } catch(e) {}
+  }, 5000);
+}
+
+// Try restore from autosave on load
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('diamond_painter_autosave');
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      if (data && data.pattern) {
+        loadFromJSON(data);
+        setStatus('done', t('status_restored'));
+        showNotif(t('notif_restored'), 'success');
+      }
+    } catch(e) {}
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════════
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function showProcessing(visible, label='', pct=0) {
+  procOverlay.classList.toggle('visible', visible);
+  if (visible) {
+    procLabel.textContent = label;
+    procPct.textContent = Math.round(pct) + '%';
+  }
+}
+
+function setStatus(type, text) {
+  const el = document.getElementById('status');
+  el.className = type;
+  document.getElementById('status-text').textContent = text;
+}
+
+let notifTimer = null;
+function showNotif(msg, type='') {
+  const el = document.getElementById('notification');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  if (notifTimer) clearTimeout(notifTimer);
+  notifTimer = setTimeout(() => { el.className = ''; }, 3000);
+}
+
+function enableButtons() {
+  ['btn-generate','btn-autofill','btn-replace-color','btn-clear-progress','btn-save','btn-export'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = false;
+  });
+}
+
+// ─── 언어 선택 ───
+document.getElementById('lang-select').addEventListener('change', e => {
+  setLanguage(e.target.value);
+  // 진행률 텍스트 즉시 갱신
+  updateProgress();
+});
+
+// ─── 초기 번역 적용 ───
+document.documentElement.lang = currentLang; // html[lang] 초기 설정
+applyTranslations();
+</script>
+</body>
+</html>

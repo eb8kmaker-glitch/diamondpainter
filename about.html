@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Diamond Painter — Free Online Pattern Generator</title>
+  <meta name="description" content="Diamond Painter is a free browser-based tool for generating DMC-coded diamond painting patterns from photos. Learn about what it does, how it works, and who it's for.">
+  <link rel="canonical" href="https://eb8kmaker-glitch.github.io/diamondpainter/about.html">
+  <meta property="og:title" content="About Diamond Painter">
+  <meta property="og:description" content="Diamond Painter is a free, privacy-first tool for creating custom diamond painting patterns from any photo.">
+  <meta property="og:url" content="https://eb8kmaker-glitch.github.io/diamondpainter/about.html">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .about-hero {
+      background: linear-gradient(160deg, #f0f7ff 0%, #f8f9fc 60%, #f5f0ff 100%);
+      border-bottom: 1px solid var(--border-light);
+      padding: 60px 0 64px;
+    }
+    .about-hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(30px, 4vw, 46px);
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+    .about-hero p {
+      font-size: 18px;
+      color: var(--text2);
+      line-height: 1.75;
+      max-width: 640px;
+    }
+    .about-section p {
+      font-size: 16px;
+      color: var(--text2);
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+    .about-section h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 600;
+      color: var(--primary);
+      margin: 56px 0 18px;
+      letter-spacing: -0.01em;
+    }
+    .about-section h2:first-child { margin-top: 0; }
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin: 32px 0;
+    }
+    .value-card {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .value-card .icon { font-size: 24px; margin-bottom: 12px; }
+    .value-card h3 { font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .value-card p { font-size: 14px; color: var(--text3); line-height: 1.65; margin: 0; }
+    .tech-list {
+      list-style: none;
+      margin: 20px 0;
+    }
+    .tech-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: var(--text2);
+    }
+    .tech-list li::before {
+      content: '→';
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    @media (max-width: 600px) {
+      .values-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon" aria-hidden="true">◆</div>
+      Diamond Painter
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="guide/index.html">Guide</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-spacer"></div>
+    <a href="create.html" class="nav-cta">Try Free →</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<section class="about-hero" aria-labelledby="about-heading">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="breadcrumb-sep" aria-hidden="true">›</span>
+      <span aria-current="page">About</span>
+    </nav>
+    <h1 id="about-heading">About Diamond Painter</h1>
+    <p>Diamond Painter is a free, browser-based tool that converts any photo into a DMC-coded diamond painting pattern — completely private, with no account required and no files ever leaving your device.</p>
+  </div>
+</section>
+
+<section class="section" aria-label="About content">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:60px;align-items:start;">
+
+      <div class="about-section">
+        <h2>What Diamond Painter Does</h2>
+        <p>Diamond painting is a craft where small resin diamonds — called drills — are placed onto a printed adhesive canvas to create a sparkling mosaic image. The canvas is color-coded using a standardized numbering system (DMC codes) so crafters know exactly which color goes in each position.</p>
+        <p>Diamond Painter lets you generate these pattern files from any photo you choose. You upload an image, configure your canvas size and color count, and the tool produces a complete, DMC-coded pattern showing exactly where each color goes — including precise bead counts so you know what to order.</p>
+        <p>The tool also includes editing features so you can manually adjust colors, fix areas the algorithm missed, and export a print-ready pattern image. Everything runs locally in your browser. No photos are uploaded. No account is needed.</p>
+
+        <h2>The Design Philosophy</h2>
+        <p>There are commercial services that offer similar functionality, but most require payment, account creation, or impose watermarks and size limits on exports. Diamond Painter was built on a simpler idea: crafters deserve a good tool that does not put obstacles between them and their project.</p>
+        <p>Privacy was a non-negotiable design requirement from the start. Custom diamond painting often uses deeply personal images — a pet that has passed away, a family portrait, a meaningful travel photo. These are not images people should need to upload to an unknown server to use a creative tool.</p>
+        <p>Running the image processing locally also means the tool works offline after the initial page load, is genuinely fast, and costs nothing to scale — which is why we can offer it completely free without any subscription tier.</p>
+
+        <div class="values-grid">
+          <div class="value-card">
+            <div class="icon" aria-hidden="true">🔒</div>
+            <h3>Privacy First</h3>
+            <p>Your images are processed entirely in your browser. Nothing is uploaded, stored, or transmitted.</p>
+          </div>
+          <div class="value-card">
+            <div class="icon" aria-hidden="true">⚡</div>
+            <h3>Fast and Responsive</h3>
+            <p>Local processing means no waiting for server responses. Patterns generate in seconds, not minutes.</p>
+          </div>
+          <div class="value-card">
+            <div class="icon" aria-hidden="true">🎯</div>
+            <h3>Accurate Color Matching</h3>
+            <p>DMC colors are matched using perceptual distance — the same approach used by professional color tools.</p>
+          </div>
+          <div class="value-card">
+            <div class="icon" aria-hidden="true">🌍</div>
+            <h3>Built for Everyone</h3>
+            <p>Full support for English, Korean, Japanese, and Chinese. No paywalls, no region restrictions.</p>
+          </div>
+        </div>
+
+        <h2>How the Technology Works</h2>
+        <p>When you upload an image and click generate, Diamond Painter performs a series of operations entirely within your browser:</p>
+        <ul class="tech-list">
+          <li>The image is downsampled to the target canvas resolution based on your chosen canvas size and drill type</li>
+          <li>A perceptual color clustering algorithm groups the image's pixels into the number of color clusters you select</li>
+          <li>Each cluster centroid is matched to the nearest color in the DMC drill database using perceptual color distance (CIE Lab color space)</li>
+          <li>The canvas grid is rendered with each cell showing the corresponding DMC color and its associated symbol</li>
+          <li>Bead counts are calculated for each color and displayed in the color palette panel</li>
+        </ul>
+        <p>The editing tools (paint, fill, erase, eyedropper, color replacement) then let you refine the generated pattern manually before exporting.</p>
+
+        <h2>Who It's For</h2>
+        <p>Diamond Painter is designed for anyone interested in diamond painting — from someone who has never picked up a drill to experienced crafters who want to create custom patterns from their own photos. The interface is available in multiple languages and the guide content on this site is written for complete beginners.</p>
+        <p>It is also useful as a design planning tool for people who purchase pre-made custom canvases from suppliers — generating a pattern first lets you preview the result and optimize color choices before committing to an order.</p>
+      </div>
+
+      <aside>
+        <div class="sidebar-cta" style="position:sticky;top:calc(var(--nav-h) + 24px);">
+          <h4>Try Diamond Painter</h4>
+          <p>Generate a free pattern from any photo — no account, no download, no watermarks.</p>
+          <a href="create.html" class="btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:16px;">Open Pattern Generator</a>
+        </div>
+        <div style="margin-top:20px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius);padding:24px;">
+          <h4 style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:16px;">Quick Facts</h4>
+          <div style="font-size:14px;color:var(--text2);">
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);">
+              <span style="color:var(--text3);">Cost</span>
+              <strong style="color:var(--success);">Free</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);">
+              <span style="color:var(--text3);">Account required</span>
+              <strong>No</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);">
+              <span style="color:var(--text3);">Photo upload</span>
+              <strong>Never</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);">
+              <span style="color:var(--text3);">DMC colors</span>
+              <strong>457</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);">
+              <span style="color:var(--text3);">Languages</span>
+              <strong>4</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;">
+              <span style="color:var(--text3);">Watermarks</span>
+              <strong>None</strong>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- AdSense Banner Placeholder -->
+<div class="container">
+  <div class="adsense-placeholder">Advertisement</div>
+</div>
+
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:14px;display:inline-flex;">
+          <div class="nav-logo-icon" aria-hidden="true">◆</div>
+          Diamond Painter
+        </a>
+        <p class="footer-tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Tool</h4>
+        <a href="create.html">Create Pattern</a>
+        <a href="guide/diamond-painting-beginner-guide.html">Beginner Guide</a>
+        <a href="guide/custom-diamond-painting-tutorial.html">Custom Tutorial</a>
+      </div>
+      <div class="footer-col">
+        <h4>Guides</h4>
+        <a href="guide/index.html">All Guides</a>
+        <a href="guide/diamond-painting-tips.html">Tips &amp; Tricks</a>
+        <a href="guide/best-diamond-painting-accessories.html">Accessories</a>
+        <a href="guide/dmc-color-guide.html">DMC Color Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Diamond Painter. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+  toggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+  });
+</script>
+</body>
+</html>

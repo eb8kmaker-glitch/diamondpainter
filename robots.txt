@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://eb8kmaker-glitch.github.io/diamondpainter/sitemap.xml

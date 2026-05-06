@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Diamond Painter</title>
+  <meta name="description" content="Get in touch with Diamond Painter — for bug reports, feature suggestions, general questions, or feedback about the pattern generator tool.">
+  <link rel="canonical" href="https://eb8kmaker-glitch.github.io/diamondpainter/contact.html">
+  <meta property="og:title" content="Contact — Diamond Painter">
+  <meta property="og:description" content="Reach out to the Diamond Painter team with questions, bug reports, or feature suggestions.">
+  <meta property="og:url" content="https://eb8kmaker-glitch.github.io/diamondpainter/contact.html">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .contact-hero {
+      background: linear-gradient(160deg, #f0f7ff 0%, #f8f9fc 60%, #f5f0ff 100%);
+      border-bottom: 1px solid var(--border-light);
+      padding: 56px 0 60px;
+    }
+    .contact-hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .contact-hero p {
+      font-size: 17px;
+      color: var(--text3);
+      line-height: 1.7;
+      max-width: 500px;
+    }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 56px;
+      align-items: start;
+    }
+    .contact-form {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 36px;
+      box-shadow: var(--shadow-card);
+    }
+    .form-group {
+      margin-bottom: 22px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 8px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text);
+      transition: border-color 0.18s, box-shadow 0.18s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.12);
+    }
+    .form-group textarea {
+      height: 140px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-note {
+      font-size: 13px;
+      color: var(--text3);
+      margin-top: 6px;
+    }
+    .form-submit {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: opacity 0.18s, transform 0.18s;
+      box-shadow: 0 3px 12px rgba(14,165,233,0.35);
+    }
+    .form-submit:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+    .contact-info-card {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .contact-info-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 14px;
+    }
+    .contact-info-card p {
+      font-size: 14px;
+      color: var(--text3);
+      line-height: 1.65;
+    }
+    .response-time {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--success);
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .quick-links a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 0;
+      font-size: 14px;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-light);
+      transition: color 0.15s;
+    }
+    .quick-links a:last-child { border-bottom: none; }
+    .quick-links a:hover { color: var(--accent-dark); }
+    .quick-links a::before { content: '→'; }
+    @media (max-width: 900px) {
+      .contact-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .contact-form { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon" aria-hidden="true">◆</div>
+      Diamond Painter
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="guide/index.html">Guide</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <div class="nav-spacer"></div>
+    <a href="create.html" class="nav-cta">Try Free →</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<section class="contact-hero" aria-labelledby="contact-heading">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="breadcrumb-sep" aria-hidden="true">›</span>
+      <span aria-current="page">Contact</span>
+    </nav>
+    <h1 id="contact-heading">Get in Touch</h1>
+    <p>Questions, bug reports, feature ideas, or feedback — we read everything and respond to as many messages as we can.</p>
+  </div>
+</section>
+
+<section class="section" aria-label="Contact form">
+  <div class="container">
+    <div class="contact-layout">
+
+      <div>
+        <form class="contact-form" id="contact-form" action="https://formspree.io/f/your-form-id" method="POST" novalidate>
+          <h2 style="font-size:20px;font-weight:700;color:var(--primary);margin-bottom:24px;">Send a message</h2>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="first-name">First name <span style="color:var(--accent)">*</span></label>
+              <input type="text" id="first-name" name="first_name" required autocomplete="given-name" placeholder="Your first name">
+            </div>
+            <div class="form-group">
+              <label for="last-name">Last name</label>
+              <input type="text" id="last-name" name="last_name" autocomplete="family-name" placeholder="Optional">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email address <span style="color:var(--accent)">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com">
+          </div>
+
+          <div class="form-group">
+            <label for="subject">What is this about?</label>
+            <select id="subject" name="subject">
+              <option value="">Select a topic...</option>
+              <option value="bug">Bug report / Something isn't working</option>
+              <option value="feature">Feature request</option>
+              <option value="pattern">Question about a pattern I generated</option>
+              <option value="general">General question</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Your message <span style="color:var(--accent)">*</span></label>
+            <textarea id="message" name="message" required placeholder="Describe what you need or what you'd like to see improved..."></textarea>
+            <p class="form-note">For bug reports, please include your browser, operating system, and steps to reproduce the issue.</p>
+          </div>
+
+          <button type="submit" class="form-submit">Send Message</button>
+
+          <p style="font-size:12px;color:var(--text4);text-align:center;margin-top:14px;">
+            By submitting this form, you agree to our <a href="privacy-policy.html" style="color:var(--accent);">Privacy Policy</a>.
+          </p>
+        </form>
+
+        <div id="form-success" style="display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius);padding:28px;text-align:center;margin-top:16px;">
+          <div style="font-size:32px;margin-bottom:12px;">✓</div>
+          <h3 style="font-size:18px;font-weight:700;color:var(--success);margin-bottom:8px;">Message sent!</h3>
+          <p style="font-size:14px;color:var(--text3);">Thanks for reaching out. We'll get back to you as soon as we can.</p>
+        </div>
+      </div>
+
+      <aside>
+        <div class="contact-info-card">
+          <h3>Before you write...</h3>
+          <p>Many common questions are already answered in our FAQ and Guide sections. If you're having trouble with the tool, checking there first often resolves the issue faster than waiting for a reply.</p>
+          <div class="quick-links" style="margin-top:16px;">
+            <a href="faq.html">Frequently Asked Questions</a>
+            <a href="guide/index.html">Diamond Painting Guides</a>
+            <a href="guide/diamond-painting-beginner-guide.html">Beginner's Guide</a>
+            <a href="guide/custom-diamond-painting-tutorial.html">Custom Pattern Tutorial</a>
+          </div>
+        </div>
+
+        <div class="contact-info-card">
+          <h3>Response Time</h3>
+          <p>We aim to respond to messages within 3–5 business days. Bug reports and critical issues are typically prioritized.</p>
+          <p style="margin-top:10px;">We do not offer phone support. Email (via the form above) is the best way to reach us.</p>
+        </div>
+
+        <div class="contact-info-card">
+          <h3>Feature Requests</h3>
+          <p>We genuinely read all feature suggestions. If multiple people request the same thing, it moves up the priority list. The more specific and detailed your request, the more useful it is — tell us what you're trying to do and why the current tool doesn't quite get you there.</p>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+<!-- AdSense Banner Placeholder -->
+<div class="container">
+  <div class="adsense-placeholder">Advertisement</div>
+</div>
+
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:14px;display:inline-flex;">
+          <div class="nav-logo-icon" aria-hidden="true">◆</div>
+          Diamond Painter
+        </a>
+        <p class="footer-tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Tool</h4>
+        <a href="create.html">Create Pattern</a>
+        <a href="guide/diamond-painting-beginner-guide.html">Beginner Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4>Guides</h4>
+        <a href="guide/index.html">All Guides</a>
+        <a href="guide/diamond-painting-tips.html">Tips &amp; Tricks</a>
+        <a href="guide/dmc-color-guide.html">DMC Color Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Diamond Painter. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+  toggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+  });
+
+  document.getElementById('contact-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('.form-submit');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    // If Formspree is not configured, show success message as demo
+    const action = form.action;
+    if (action.includes('your-form-id')) {
+      setTimeout(() => {
+        form.style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+      }, 800);
+      return;
+    }
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        form.style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+      } else {
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+        alert('Something went wrong. Please try again.');
+      }
+    } catch {
+      btn.textContent = 'Send Message';
+      btn.disabled = false;
+      alert('Network error. Please check your connection and try again.');
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diamond Painting Guides &amp; Tutorials — Diamond Painter</title>
+  <meta name="description" content="Learn everything about diamond painting — from beginner basics to advanced techniques, DMC color codes, accessory reviews, and custom pattern tutorials.">
+  <link rel="canonical" href="https://eb8kmaker-glitch.github.io/diamondpainter/guide/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Diamond Painting Guides &amp; Tutorials — Diamond Painter">
+  <meta property="og:description" content="Beginner guides, custom pattern tutorials, tips, accessory reviews, and a complete DMC color guide — all free.">
+  <meta property="og:url" content="https://eb8kmaker-glitch.github.io/diamondpainter/guide/">
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .guide-hero {
+      background: linear-gradient(160deg, #f0f7ff 0%, #f8f9fc 60%, #f5f0ff 100%);
+      border-bottom: 1px solid var(--border-light);
+      padding: 60px 0 64px;
+    }
+    .guide-hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(30px, 4vw, 46px);
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .guide-hero p {
+      font-size: 18px;
+      color: var(--text3);
+      line-height: 1.7;
+      max-width: 560px;
+    }
+    .guide-full-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .guide-card-featured {
+      grid-column: span 3;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
+      border-radius: var(--radius);
+      padding: 36px 40px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      text-decoration: none;
+      transition: transform 0.22s, box-shadow 0.22s;
+      box-shadow: var(--shadow-card);
+    }
+    .guide-card-featured:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    .guide-card-featured .icon { font-size: 52px; flex-shrink: 0; }
+    .guide-card-featured .tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 8px;
+    }
+    .guide-card-featured h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .guide-card-featured p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+    .guide-card-featured .link-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #6fe7ff;
+    }
+    .topics-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+    }
+    .topic-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text2);
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    .topic-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-light);
+    }
+    @media (max-width: 900px) {
+      .guide-full-grid { grid-template-columns: 1fr 1fr; }
+      .guide-card-featured { grid-column: span 2; flex-direction: column; gap: 16px; padding: 28px 24px; }
+    }
+    @media (max-width: 600px) {
+      .guide-full-grid { grid-template-columns: 1fr; }
+      .guide-card-featured { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="container">
+    <a href="../index.html" class="nav-logo">
+      <div class="nav-logo-icon" aria-hidden="true">◆</div>
+      Diamond Painter
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="active">Guide</a></li>
+      <li><a href="../faq.html">FAQ</a></li>
+      <li><a href="../about.html">About</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-spacer"></div>
+    <a href="../create.html" class="nav-cta">Try Free →</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<section class="guide-hero" aria-labelledby="guide-hub-heading">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a>
+      <span class="breadcrumb-sep" aria-hidden="true">›</span>
+      <span aria-current="page">Guide</span>
+    </nav>
+    <h1 id="guide-hub-heading">Diamond Painting Guides &amp; Tutorials</h1>
+    <p>From your very first canvas to advanced custom patterns — everything you need to get the most out of diamond painting, explained clearly and honestly.</p>
+    <div class="topics-list" aria-label="Browse topics">
+      <a href="diamond-painting-beginner-guide.html" class="topic-chip">📖 Beginner Guide</a>
+      <a href="custom-diamond-painting-tutorial.html" class="topic-chip">🖼️ Custom Patterns</a>
+      <a href="diamond-painting-tips.html" class="topic-chip">💡 Tips &amp; Tricks</a>
+      <a href="best-diamond-painting-accessories.html" class="topic-chip">🛍️ Accessories</a>
+      <a href="dmc-color-guide.html" class="topic-chip">🎨 DMC Colors</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="all-guides-heading">
+  <div class="container">
+    <h2 id="all-guides-heading" class="section-title" style="margin-bottom:36px;">All Guides</h2>
+
+    <!-- AdSense Banner Placeholder -->
+    <div class="adsense-placeholder">Advertisement</div>
+
+    <div class="guide-full-grid">
+      <a href="diamond-painting-beginner-guide.html" class="guide-card-featured" aria-label="Read: Complete Beginner's Guide to Diamond Painting">
+        <div class="icon" aria-hidden="true">📖</div>
+        <div>
+          <p class="tag">Beginner &bull; 12 min read</p>
+          <h2>Complete Beginner's Guide to Diamond Painting</h2>
+          <p>Everything you need to know before placing your first diamond — what materials to buy, how to read a canvas, basic placement techniques, and the mistakes most beginners make in their first week.</p>
+          <span class="link-arrow">Read the guide →</span>
+        </div>
+      </a>
+
+      <a href="custom-diamond-painting-tutorial.html" class="guide-card">
+        <div class="guide-card-icon" aria-hidden="true">🖼️</div>
+        <span class="guide-card-tag">Tutorial &bull; 10 min read</span>
+        <h3>How to Create a Custom Diamond Painting Pattern</h3>
+        <p>Step-by-step: choosing the right photo, generating your pattern with Diamond Painter, understanding color reduction, and preparing your design for printing or ordering.</p>
+        <span class="guide-card-link">Read tutorial →</span>
+      </a>
+
+      <a href="diamond-painting-tips.html" class="guide-card">
+        <div class="guide-card-icon" aria-hidden="true">💡</div>
+        <span class="guide-card-tag">Tips &bull; 9 min read</span>
+        <h3>20 Diamond Painting Tips That Actually Work</h3>
+        <p>Practical, tested tips that cover everything from workspace setup and color organization to finishing your edges and getting a professional-looking seal.</p>
+        <span class="guide-card-link">Read tips →</span>
+      </a>
+
+      <a href="best-diamond-painting-accessories.html" class="guide-card">
+        <div class="guide-card-icon" aria-hidden="true">🛍️</div>
+        <span class="guide-card-tag">Gear Guide &bull; 11 min read</span>
+        <h3>Best Diamond Painting Accessories Worth Buying</h3>
+        <p>An honest guide to the tools and accessories that genuinely improve your experience — light pads, multi-placers, storage systems, and more, with budget options included.</p>
+        <span class="guide-card-link">Read guide →</span>
+      </a>
+
+      <a href="dmc-color-guide.html" class="guide-card">
+        <div class="guide-card-icon" aria-hidden="true">🎨</div>
+        <span class="guide-card-tag">Reference &bull; 13 min read</span>
+        <h3>DMC Color Guide for Diamond Painting</h3>
+        <p>Everything about the DMC numbering system — how codes work, how to match colors when a drill is out of stock, popular color families, and how Diamond Painter assigns codes automatically.</p>
+        <span class="guide-card-link">Read guide →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- AdSense Banner Placeholder -->
+<div class="container">
+  <div class="adsense-placeholder">Advertisement</div>
+</div>
+
+<section class="section" style="background:var(--bg-alt);padding-top:60px;padding-bottom:60px;" aria-labelledby="cta-guide-heading">
+  <div class="container text-center">
+    <p class="section-label">Ready to create?</p>
+    <h2 class="section-title" id="cta-guide-heading">Generate your own pattern for free</h2>
+    <p class="section-subtitle" style="margin:14px auto 28px;">No account required. Upload any photo and have a full DMC-coded pattern in under a minute.</p>
+    <a href="../create.html" class="btn-primary">◆ Open the Pattern Generator</a>
+  </div>
+</section>
+
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../index.html" class="nav-logo" style="margin-bottom:14px;display:inline-flex;">
+          <div class="nav-logo-icon" aria-hidden="true">◆</div>
+          Diamond Painter
+        </a>
+        <p class="footer-tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Tool</h4>
+        <a href="../create.html">Create Pattern</a>
+        <a href="diamond-painting-beginner-guide.html">Beginner Guide</a>
+        <a href="custom-diamond-painting-tutorial.html">Custom Tutorial</a>
+      </div>
+      <div class="footer-col">
+        <h4>Guides</h4>
+        <a href="index.html">All Guides</a>
+        <a href="diamond-painting-tips.html">Tips &amp; Tricks</a>
+        <a href="best-diamond-painting-accessories.html">Accessories</a>
+        <a href="dmc-color-guide.html">DMC Color Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Diamond Painter. All rights reserved.</p>
+      <p>Made for diamond painting enthusiasts everywhere.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+  toggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+  });
+</script>
+</body>
+</html>
