@@ -115,8 +115,9 @@
     text-rendering: optimizeLegibility;
     background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 100%);
     color: var(--text);
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
   }
@@ -287,7 +288,9 @@
     -webkit-backdrop-filter: blur(20px);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - var(--header-h));
     flex-shrink: 0;
   }
 
@@ -754,7 +757,9 @@
     -webkit-backdrop-filter: blur(20px);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - var(--header-h));
     flex-shrink: 0;
   }
 
@@ -2958,20 +2963,31 @@ function floodFill(startX, startY, paletteIdx) {
 }
 
 // ─── Mouse events ───
-let spaceHeld = false;
+let isSpacePressed = false;
+let isPanning = false;
 
 document.addEventListener('keydown', e => {
-  if (e.code === 'Space') { spaceHeld = true; canvasArea.style.cursor = 'grab'; }
+  if (e.code === 'Space' && !e.target.matches('input, textarea, select')) {
+    e.preventDefault();
+    isSpacePressed = true;
+    canvasArea.style.cursor = state.pattern ? 'grab' : 'default';
+  }
 });
 document.addEventListener('keyup', e => {
-  if (e.code === 'Space') { spaceHeld = false; canvasArea.style.cursor = state.pattern ? 'crosshair' : 'default'; }
+  if (e.code === 'Space') {
+    isSpacePressed = false;
+    if (!isPanning) {
+      canvasArea.style.cursor = state.pattern ? 'crosshair' : 'default';
+    }
+  }
 });
 
 canvasArea.addEventListener('mousedown', e => {
   if (!state.pattern) return;
   e.preventDefault();
 
-  if (spaceHeld || e.button === 1) {
+  if (isSpacePressed || e.button === 1) {
+    isPanning = true;
     state.isDragging = true;
     state.dragStartX = e.clientX;
     state.dragStartY = e.clientY;
@@ -2998,7 +3014,7 @@ canvasArea.addEventListener('mousemove', e => {
   document.getElementById('coords').textContent = `${cx}, ${cy}`;
   drawHoverCell(cx, cy);
 
-  if (state.isDragging) {
+  if (isPanning) {
     state.viewX = state.viewStartX + (e.clientX - state.dragStartX);
     state.viewY = state.viewStartY + (e.clientY - state.dragStartY);
     applyTransform();
@@ -3016,9 +3032,10 @@ canvasArea.addEventListener('mousemove', e => {
 });
 
 canvasArea.addEventListener('mouseup', e => {
-  if (state.isDragging) {
+  if (isPanning) {
+    isPanning = false;
     state.isDragging = false;
-    canvasArea.style.cursor = spaceHeld ? 'grab' : (state.pattern ? 'crosshair' : 'default');
+    canvasArea.style.cursor = isSpacePressed ? 'grab' : (state.pattern ? 'crosshair' : 'default');
   }
   if (state.isPainting) {
     state.isPainting = false;
@@ -3028,7 +3045,10 @@ canvasArea.addEventListener('mouseup', e => {
 
 canvasArea.addEventListener('mouseleave', () => {
   state.isPainting = false;
-  state.isDragging = false;
+  if (isPanning) {
+    isPanning = false;
+    state.isDragging = false;
+  }
   oCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
   document.getElementById('coords').textContent = '— , —';
 });
