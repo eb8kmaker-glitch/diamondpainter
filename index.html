@@ -28,26 +28,22 @@
   <style>
     /* ── Hero ── */
     .hero {
-      background: linear-gradient(160deg, #f0f7ff 0%, #f8f9fc 50%, #f3f0ff 100%);
-      border-bottom: 1px solid var(--border-light);
       padding: 80px 0 90px;
-      overflow: hidden;
-      position: relative;
     }
     .hero::before {
       content: '';
       position: absolute;
       top: -80px; right: -80px;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(14,165,233,0.07) 0%, transparent 70%);
+      width: 540px; height: 540px;
+      background: radial-gradient(circle, rgba(111,231,255,0.09) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero::after {
       content: '';
       position: absolute;
       bottom: -60px; left: -60px;
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%);
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(200,166,255,0.08) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero-inner {
@@ -62,36 +58,36 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: var(--accent-light);
-      border: 1px solid rgba(14,165,233,0.25);
+      background: rgba(111,231,255,0.1);
+      border: 1px solid rgba(111,231,255,0.22);
       border-radius: 100px;
       padding: 5px 14px;
       font-size: 12px;
       font-weight: 600;
-      color: var(--accent-dark);
+      color: #6fe7ff;
       margin-bottom: 22px;
       letter-spacing: 0.04em;
     }
-    .hero-badge span { color: var(--success); }
+    .hero-badge span { color: #6fe7ff; }
     .hero-title {
       font-family: 'Playfair Display', Georgia, serif;
       font-size: clamp(34px, 5vw, 56px);
       font-weight: 600;
-      color: var(--primary);
+      color: rgba(255,255,255,0.95);
       line-height: 1.15;
       letter-spacing: -0.025em;
       margin-bottom: 20px;
     }
     .hero-title em {
       font-style: italic;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background: linear-gradient(135deg, #6fe7ff, #c8a6ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
     .hero-desc {
       font-size: 18px;
-      color: var(--text3);
+      color: rgba(255,255,255,0.62);
       line-height: 1.7;
       margin-bottom: 36px;
       max-width: 480px;
@@ -114,20 +110,21 @@
       align-items: center;
       gap: 6px;
       font-size: 13px;
-      color: var(--text3);
+      color: rgba(255,255,255,0.52);
       font-weight: 500;
     }
-    .trust-item svg { color: var(--success); flex-shrink: 0; }
+    .trust-item svg { color: #6fe7ff; flex-shrink: 0; }
 
     /* ── Diamond Canvas Preview ── */
     .hero-visual {
       position: relative;
     }
     .canvas-preview {
-      background: #0d1638;
+      background: rgba(8,14,34,0.75);
+      border: 1px solid rgba(111,231,255,0.12);
       border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 0 0 1px rgba(255,255,255,0.1);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(111,231,255,0.06);
       position: relative;
       overflow: hidden;
     }
@@ -135,7 +132,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(111,231,255,0.08), transparent);
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(111,231,255,0.1), transparent);
     }
     .canvas-preview-header {
       display: flex;
@@ -322,7 +319,8 @@
 
     /* ── CTA Section ── */
     .cta-section {
-      background: linear-gradient(135deg, var(--primary) 0%, #2a4070 100%);
+      background: linear-gradient(160deg, #080e22 0%, #0d1638 55%, #0f0b36 100%);
+      border-top: 1px solid rgba(111,231,255,0.08);
       color: white;
       padding: 80px 0;
       text-align: center;
@@ -333,7 +331,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(14,165,233,0.15), transparent);
+      background: radial-gradient(ellipse 70% 80% at 50% 0%, rgba(111,231,255,0.1), transparent);
     }
     .cta-section .container { position: relative; z-index: 1; }
     .cta-section .section-title { color: white; }
@@ -423,7 +421,7 @@
 </nav>
 
 <!-- ── Hero ── -->
-<section class="hero" aria-labelledby="hero-heading">
+<section class="hero hero-dark" aria-labelledby="hero-heading">
   <div class="container">
     <div class="hero-inner">
       <div class="hero-content">
@@ -629,10 +627,10 @@
         </div>
       </div>
       <div aria-hidden="true">
-        <div style="background:linear-gradient(135deg,#eff6ff,#f0fdf4);border-radius:20px;padding:36px;border:1px solid var(--border-light);">
+        <div style="background:linear-gradient(135deg,#eef0f9,#f6f8ff);border-radius:20px;padding:36px;border:1px solid var(--border-light);">
           <div style="background:white;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow-sm);">
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-              <div style="width:10px;height:10px;background:#0ea5e9;border-radius:50%;"></div>
+              <div style="width:10px;height:10px;background:#0eb4d4;border-radius:50%;"></div>
               <span style="font-size:13px;font-weight:600;color:var(--text2);">Color Palette — 32 DMC Colors</span>
             </div>
             <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px;">

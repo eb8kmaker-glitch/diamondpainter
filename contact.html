@@ -15,22 +15,18 @@
   <link rel="stylesheet" href="shared.css">
   <style>
     .contact-hero {
-      background: linear-gradient(160deg, #f0f7ff 0%, #f8f9fc 60%, #f5f0ff 100%);
-      border-bottom: 1px solid var(--border-light);
       padding: 56px 0 60px;
     }
     .contact-hero h1 {
       font-family: 'Playfair Display', Georgia, serif;
       font-size: clamp(28px, 4vw, 44px);
       font-weight: 600;
-      color: var(--primary);
       letter-spacing: -0.02em;
       line-height: 1.2;
       margin-bottom: 14px;
     }
     .contact-hero p {
       font-size: 17px;
-      color: var(--text3);
       line-height: 1.7;
       max-width: 500px;
     }
@@ -75,7 +71,7 @@
     .form-group select:focus,
     .form-group textarea:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(14,165,233,0.12);
+      box-shadow: 0 0 0 3px rgba(14,180,212,0.12);
     }
     .form-group textarea {
       height: 140px;
@@ -95,7 +91,7 @@
     .form-submit {
       width: 100%;
       padding: 13px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
       color: white;
       font-size: 15px;
       font-weight: 700;
@@ -103,7 +99,7 @@
       border-radius: 100px;
       cursor: pointer;
       transition: opacity 0.18s, transform 0.18s;
-      box-shadow: 0 3px 12px rgba(14,165,233,0.35);
+      box-shadow: 0 3px 14px rgba(14,180,212,0.35);
     }
     .form-submit:hover {
       opacity: 0.92;
@@ -180,7 +176,7 @@
   </div>
 </nav>
 
-<section class="contact-hero" aria-labelledby="contact-heading">
+<section class="contact-hero hero-dark" aria-labelledby="contact-heading">
   <div class="container">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="index.html">Home</a>
