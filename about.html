@@ -131,53 +131,53 @@
     <div style="display:grid;grid-template-columns:1fr 320px;gap:60px;align-items:start;">
 
       <div class="about-section">
-        <h2>What Diamond Painter Does</h2>
-        <p>Diamond painting is a craft where small resin diamonds — called drills — are placed onto a printed adhesive canvas to create a sparkling mosaic image. The canvas is color-coded using a standardized numbering system (DMC codes) so crafters know exactly which color goes in each position.</p>
-        <p>Diamond Painter lets you generate these pattern files from any photo you choose. You upload an image, configure your canvas size and color count, and the tool produces a complete, DMC-coded pattern showing exactly where each color goes — including precise bead counts so you know what to order.</p>
-        <p>The tool also includes editing features so you can manually adjust colors, fix areas the algorithm missed, and export a print-ready pattern image. Everything runs locally in your browser. No photos are uploaded. No account is needed.</p>
+        <h2 data-i18n="about_what_title">What Diamond Painter Does</h2>
+        <p data-i18n="about_what_p1">Diamond painting is a craft where small resin diamonds — called drills — are placed onto a printed adhesive canvas to create a sparkling mosaic image. The canvas is color-coded using a standardized numbering system (DMC codes) so crafters know exactly which color goes in each position.</p>
+        <p data-i18n="about_what_p2">Diamond Painter lets you generate these pattern files from any photo you choose. You upload an image, configure your canvas size and color count, and the tool produces a complete, DMC-coded pattern showing exactly where each color goes — including precise bead counts so you know what to order.</p>
+        <p data-i18n="about_what_p3">The tool also includes editing features so you can manually adjust colors, fix areas the algorithm missed, and export a print-ready pattern image. Everything runs locally in your browser. No photos are uploaded. No account is needed.</p>
 
-        <h2>The Design Philosophy</h2>
-        <p>There are commercial services that offer similar functionality, but most require payment, account creation, or impose watermarks and size limits on exports. Diamond Painter was built on a simpler idea: crafters deserve a good tool that does not put obstacles between them and their project.</p>
-        <p>Privacy was a non-negotiable design requirement from the start. Custom diamond painting often uses deeply personal images — a pet that has passed away, a family portrait, a meaningful travel photo. These are not images people should need to upload to an unknown server to use a creative tool.</p>
-        <p>Running the image processing locally also means the tool works offline after the initial page load, is genuinely fast, and costs nothing to scale — which is why we can offer it completely free without any subscription tier.</p>
+        <h2 data-i18n="about_philosophy_title">The Design Philosophy</h2>
+        <p data-i18n="about_philosophy_p1">There are commercial services that offer similar functionality, but most require payment, account creation, or impose watermarks and size limits on exports. Diamond Painter was built on a simpler idea: crafters deserve a good tool that does not put obstacles between them and their project.</p>
+        <p data-i18n="about_philosophy_p2">Privacy was a non-negotiable design requirement from the start. Custom diamond painting often uses deeply personal images — a pet that has passed away, a family portrait, a meaningful travel photo. These are not images people should need to upload to an unknown server to use a creative tool.</p>
+        <p data-i18n="about_philosophy_p3">Running the image processing locally also means the tool works offline after the initial page load, is genuinely fast, and costs nothing to scale — which is why we can offer it completely free without any subscription tier.</p>
 
         <div class="values-grid">
           <div class="value-card">
             <div class="icon" aria-hidden="true">🔒</div>
-            <h3>Privacy First</h3>
-            <p>Your images are processed entirely in your browser. Nothing is uploaded, stored, or transmitted.</p>
+            <h3 data-i18n="about_val1_title">Privacy First</h3>
+            <p data-i18n="about_val1_desc">Your images are processed entirely in your browser. Nothing is uploaded, stored, or transmitted.</p>
           </div>
           <div class="value-card">
             <div class="icon" aria-hidden="true">⚡</div>
-            <h3>Fast and Responsive</h3>
-            <p>Local processing means no waiting for server responses. Patterns generate in seconds, not minutes.</p>
+            <h3 data-i18n="about_val2_title">Fast and Responsive</h3>
+            <p data-i18n="about_val2_desc">Local processing means no waiting for server responses. Patterns generate in seconds, not minutes.</p>
           </div>
           <div class="value-card">
             <div class="icon" aria-hidden="true">🎯</div>
-            <h3>Accurate Color Matching</h3>
-            <p>DMC colors are matched using perceptual distance — the same approach used by professional color tools.</p>
+            <h3 data-i18n="about_val3_title">Accurate Color Matching</h3>
+            <p data-i18n="about_val3_desc">DMC colors are matched using perceptual distance — the same approach used by professional color tools.</p>
           </div>
           <div class="value-card">
             <div class="icon" aria-hidden="true">🌍</div>
-            <h3>Built for Everyone</h3>
-            <p>Full support for English, Korean, Japanese, and Chinese. No paywalls, no region restrictions.</p>
+            <h3 data-i18n="about_val4_title">Built for Everyone</h3>
+            <p data-i18n="about_val4_desc">Full support for English, Korean, Japanese, and Chinese. No paywalls, no region restrictions.</p>
           </div>
         </div>
 
-        <h2>How the Technology Works</h2>
-        <p>When you upload an image and click generate, Diamond Painter performs a series of operations entirely within your browser:</p>
+        <h2 data-i18n="about_tech_title">How the Technology Works</h2>
+        <p data-i18n="about_tech_intro">When you upload an image and click generate, Diamond Painter performs a series of operations entirely within your browser:</p>
         <ul class="tech-list">
-          <li>The image is downsampled to the target canvas resolution based on your chosen canvas size and drill type</li>
-          <li>A perceptual color clustering algorithm groups the image's pixels into the number of color clusters you select</li>
-          <li>Each cluster centroid is matched to the nearest color in the DMC drill database using perceptual color distance (CIE Lab color space)</li>
-          <li>The canvas grid is rendered with each cell showing the corresponding DMC color and its associated symbol</li>
-          <li>Bead counts are calculated for each color and displayed in the color palette panel</li>
+          <li data-i18n="about_tech1">The image is downsampled to the target canvas resolution based on your chosen canvas size and drill type</li>
+          <li data-i18n="about_tech2">A perceptual color clustering algorithm groups the image's pixels into the number of color clusters you select</li>
+          <li data-i18n="about_tech3">Each cluster centroid is matched to the nearest color in the DMC drill database using perceptual color distance (CIE Lab color space)</li>
+          <li data-i18n="about_tech4">The canvas grid is rendered with each cell showing the corresponding DMC color and its associated symbol</li>
+          <li data-i18n="about_tech5">Bead counts are calculated for each color and displayed in the color palette panel</li>
         </ul>
-        <p>The editing tools (paint, fill, erase, eyedropper, color replacement) then let you refine the generated pattern manually before exporting.</p>
+        <p data-i18n="about_tech_outro">The editing tools (paint, fill, erase, eyedropper, color replacement) then let you refine the generated pattern manually before exporting.</p>
 
-        <h2>Who It's For</h2>
-        <p>Diamond Painter is designed for anyone interested in diamond painting — from someone who has never picked up a drill to experienced crafters who want to create custom patterns from their own photos. The interface is available in multiple languages and the guide content on this site is written for complete beginners.</p>
-        <p>It is also useful as a design planning tool for people who purchase pre-made custom canvases from suppliers — generating a pattern first lets you preview the result and optimize color choices before committing to an order.</p>
+        <h2 data-i18n="about_who_title">Who It's For</h2>
+        <p data-i18n="about_who_p1">Diamond Painter is designed for anyone interested in diamond painting — from someone who has never picked up a drill to experienced crafters who want to create custom patterns from their own photos. The interface is available in multiple languages and the guide content on this site is written for complete beginners.</p>
+        <p data-i18n="about_who_p2">It is also useful as a design planning tool for people who purchase pre-made custom canvases from suppliers — generating a pattern first lets you preview the result and optimize color choices before committing to an order.</p>
       </div>
 
       <aside>
@@ -187,31 +187,31 @@
           <a href="create.html" class="btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:16px;" data-i18n="about_sidebar_cta_btn">Open Pattern Generator</a>
         </div>
         <div style="margin-top:20px;background:var(--card);border:1px solid var(--border-light);border-radius:var(--radius);padding:24px;">
-          <h4 style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:16px;">Quick Facts</h4>
+          <h4 style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:16px;" data-i18n="about_qf_title">Quick Facts</h4>
           <div style="font-size:14px;color:var(--text2);">
             <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);">
-              <span style="color:var(--text3);">Cost</span>
-              <strong style="color:var(--success);">Free</strong>
+              <span style="color:var(--text3);" data-i18n="about_qf_cost_label">Cost</span>
+              <strong style="color:var(--success);" data-i18n="about_qf_cost_val">Free</strong>
             </div>
             <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);">
-              <span style="color:var(--text3);">Account required</span>
-              <strong>No</strong>
+              <span style="color:var(--text3);" data-i18n="about_qf_account_label">Account required</span>
+              <strong data-i18n="about_qf_account_val">No</strong>
             </div>
             <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);">
-              <span style="color:var(--text3);">Photo upload</span>
-              <strong>Never</strong>
+              <span style="color:var(--text3);" data-i18n="about_qf_photo_label">Photo upload</span>
+              <strong data-i18n="about_qf_photo_val">Never</strong>
             </div>
             <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);">
-              <span style="color:var(--text3);">DMC colors</span>
+              <span style="color:var(--text3);" data-i18n="about_qf_dmc_label">DMC colors</span>
               <strong>457</strong>
             </div>
             <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);">
-              <span style="color:var(--text3);">Languages</span>
+              <span style="color:var(--text3);" data-i18n="about_qf_langs_label">Languages</span>
               <strong>4</strong>
             </div>
             <div style="display:flex;justify-content:space-between;padding:8px 0;">
-              <span style="color:var(--text3);">Watermarks</span>
-              <strong>None</strong>
+              <span style="color:var(--text3);" data-i18n="about_qf_watermark_label">Watermarks</span>
+              <strong data-i18n="about_qf_watermark_val">None</strong>
             </div>
           </div>
         </div>
