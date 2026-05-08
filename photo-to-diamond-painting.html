@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8254204287118850"
+       crossorigin="anonymous"></script>
+  <title>Photo to Diamond Painting — Free Online Converter | Diamond Painter</title>
+  <meta name="description" content="Convert any photo to a diamond painting pattern for free. Upload your image and instantly generate a DMC color-coded diamond art pattern with bead counts — no sign-up, no download required. 사진으로 보석십자수 도안 무료 변환.">
+  <meta name="keywords" content="photo to diamond painting, diamond painting from photo, convert photo to diamond painting, photo to diamond art, picture to diamond painting, 사진으로 보석십자수 만들기, 보석십자수 변환">
+  <link rel="canonical" href="https://diamondpainter.app/photo-to-diamond-painting.html">
+  <link rel="alternate" hreflang="en" href="https://diamondpainter.app/photo-to-diamond-painting.html">
+  <link rel="alternate" hreflang="ko" href="https://diamondpainter.app/photo-to-diamond-painting.html">
+  <link rel="alternate" hreflang="x-default" href="https://diamondpainter.app/photo-to-diamond-painting.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://diamondpainter.app/photo-to-diamond-painting.html">
+  <meta property="og:title" content="Photo to Diamond Painting — Free Online Converter">
+  <meta property="og:description" content="Convert any photo into a diamond painting pattern for free. DMC color codes, custom canvas sizes, instant download — no sign-up required.">
+  <meta property="og:image" content="https://diamondpainter.app/og-image.png">
+  <meta property="og:site_name" content="Diamond Painter">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Photo to Diamond Painting — Free Online Converter">
+  <meta name="twitter:description" content="Convert any photo into a diamond painting pattern for free. DMC colors, custom sizes, instant download.">
+  <meta name="twitter:image" content="https://diamondpainter.app/og-image.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Photo to Diamond Painting Converter",
+    "description": "Free online tool to convert any photo into a custom diamond painting pattern with DMC color codes and bead counts.",
+    "url": "https://diamondpainter.app/photo-to-diamond-painting.html",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://diamondpainter.app/" },
+        { "@type": "ListItem", "position": 2, "name": "Photo to Diamond Painting" }
+      ]
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I convert a photo to a diamond painting?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Upload your photo to Diamond Painter, choose canvas size and color count, then click Generate. Your photo is instantly converted into a DMC color-coded diamond painting pattern — free, no sign-up needed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What photos work best for diamond painting?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "High-contrast images with a clear main subject work best — pet portraits, single-person portraits, and simple landscapes. Avoid very busy scenes with many small details. Minimum 800x800 pixels recommended."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is photo to diamond painting conversion free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, completely free. No account required, no watermarks, no limits. All processing happens in your browser."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .lp-hero {
+      padding: 72px 0 80px;
+    }
+    .lp-hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(32px, 5vw, 54px);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .lp-hero h1 em {
+      font-style: italic;
+      background: linear-gradient(135deg, #6fe7ff, #c8a6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .lp-hero p.lead {
+      font-size: 18px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 36px;
+    }
+    .lp-steps { background: var(--bg-alt); }
+    .step-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .step-card {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .step-num {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .step-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--primary); }
+    .step-card p { font-size: 14px; color: var(--text3); line-height: 1.6; }
+    .tips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .tip-card {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+    }
+    .tip-card h3 { font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .tip-card p { font-size: 13px; color: var(--text3); line-height: 1.6; }
+    .faq-lp { background: var(--bg-alt); }
+    @media (max-width: 768px) {
+      .step-list { grid-template-columns: 1fr; }
+      .tips-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="container">
+    <a href="index.html" class="nav-logo" aria-label="Diamond Painter home">
+      <div class="nav-logo-icon" aria-hidden="true">◆</div>
+      Diamond Painter
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="guide/index.html" data-i18n="nav_guide">Guide</a></li>
+      <li><a href="faq.html" data-i18n="nav_faq">FAQ</a></li>
+      <li><a href="about.html" data-i18n="nav_about">About</a></li>
+      <li><a href="contact.html" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <div class="nav-spacer"></div>
+    <select class="dp-lang-select" aria-label="Language">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+      <option value="zh">中文</option>
+    </select>
+    <a href="create.html" class="nav-cta">Try Free →</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="lp-hero hero-dark" aria-labelledby="lp-heading">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="breadcrumb-sep" aria-hidden="true">›</span>
+      <span aria-current="page">Photo to Diamond Painting</span>
+    </nav>
+    <h1 id="lp-heading">
+      <em>Photo to Diamond Painting</em><br>
+      — Free Online Converter
+    </h1>
+    <p class="lead">
+      Upload any photo and instantly convert it into a custom diamond painting pattern. Get DMC color-coded designs with bead counts, printable symbols, and print-ready output — completely free, no sign-up required.
+    </p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;">
+      <a href="create.html" class="btn-primary" style="font-size:16px;padding:14px 32px;">
+        ◆ Convert My Photo Now — Free
+      </a>
+      <a href="guide/custom-diamond-painting-tutorial.html" class="btn-secondary">
+        See how it works →
+      </a>
+    </div>
+    <div style="margin-top:24px;display:flex;gap:24px;flex-wrap:wrap;">
+      <span style="font-size:13px;color:rgba(255,255,255,0.5);">✓ No sign-up</span>
+      <span style="font-size:13px;color:rgba(255,255,255,0.5);">✓ No download</span>
+      <span style="font-size:13px;color:rgba(255,255,255,0.5);">✓ No watermarks</span>
+      <span style="font-size:13px;color:rgba(255,255,255,0.5);">✓ 457 DMC colors</span>
+      <span style="font-size:13px;color:rgba(255,255,255,0.5);">✓ 사진으로 보석십자수 제작</span>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="section lp-steps" aria-labelledby="steps-heading">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-label">How It Works</p>
+      <h2 class="section-title" id="steps-heading">Convert your photo to diamond painting in 3 steps</h2>
+      <p class="section-subtitle">No software to install, no account to create. Open the tool and start in seconds.</p>
+    </div>
+    <div class="step-list">
+      <div class="step-card">
+        <div class="step-num" aria-label="Step 1">1</div>
+        <h3>Upload Your Photo</h3>
+        <p>Drag and drop any JPG, PNG, or WebP image. Pet portraits, landscapes, family photos — any image works. Your photo never leaves your browser.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num" aria-label="Step 2">2</div>
+        <h3>Choose Canvas &amp; Colors</h3>
+        <p>Select your canvas size (A4, 30×40cm, 40×50cm and more) and set how many DMC colors to use. The tool previews your pattern in real time with bead counts.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num" aria-label="Step 3">3</div>
+        <h3>Download Your Pattern</h3>
+        <p>Export the finished DMC color-coded diamond painting pattern as a high-resolution printable image. Order your drills and start creating.</p>
+      </div>
+    </div>
+    <div class="text-center mt-48">
+      <a href="create.html" class="btn-primary">Start Converting — Free →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Tips for Best Results -->
+<section class="section" aria-labelledby="tips-heading">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-label">Tips</p>
+      <h2 class="section-title" id="tips-heading">Get the best results from your photo</h2>
+      <p class="section-subtitle">Follow these guidelines for a diamond painting pattern that truly captures your photo.</p>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <h3>Use High-Contrast Photos</h3>
+        <p>Images with a clear subject against a distinct background convert best. Pet portraits, single-person shots, and landscapes with good lighting work particularly well.</p>
+      </div>
+      <div class="tip-card">
+        <h3>Minimum 800×800 Pixels</h3>
+        <p>Higher resolution photos give the algorithm more detail to work with. Most smartphone photos are more than sufficient. Avoid heavily compressed or blurry images.</p>
+      </div>
+      <div class="tip-card">
+        <h3>Start with 25–40 Colors</h3>
+        <p>This range produces recognizable patterns for most photos. Use fewer colors for simple images, more for complex portraits. Going above 50 colors rarely improves results.</p>
+      </div>
+      <div class="tip-card">
+        <h3>Larger Canvas = More Detail</h3>
+        <p>A 40×50cm canvas gives you more grid squares, so finer details are preserved. A4 canvases work well for simple images but may blur complex patterns.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-lp" aria-labelledby="faq-heading">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-label">FAQ</p>
+      <h2 class="section-title" id="faq-heading">Photo to diamond painting — common questions</h2>
+    </div>
+    <div class="faq-list" style="max-width:720px;margin:0 auto;">
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>How do I convert a photo to a diamond painting pattern?</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          Upload your photo to Diamond Painter, select your canvas size and number of colors, then click Generate. Your photo is instantly converted into a full DMC color-coded diamond painting pattern with bead counts per color. Export as a printable image — free, no account needed.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>What photos work best for diamond painting conversion?</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          High-contrast images with a clear main subject produce the best results. Pet portraits, single-person portraits, landscapes, and architecture convert beautifully. Very busy group photos or low-light images can be trickier — try reducing the color count to 20–25 for these.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Is photo to diamond painting conversion free?</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          Yes, completely free. No account required, no watermarks on exports, no usage limits. All image processing happens locally in your browser — your photos are never uploaded to any server.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>사진으로 보석십자수 도안을 만들 수 있나요?</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          네, 가능합니다. Diamond Painter에 사진을 업로드하면 AI 색상 알고리즘이 자동으로 보석십자수 도안으로 변환해드립니다. DMC 코드가 자동 매칭되며, 비드 수량도 즉시 계산됩니다. 무료이며 회원가입이 필요 없습니다.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Can I edit the pattern after converting my photo?</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          Yes. Diamond Painter includes built-in editing tools — paint, fill, erase, eyedropper, and color replace — so you can refine your converted pattern before exporting. Undo and redo are available for as many steps as you need.
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-32">
+      <a href="faq.html" class="btn-secondary">View all FAQs →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:linear-gradient(160deg,#080e22,#0d1638 55%,#0f0b36);border-top:1px solid rgba(111,231,255,0.08);padding:72px 0;text-align:center;" aria-labelledby="cta-lp">
+  <div class="container">
+    <p class="section-label" style="color:rgba(255,255,255,0.5);">Get Started</p>
+    <h2 class="section-title" id="cta-lp" style="color:white;">Ready to convert your photo?</h2>
+    <p class="section-subtitle" style="color:rgba(255,255,255,0.65);margin:0 auto 32px;">Free, instant, browser-based. No sign-up, no download, no watermarks.</p>
+    <a href="create.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:white;color:#0a0e1a;font-size:16px;font-weight:700;border-radius:100px;text-decoration:none;">
+      ◆ Convert My Photo — Free
+    </a>
+  </div>
+</section>
+
+<!-- Internal Links -->
+<section class="section" aria-label="Related pages">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-label">Related</p>
+      <h2 class="section-title" style="font-size:24px;">More diamond painting resources</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+      <a href="custom-diamond-painting.html" class="guide-card">
+        <span class="guide-card-tag">Tool</span>
+        <h3>Custom Diamond Painting</h3>
+        <p>Create fully custom diamond painting designs from your own photos with DMC color matching.</p>
+        <span class="guide-card-link">Learn more →</span>
+      </a>
+      <a href="diamond-painting-pattern-maker.html" class="guide-card">
+        <span class="guide-card-tag">Tool</span>
+        <h3>Diamond Painting Pattern Maker</h3>
+        <p>Professional-grade pattern generation with 457 DMC colors and custom canvas sizes.</p>
+        <span class="guide-card-link">Learn more →</span>
+      </a>
+      <a href="guide/custom-diamond-painting-tutorial.html" class="guide-card">
+        <span class="guide-card-tag">Tutorial</span>
+        <h3>Custom Diamond Painting Tutorial</h3>
+        <p>Step-by-step guide to creating your first custom diamond painting pattern from a photo.</p>
+        <span class="guide-card-link">Read tutorial →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:14px;display:inline-flex;">
+          <div class="nav-logo-icon" aria-hidden="true">◆</div>
+          Diamond Painter
+        </a>
+        <p class="footer-tagline" data-i18n="footer_tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Tool</h4>
+        <a href="create.html">Create Pattern</a>
+        <a href="photo-to-diamond-painting.html">Photo to Diamond Painting</a>
+        <a href="diamond-painting-pattern-maker.html">Pattern Maker</a>
+        <a href="custom-diamond-painting.html">Custom Diamond Painting</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_guides">Guides</h4>
+        <a href="guide/index.html" data-i18n="footer_all_guides">All Guides</a>
+        <a href="guide/diamond-painting-beginner-guide.html" data-i18n="footer_beginner_guide">Beginner Guide</a>
+        <a href="guide/custom-diamond-painting-tutorial.html" data-i18n="footer_custom_tutorial">Custom Tutorial</a>
+        <a href="guide/dmc-color-guide.html" data-i18n="footer_dmc_guide">DMC Color Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_info">Info</h4>
+        <a href="faq.html" data-i18n="footer_faq">FAQ</a>
+        <a href="about.html" data-i18n="footer_about">About</a>
+        <a href="contact.html" data-i18n="footer_contact">Contact</a>
+        <a href="privacy-policy.html" data-i18n="footer_privacy">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer_copyright">© 2025 Diamond Painter. All rights reserved.</p>
+      <p data-i18n="footer_made_for">Made for diamond painting enthusiasts everywhere.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+  toggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+  });
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+      btn.setAttribute('aria-expanded', (!isOpen).toString());
+    });
+  });
+</script>
+<script src="i18n.js"></script>
+<script src="ads.js" defer></script>
+<script type="module" src="/analytics.js"></script>
+</body>
+</html>
