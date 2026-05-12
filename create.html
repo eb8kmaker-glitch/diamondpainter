@@ -2329,10 +2329,11 @@ function deltaE(lab1, lab2) {
 // Precompute LAB for all DMC colors
 const DMC_LAB = DMC_COLORS.map(c => rgbToLab(...c.rgb));
 
-function nearestDMC(r, g, b) {
+function nearestDMC(r, g, b, excludeSet) {
   const lab = rgbToLab(r, g, b);
   let best = 0, bestDist = Infinity;
   for (let i = 0; i < DMC_LAB.length; i++) {
+    if (excludeSet && excludeSet.has(i)) continue;
     const d = deltaE(lab, DMC_LAB[i]);
     if (d < bestDist) { bestDist = d; best = i; }
   }
@@ -2422,6 +2423,7 @@ const state = {
   pattern: null,       // {width, height, grid}
   userGrid: null,      // Int16Array, -1 = empty, >=0 = palette index
   palette: [],         // [{dmc, name, color, symbol, count}]
+  requestedColors: 0,  // user-requested k for UI display
   activePaletteIdx: 0,
   tool: 'paint',
 
@@ -2660,13 +2662,15 @@ async function generatePattern() {
   const { gridW, gridH } = getGridDimensions();
   if (!gridW || !gridH) return;
   const k = parseInt(document.getElementById('k-colors').value);
+  state.requestedColors = k;
   const img = state.sourceImage;
 
   // Step 1: Resize image to grid dimensions
   const offscreen = document.createElement('canvas');
   offscreen.width = gridW; offscreen.height = gridH;
   const ctx2 = offscreen.getContext('2d');
-  ctx2.imageSmoothingEnabled = false;
+  ctx2.imageSmoothingEnabled = true;
+  ctx2.imageSmoothingQuality = 'high';
   ctx2.drawImage(img, 0, 0, gridW, gridH);
 
   const imgData = ctx2.getImageData(0, 0, gridW, gridH);
@@ -2689,18 +2693,32 @@ async function generatePattern() {
   showProcessing(true, t('proc_dmc'), 70);
   await sleep(30);
 
-  // Step 3: Map centroids to nearest DMC
-  const dmcIndices = centroids.map(([r,g,b]) => nearestDMC(r,g,b));
-
-  // Deduplicate: if two centroids map to same DMC, merge
-  const dmcToFirstCentroid = new Map();
+  // Step 3: Map each centroid to the nearest DMC not yet used.
+  // If two centroids would pick the same DMC, the later one falls back to the
+  // next-nearest unique DMC — so the final palette has exactly k colors.
+  const usedDmc = new Set();
   const centroidToDmc = [];
+  const mergedPairs = [];
+
   for (let i = 0; i < centroids.length; i++) {
-    const di = dmcIndices[i];
-    if (!dmcToFirstCentroid.has(di)) {
-      dmcToFirstCentroid.set(di, i);
+    const [r, g, b] = centroids[i];
+    const firstChoice = nearestDMC(r, g, b);
+    const unique      = nearestDMC(r, g, b, usedDmc);
+    if (firstChoice !== unique) {
+      mergedPairs.push({
+        centroid: i,
+        skipped:  DMC_COLORS[firstChoice].code,
+        assigned: DMC_COLORS[unique].code,
+      });
     }
-    centroidToDmc.push(di);
+    usedDmc.add(unique);
+    centroidToDmc.push(unique);
+  }
+
+  console.log(`[DiamondPainter] Quantized centroids : ${centroids.length}`);
+  console.log(`[DiamondPainter] Unique DMC assigned : ${usedDmc.size}`);
+  if (mergedPairs.length > 0) {
+    console.log(`[DiamondPainter] DMC collisions resolved (${mergedPairs.length}):`, mergedPairs);
   }
 
   // Build palette
@@ -2857,7 +2875,10 @@ function updateStats() {
     }
   }
   document.getElementById('stat-total').textContent    = total.toLocaleString();
-  document.getElementById('stat-colors').textContent   = state.palette.length;
+  const actual = state.palette.length;
+  const requested = state.requestedColors;
+  document.getElementById('stat-colors').textContent =
+    (requested && actual < requested) ? `${actual} / ${requested}` : actual;
   const modEl = document.getElementById('stat-modified');
   if (modEl) modEl.textContent = modified.toLocaleString();
   document.getElementById('stat-remaining').textContent = (total - modified).toLocaleString();
