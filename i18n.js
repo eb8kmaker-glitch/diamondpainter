@@ -471,23 +471,25 @@
   };
 
   var currentLang = localStorage.getItem('dp_lang') || 'ko';
+  var domReady = false;
 
   function t(key) {
-    return (T[currentLang] && T[currentLang][key]) || (T['en'] && T['en'][key]) || key;
+    var v = (T[currentLang] && T[currentLang][key]) || (T['en'] && T['en'][key]);
+    return v !== undefined ? v : null;
   }
 
   function applyTranslations() {
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
-      el.textContent = t(el.getAttribute('data-i18n'));
+      var v = t(el.getAttribute('data-i18n')); if (v !== null) el.textContent = v;
     });
     document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
-      el.innerHTML = t(el.getAttribute('data-i18n-html'));
+      var v = t(el.getAttribute('data-i18n-html')); if (v !== null) el.innerHTML = v;
     });
     document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
-      el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+      var v = t(el.getAttribute('data-i18n-placeholder')); if (v !== null) el.placeholder = v;
     });
     document.querySelectorAll('[data-i18n-title]').forEach(function (el) {
-      el.title = t(el.getAttribute('data-i18n-title'));
+      var v = t(el.getAttribute('data-i18n-title')); if (v !== null) el.title = v;
     });
     document.querySelectorAll('.dp-lang-select').forEach(function (sel) {
       sel.value = currentLang;
@@ -505,12 +507,22 @@
 
   function getCurrentLang() { return currentLang; }
 
+  function extend(translations) {
+    Object.keys(translations).forEach(function(lang) {
+      if (!T[lang]) T[lang] = {};
+      var src = translations[lang];
+      Object.keys(src).forEach(function(k) { T[lang][k] = src[k]; });
+    });
+    if (domReady) applyTranslations();
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
+    domReady = true;
     applyTranslations();
     document.querySelectorAll('.dp-lang-select').forEach(function (sel) {
       sel.addEventListener('change', function () { setLanguage(this.value); });
     });
   });
 
-  window.dpI18n = { t: t, setLanguage: setLanguage, applyTranslations: applyTranslations, getCurrentLang: getCurrentLang };
+  window.dpI18n = { t: t, setLanguage: setLanguage, applyTranslations: applyTranslations, getCurrentLang: getCurrentLang, extend: extend };
 })();
