@@ -43,62 +43,108 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- Guides -->
+  <!-- Guides Hub -->
   <url>
     <loc>https://diamondpainter.app/guide/</loc>
-    <lastmod>2026-05-08</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
+  <!-- Getting Started -->
   <url>
     <loc>https://diamondpainter.app/guide/diamond-painting-beginner-guide.html</loc>
-    <lastmod>2026-05-08</lastmod>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://diamondpainter.app/guide/square-vs-round-drill.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://diamondpainter.app/guide/full-drill-vs-partial-drill.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Making Patterns -->
+  <url>
+    <loc>https://diamondpainter.app/guide/how-to-make-diamond-painting-patterns.html</loc>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://diamondpainter.app/guide/custom-diamond-painting-tutorial.html</loc>
-    <lastmod>2026-05-08</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
+    <loc>https://diamondpainter.app/guide/best-image-types-for-diamond-painting.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://diamondpainter.app/guide/best-resolution-for-cross-stitch.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://diamondpainter.app/guide/how-to-print-large-patterns.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Colors & DMC -->
+  <url>
+    <loc>https://diamondpainter.app/guide/dmc-color-guide.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Accessories & Tips -->
+  <url>
     <loc>https://diamondpainter.app/guide/diamond-painting-tips.html</loc>
-    <lastmod>2026-05-08</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://diamondpainter.app/guide/best-diamond-painting-accessories.html</loc>
-    <lastmod>2026-05-08</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
-  <url>
-    <loc>https://diamondpainter.app/guide/dmc-color-guide.html</loc>
-    <lastmod>2026-05-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Support -->
+  <!-- Support & Info -->
   <url>
     <loc>https://diamondpainter.app/faq.html</loc>
-    <lastmod>2026-05-08</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://diamondpainter.app/about.html</loc>
-    <lastmod>2026-05-08</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
   </url>
 
   <url>
@@ -106,6 +152,13 @@
     <lastmod>2026-05-08</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://diamondpainter.app/terms-of-service.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 
 </urlset>

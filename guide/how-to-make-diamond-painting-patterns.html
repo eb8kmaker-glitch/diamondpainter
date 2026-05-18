@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8254204287118850"
+       crossorigin="anonymous"></script>
+  <title>How to Make Diamond Painting Patterns from Photos — Step-by-Step Guide</title>
+  <meta name="description" content="Learn how to make your own diamond painting patterns from photos. Step-by-step guide covering photo selection, color reduction, canvas sizing, DMC matching, and exporting your finished pattern.">
+  <link rel="canonical" href="https://diamondpainter.app/guide/how-to-make-diamond-painting-patterns.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Make Diamond Painting Patterns from Photos — Complete Guide">
+  <meta property="og:description" content="Turn any photo into a diamond painting pattern. Step-by-step guide to photo selection, canvas sizing, color reduction, DMC matching, and printing your pattern.">
+  <meta property="og:url" content="https://diamondpainter.app/guide/how-to-make-diamond-painting-patterns.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to Make Diamond Painting Patterns from Photos">
+  <meta name="twitter:description" content="Complete guide to converting photos into diamond painting patterns — photo prep, canvas sizing, color reduction, and DMC codes.">
+  <link rel="stylesheet" href="../shared.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Make a Diamond Painting Pattern from a Photo",
+    "description": "Step-by-step guide to converting a photograph into a diamond painting pattern with DMC color codes.",
+    "step": [
+      { "@type": "HowToStep", "name": "Choose the right photo", "text": "Select a photo with strong contrast, clear subject focus, and good lighting. Portraits with a simple background and landscapes with clear color separation work best." },
+      { "@type": "HowToStep", "name": "Decide on canvas size", "text": "Choose a canvas size based on the detail in your photo. For portraits, 40×50cm or larger is recommended. For simple subjects, 30×30cm can work well." },
+      { "@type": "HowToStep", "name": "Set your color count", "text": "Choose a color limit between 15 and 50 DMC colors. Fewer colors simplify the project; more colors preserve detail. Most photos look good at 25–35 colors." },
+      { "@type": "HowToStep", "name": "Upload and generate your pattern", "text": "Upload your photo to Diamond Painter and generate the pattern. Review the result — check that the subject is recognizable and colors are well-distributed." },
+      { "@type": "HowToStep", "name": "Review and adjust colors", "text": "Use the color editor to adjust any colors that look wrong, reduce hard-to-find DMC shades, or increase contrast in key areas." },
+      { "@type": "HowToStep", "name": "Export your pattern", "text": "Export the finished pattern as a printable PDF or image file with the color legend and bead counts included." }
+    ],
+    "datePublished": "2026-05-01",
+    "dateModified": "2026-05-18",
+    "author": { "@type": "Organization", "name": "Diamond Painter", "url": "https://diamondpainter.app" },
+    "publisher": { "@type": "Organization", "name": "Diamond Painter", "url": "https://diamondpainter.app" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What makes a good photo for diamond painting?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Good diamond painting photos have strong contrast, clear separation between the subject and background, good lighting with visible shadows, and a simple or uncluttered composition. Close-up portraits of people or animals, bold floral shots, and landscapes with clear color zones all work well. Avoid heavily blurred backgrounds (bokeh), very dark photos without detail, and images with dozens of similarly-colored elements at small scale." }
+      },
+      {
+        "@type": "Question",
+        "name": "How many colors should a diamond painting pattern have?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Most diamond painting patterns work well with 20–40 DMC colors. Fewer colors (15–20) simplify the project significantly and are easier to manage, especially for beginners. More colors (40–60) preserve more detail but increase the number of drill bags to organize and the number of color switches during work. Very complex photorealistic patterns may use up to 70+ colors, but these are advanced projects." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I make a diamond painting pattern for free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Diamond Painter at diamondpainter.app is completely free. You upload your photo, configure your settings, and generate a full DMC-coded pattern with bead counts — no account, no subscription, no watermarks. The entire process runs in your browser." }
+      },
+      {
+        "@type": "Question",
+        "name": "What size should my canvas be for a portrait photo?",
+        "acceptedAnswer": { "@type": "Answer", "text": "For a portrait of a person's face, 40×50cm with 35+ DMC colors produces a recognizable result with reasonable detail. For a head-and-shoulders portrait with more background, 50×60cm or 50×70cm gives better proportions. Very small canvases (under 30cm in either dimension) tend to produce blocky, pixelated portrait results that lose facial detail." }
+      }
+    ]
+  }
+  </script>
+  <style>
+    .step-block {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 36px;
+      align-items: flex-start;
+    }
+    .step-number {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+    }
+    .step-content h3 { font-size: 17px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .step-content p { font-size: 15px; color: var(--text2); line-height: 1.75; margin-bottom: 10px; }
+    .step-content p:last-child { margin-bottom: 0; }
+    .photo-quality-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .pq-card {
+      padding: 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-light);
+    }
+    .pq-card.good { border-color: #059669; background: #f0fdf4; }
+    .pq-card.avoid { border-color: #dc2626; background: #fef2f2; }
+    .pq-card h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+    .pq-card.good h4 { color: #059669; }
+    .pq-card.avoid h4 { color: #dc2626; }
+    .pq-card ul { list-style: disc; padding-left: 18px; margin: 0; }
+    .pq-card li { font-size: 14px; color: var(--text2); line-height: 1.65; margin-bottom: 4px; }
+    .color-count-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 20px 0; }
+    .color-count-table th { background: var(--bg-alt); padding: 10px 14px; text-align: left; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--border); }
+    .color-count-table td { padding: 10px 14px; border-bottom: 1px solid var(--border-light); color: var(--text2); }
+    .color-count-table tr:last-child td { border-bottom: none; }
+    @media (max-width: 580px) {
+      .photo-quality-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="container">
+    <a href="../index.html" class="nav-logo">
+      <div class="nav-logo-icon" aria-hidden="true">◆</div>
+      Diamond Painter
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="active" data-i18n="nav_guide">Guide</a></li>
+      <li><a href="../faq.html" data-i18n="nav_faq">FAQ</a></li>
+      <li><a href="../about.html" data-i18n="nav_about">About</a></li>
+      <li><a href="../contact.html" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <div class="nav-spacer"></div>
+    <select class="dp-lang-select" aria-label="Language">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+      <option value="zh">中文</option>
+    </select>
+    <a href="../create.html" class="nav-cta" data-i18n="nav_try_free">Try Free →</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<main class="article-page">
+  <div class="container">
+    <div class="article-layout">
+
+      <article>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html">Home</a>
+          <span class="breadcrumb-sep" aria-hidden="true">›</span>
+          <a href="index.html">Guide</a>
+          <span class="breadcrumb-sep" aria-hidden="true">›</span>
+          <span aria-current="page">How to Make Patterns</span>
+        </nav>
+
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="tag">Tutorial</span>
+            <span>14 min read</span>
+            <span>Updated May 2026</span>
+          </div>
+          <h1 class="article-title">How to Make Diamond Painting Patterns from Photos</h1>
+          <p class="article-intro">
+            Custom diamond painting patterns — made from your own photos — are one of the most satisfying things you can create with this craft. A pet portrait, a family photo, a meaningful landscape: converting a personal image into a sparkling, hand-placed mosaic produces a result that store-bought kits simply cannot match. This guide walks through the complete process from photo selection to finished, printable pattern, with specific advice on every decision point.
+          </p>
+        </header>
+
+        <div class="ad-slot ad-slot--article-top" aria-label="Advertisement" role="complementary">
+          <span class="ad-slot__label">Advertisement</span>
+        </div>
+
+        <div class="toc-box" aria-label="Table of contents">
+          <h4>In this guide</h4>
+          <ul class="toc-list">
+            <li><a href="#choosing-photo">Step 1: Choosing the right photo</a></li>
+            <li><a href="#canvas-size">Step 2: Deciding your canvas size</a></li>
+            <li><a href="#color-count">Step 3: Choosing how many colors</a></li>
+            <li><a href="#generating">Step 4: Generating the pattern</a></li>
+            <li><a href="#reviewing">Step 5: Reviewing and adjusting</a></li>
+            <li><a href="#exporting">Step 6: Exporting your pattern</a></li>
+            <li><a href="#ordering">Step 7: Ordering your drills</a></li>
+            <li><a href="#tips">Tips for better results</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ul>
+        </div>
+
+        <div class="article-body">
+
+          <h2 id="choosing-photo">Step 1: Choosing the Right Photo</h2>
+          <p>The photo you choose is the single most important factor in how your finished pattern will look. Diamond painting patterns are created by reducing a photo to a grid of colored squares — each square becomes one drill. This pixelation process works better on some images than others.</p>
+          <p>The fundamental requirement is that your image's key features must remain recognizable after being reduced to the resolution of your chosen canvas size. A face at 30×40cm with 40 colors needs to be readable even when reduced to roughly 120×160 grid cells. Photos where the important detail is very fine — intricate fabric patterns, text in a sign, a group of small distant figures — often do not survive this reduction gracefully.</p>
+
+          <div class="photo-quality-grid">
+            <div class="pq-card good">
+              <h4>Works Well</h4>
+              <ul>
+                <li>Close-up animal or pet portraits</li>
+                <li>Head-and-shoulders person portraits</li>
+                <li>Bold floral or botanical photos</li>
+                <li>Landscapes with clear color zones</li>
+                <li>Photos with strong light/shadow contrast</li>
+                <li>Simple subjects against plain backgrounds</li>
+              </ul>
+            </div>
+            <div class="pq-card avoid">
+              <h4>Works Poorly</h4>
+              <ul>
+                <li>Group photos with many small faces</li>
+                <li>Very dark photos with little shadow detail</li>
+                <li>Heavy bokeh that obscures the subject edges</li>
+                <li>Highly complex busy backgrounds</li>
+                <li>Images with important small text</li>
+                <li>Very low resolution originals (under 600px)</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>Preparing Your Photo</h3>
+          <p>Before uploading, consider whether your photo benefits from any edits. You do not need photo editing software — small adjustments before uploading can improve results noticeably:</p>
+          <ul style="list-style:disc;padding-left:24px;margin:12px 0 20px;">
+            <li><strong>Increase contrast slightly</strong> — more contrast between light and dark areas translates to more defined edges in the pattern</li>
+            <li><strong>Crop to your subject</strong> — if most of the photo is background, crop it out so the subject occupies most of the frame</li>
+            <li><strong>Brighten slightly if needed</strong> — very dark photos lose shadow detail in the reduction process</li>
+            <li><strong>Convert to JPEG or PNG</strong> — both work; files above 5MB may take a moment to process but work fine</li>
+          </ul>
+
+          <h2 id="canvas-size">Step 2: Deciding Your Canvas Size</h2>
+          <p>Canvas size is the second most important decision. It directly determines how much detail your pattern can contain, how long the finished project takes to complete, and how large the printed canvas will be.</p>
+          <p>Diamond painting canvases are measured in centimeters. The most common sizes are:</p>
+
+          <table class="color-count-table" aria-label="Canvas size comparison">
+            <thead>
+              <tr>
+                <th>Canvas Size</th>
+                <th>Approx. Drill Cells</th>
+                <th>Est. Hours</th>
+                <th>Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>25×25 cm</td>
+                <td>~10,000</td>
+                <td>8–15h</td>
+                <td>First projects, simple subjects, gifts</td>
+              </tr>
+              <tr>
+                <td>30×40 cm</td>
+                <td>~19,200</td>
+                <td>15–30h</td>
+                <td>Pet portraits, small landscapes</td>
+              </tr>
+              <tr>
+                <td>40×50 cm</td>
+                <td>~32,000</td>
+                <td>28–50h</td>
+                <td>Portraits, detailed florals</td>
+              </tr>
+              <tr>
+                <td>50×70 cm</td>
+                <td>~56,000</td>
+                <td>50–90h</td>
+                <td>Complex photos, display pieces</td>
+              </tr>
+              <tr>
+                <td>60×80 cm +</td>
+                <td>~77,000+</td>
+                <td>80–150h+</td>
+                <td>Serious project pieces, high resolution</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>For portraits, bigger is almost always better in terms of recognizability. A 30×40cm portrait may have the face recognize able but lose fine details like eye color variation and hair texture. A 50×70cm portrait of the same image preserves significantly more detail.</p>
+
+          <div class="info-box">
+            <p><strong>Rule of thumb:</strong> If your canvas size divided by the main subject's width in the image gives you fewer than 50 drill cells across the subject's face, the face will look blocky. For a portrait where the face takes up half the canvas width, a 40cm-wide canvas gives 80 cells across the face — workable, but a 50cm canvas gives 100 cells and produces noticeably better results.</p>
+          </div>
+
+          <h2 id="color-count">Step 3: Choosing How Many Colors</h2>
+          <p>The color count setting determines how many distinct DMC shades will appear in your pattern. This has a significant impact on both the visual quality and the practical difficulty of the project.</p>
+
+          <table class="color-count-table" aria-label="Color count guidance">
+            <thead>
+              <tr>
+                <th>Color Count</th>
+                <th>Character</th>
+                <th>Suited For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>10–15 colors</td>
+                <td>Very simplified, posterized look</td>
+                <td>Bold graphic images, logos, simple subjects</td>
+              </tr>
+              <tr>
+                <td>20–25 colors</td>
+                <td>Simplified but recognizable</td>
+                <td>Beginners, landscapes, animals</td>
+              </tr>
+              <tr>
+                <td>30–40 colors</td>
+                <td>Good detail, natural transitions</td>
+                <td>Most photos — recommended range</td>
+              </tr>
+              <tr>
+                <td>45–60 colors</td>
+                <td>High detail, subtle gradients</td>
+                <td>Portraits, detailed botanical, experienced crafters</td>
+              </tr>
+              <tr>
+                <td>60–80+ colors</td>
+                <td>Photorealistic (complex to work)</td>
+                <td>Advanced projects, large canvases only</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>More colors produce better-looking patterns but require more drill bags to organize and more color switches during work. For your first custom pattern, 25–35 colors is a good target: enough to capture your image clearly without making the project overwhelming to manage.</p>
+
+          <h2 id="generating">Step 4: Generating the Pattern</h2>
+          <p>Once you have your photo and settings in mind, the generation process is straightforward:</p>
+
+          <div class="step-block">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3>Open Diamond Painter and upload your photo</h3>
+              <p>Go to <a href="../create.html" style="color:var(--accent-dark);text-decoration:underline;">diamondpainter.app/create.html</a> and click "Upload Photo." Your photo is loaded directly into your browser — nothing is transmitted anywhere. Supported formats are JPEG, PNG, WebP, and GIF.</p>
+            </div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>Configure canvas size and drill type</h3>
+              <p>Set your canvas dimensions in the configuration panel. Select whether you want a square or round drill pattern. The preview updates to show approximately how your image will look at that resolution.</p>
+            </div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>Set your color count and generate</h3>
+              <p>Choose your DMC color limit and click Generate. The algorithm performs color clustering using k-means in perceptual (CIE Lab) color space, then matches each cluster to the nearest actual DMC color in the full 457-color database. This takes a few seconds for large canvases.</p>
+            </div>
+          </div>
+
+          <h2 id="reviewing">Step 5: Reviewing and Adjusting</h2>
+          <p>The first generated result is rarely perfect — but it is usually a good starting point. Here is what to look for in your review:</p>
+          <h3>Check the Subject Recognizability</h3>
+          <p>Is the main subject of your photo clearly readable? For a portrait, the face should be identifiable, even if simplified. If it looks too blocky or unrecognizable, increase either the canvas size or the color count — often both help.</p>
+          <h3>Look for Problem Colors</h3>
+          <p>Sometimes the automatic color matching produces a DMC shade that looks noticeably wrong — an area that should be warm skin tone that comes out with a green tint, for example. Use the color replacement tool to swap problem colors for more accurate alternatives from the DMC palette.</p>
+          <h3>Consider Merging Similar Colors</h3>
+          <p>If two of your 35 colors are almost identical — two very similar mid-tone blues, for example — consider merging them into one. This reduces the number of drill bags without noticeably affecting the pattern. Diamond Painter allows you to replace one color with another across the entire pattern in one action.</p>
+
+          <h2 id="exporting">Step 6: Exporting Your Pattern</h2>
+          <p>Once you are satisfied with your pattern, export it for use. Diamond Painter generates a full printable pattern image that includes the color grid and the legend with all DMC codes and bead counts.</p>
+          <p>For printing at home, export at the maximum available resolution and print across multiple A4 or A3 sheets if needed. The legend shows you exactly which DMC codes you need and how many drills of each color to order.</p>
+          <p>If you plan to order a custom printed canvas from a supplier, some accept the pattern image directly. Others require you to provide the source photo, in which case you can use your pattern generation settings as guidance for discussing canvas size and color count with the supplier.</p>
+
+          <h2 id="ordering">Step 7: Ordering Your Drills</h2>
+          <p>With your DMC color list and bead counts from the export, you can order drills from any diamond painting supplier. Search by DMC code on supplier websites — the codes are standardized, so "DMC 321" will be the same red regardless of which supplier you use.</p>
+          <p>Add 15–20% extra to each color's bead count as a buffer. Running out of a specific color mid-project is frustrating; having a few hundred extra at the end is not a problem. Store extras in labeled containers for future projects.</p>
+
+          <h2 id="tips">Tips for Better Results</h2>
+          <h3>Use Landscape-Oriented Photos for Landscape Canvases</h3>
+          <p>Match your photo's aspect ratio to your chosen canvas size. A vertical portrait photo on a horizontal canvas wastes space and compresses the subject. Either crop your photo to match the canvas ratio or choose a canvas that fits your photo naturally.</p>
+          <h3>Try Multiple Color Counts</h3>
+          <p>Generate the same image at three different color counts (20, 35, and 50) and compare them side by side. The difference is often more dramatic than expected, and seeing the options helps you make a more intentional choice.</p>
+          <h3>Simplify Complex Backgrounds</h3>
+          <p>If your photo has a busy background you do not care about, consider cropping or blurring it before uploading. Background complexity consumes color budget that could be better used on your main subject.</p>
+
+        </div>
+
+        <div class="article-cta-banner">
+          <div class="icon" aria-hidden="true">◆</div>
+          <div>
+            <h3>Start making your pattern right now</h3>
+            <p>Diamond Painter is free, private, and requires no account. Upload your photo and generate a full DMC-coded pattern in under a minute.</p>
+            <a href="../create.html" class="btn-primary btn-sm">Open Pattern Generator →</a>
+          </div>
+        </div>
+
+        <section aria-labelledby="faq-hm">
+          <h2 id="faq-hm" style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(20px,3vw,26px);font-weight:600;color:var(--primary);margin:48px 0 16px;letter-spacing:-0.01em;">Frequently Asked Questions</h2>
+          <div class="faq-list">
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span>What makes a good photo for diamond painting?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer">Good diamond painting photos have strong contrast, clear separation between the subject and background, good lighting with visible shadows, and a simple or uncluttered composition. Close-up portraits of people or animals, bold floral shots, and landscapes with clear color zones all work well. Avoid heavily blurred backgrounds (bokeh), very dark photos without detail, and images with dozens of similarly-colored elements at small scale.</div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span>How many colors should a diamond painting pattern have?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer">Most patterns work well with 20–40 DMC colors. Fewer colors (15–20) simplify the project and are easier to manage for beginners. More colors (40–60) preserve more detail but increase the number of drill bags to organize. Very complex photorealistic patterns may use 70+ colors, but these are advanced projects best tackled after several simpler ones.</div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span>Can I make a diamond painting pattern for free?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer">Yes. Diamond Painter at diamondpainter.app is completely free. You upload your photo, configure your settings, and generate a full DMC-coded pattern with bead counts — no account, no subscription, no watermarks. The entire process runs in your browser and your photos never leave your device.</div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span>What size canvas should I use for a portrait photo?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer">For a portrait of a person's face, 40×50cm with 35+ colors produces a recognizable result with reasonable detail. For a head-and-shoulders portrait, 50×60cm or 50×70cm gives better proportions. Very small canvases (under 30cm) tend to produce blocky portraits that lose facial detail. Bigger is almost always better for portraits.</div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span>My pattern doesn't look like my photo — what went wrong?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer">The most common causes are: canvas too small (increase the size), too few colors (increase the color count), or a photo that doesn't work well at grid-level resolution (try a photo with stronger contrast and simpler composition). Also check that you are zooming the preview out enough — patterns often look much better at a distance than zoomed all the way in.</div>
+            </div>
+          </div>
+        </section>
+
+        <nav aria-label="Related guides" style="margin-top:48px;">
+          <div class="sidebar-related">
+            <h4>Related Guides</h4>
+            <div class="related-links">
+              <a href="best-image-types-for-diamond-painting.html">Best Image Types for Diamond Painting</a>
+              <a href="custom-diamond-painting-tutorial.html">Custom Diamond Painting Tutorial (Detailed)</a>
+              <a href="best-resolution-for-cross-stitch.html">Best Resolution for Diamond Painting Patterns</a>
+              <a href="dmc-color-guide.html">DMC Color Guide — How the Color System Works</a>
+            </div>
+          </div>
+        </nav>
+      </article>
+
+      <aside class="article-sidebar" aria-label="Sidebar">
+        <div class="sidebar-cta">
+          <h4>Make Your Pattern Now</h4>
+          <p>Upload your photo and get a complete DMC-coded diamond painting pattern — free, in your browser.</p>
+          <a href="../create.html" class="btn-primary btn-sm" style="width:100%;justify-content:center;">Open Pattern Generator</a>
+        </div>
+        <div class="sidebar-related">
+          <h4>Related Guides</h4>
+          <div class="related-links">
+            <a href="custom-diamond-painting-tutorial.html">Custom Tutorial</a>
+            <a href="best-image-types-for-diamond-painting.html">Best Image Types</a>
+            <a href="best-resolution-for-cross-stitch.html">Pattern Resolution Guide</a>
+            <a href="dmc-color-guide.html">DMC Color Guide</a>
+            <a href="square-vs-round-drill.html">Square vs Round Drills</a>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+<div class="container">
+  <div class="ad-slot ad-slot--article-middle" aria-label="Advertisement" role="complementary">
+    <span class="ad-slot__label">Advertisement</span>
+  </div>
+</div>
+
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../index.html" class="nav-logo" style="margin-bottom:14px;display:inline-flex;">
+          <div class="nav-logo-icon" aria-hidden="true">◆</div>
+          Diamond Painter
+        </a>
+        <p class="footer-tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Tool</h4>
+        <a href="../create.html">Create Pattern</a>
+        <a href="diamond-painting-beginner-guide.html">Beginner Guide</a>
+        <a href="custom-diamond-painting-tutorial.html">Custom Tutorial</a>
+      </div>
+      <div class="footer-col">
+        <h4>Guides</h4>
+        <a href="index.html">All Guides</a>
+        <a href="best-image-types-for-diamond-painting.html">Best Image Types</a>
+        <a href="dmc-color-guide.html">DMC Color Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms-of-service.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Diamond Painter. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+  toggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+  });
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+      btn.setAttribute('aria-expanded', (!isOpen).toString());
+    });
+  });
+</script>
+<script src="../i18n.js"></script>
+<script src="../ads.js" defer></script>
+<script type="module" src="/analytics.js"></script>
+</body>
+</html>
