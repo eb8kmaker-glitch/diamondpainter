@@ -2,6 +2,14 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/square-vs-round-drill", "destination": "/guide/square-vs-round-drill", "permanent": true },
+    { "source": "/full-drill-vs-partial-drill", "destination": "/guide/full-drill-vs-partial-drill", "permanent": true },
+    { "source": "/how-to-make-diamond-painting-patterns", "destination": "/guide/how-to-make-diamond-painting-patterns", "permanent": true },
+    { "source": "/best-image-types-for-diamond-painting", "destination": "/guide/best-image-types-for-diamond-painting", "permanent": true },
+    { "source": "/best-resolution-for-cross-stitch", "destination": "/guide/best-resolution-for-cross-stitch", "permanent": true },
+    { "source": "/how-to-print-large-patterns", "destination": "/guide/how-to-print-large-patterns", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/ads.txt",
