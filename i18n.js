@@ -478,12 +478,17 @@
     return v !== undefined ? v : null;
   }
 
+  var _origHtmlCache = {};
+
   function applyTranslations() {
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var v = t(el.getAttribute('data-i18n')); if (v !== null) el.textContent = v;
     });
     document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
-      var v = t(el.getAttribute('data-i18n-html')); if (v !== null) el.innerHTML = v;
+      var key = el.getAttribute('data-i18n-html');
+      if (!(key in _origHtmlCache)) _origHtmlCache[key] = el.innerHTML;
+      var v = t(key);
+      el.innerHTML = v !== null ? v : _origHtmlCache[key];
     });
     document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
       var v = t(el.getAttribute('data-i18n-placeholder')); if (v !== null) el.placeholder = v;
