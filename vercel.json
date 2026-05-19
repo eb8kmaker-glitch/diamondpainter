@@ -3,6 +3,11 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
+    { "source": "/diamond-painting-beginner-guide", "destination": "/guide/diamond-painting-beginner-guide", "permanent": true },
+    { "source": "/custom-diamond-painting-tutorial", "destination": "/guide/custom-diamond-painting-tutorial", "permanent": true },
+    { "source": "/diamond-painting-tips", "destination": "/guide/diamond-painting-tips", "permanent": true },
+    { "source": "/best-diamond-painting-accessories", "destination": "/guide/best-diamond-painting-accessories", "permanent": true },
+    { "source": "/dmc-color-guide", "destination": "/guide/dmc-color-guide", "permanent": true },
     { "source": "/square-vs-round-drill", "destination": "/guide/square-vs-round-drill", "permanent": true },
     { "source": "/full-drill-vs-partial-drill", "destination": "/guide/full-drill-vs-partial-drill", "permanent": true },
     { "source": "/how-to-make-diamond-painting-patterns", "destination": "/guide/how-to-make-diamond-painting-patterns", "permanent": true },
