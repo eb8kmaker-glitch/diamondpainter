@@ -142,8 +142,8 @@
         <div class="article-body">
 
           <h2 id="canvas-resolution" data-i18n="brc_h2_canvas">Canvas Resolution: How Many Drills Per Centimeter</h2>
-          <p>Understanding how many drill cells fit in a given physical space is the foundation of all resolution decisions in diamond painting.</p>
-          <p>Standard diamond painting drills come in two sizes:</p>
+          <p data-i18n="brc_p_canvas_intro">Understanding how many drill cells fit in a given physical space is the foundation of all resolution decisions in diamond painting.</p>
+          <p data-i18n="brc_p_drill_sizes">Standard diamond painting drills come in two sizes:</p>
           <ul style="list-style:disc;padding-left:24px;margin:12px 0 20px;">
             <li><strong>Square drills:</strong> 2.5mm per side → exactly 4 drills per centimeter → 10.16 drills per inch</li>
             <li><strong>Round drills:</strong> 2.8mm diameter → approximately 3.57 drills per centimeter → 9.07 drills per inch</li>
@@ -160,12 +160,12 @@
             <div class="formula-note">This is the effective "pixel width" of your canvas at drill resolution.</div>
           </div>
 
-          <p>This means that the effective resolution of a 40×50cm diamond painting canvas (square drills) is 160×200 cells. If you think of each drill as one pixel, your canvas is a 160×200 image. This is a relatively low resolution compared to modern digital photos — it is roughly equivalent to a thumbnail image — which is why image selection and canvas sizing matter so much for detail quality.</p>
+          <p data-i18n="brc_p_effective_res">This means that the effective resolution of a 40×50cm diamond painting canvas (square drills) is 160×200 cells. If you think of each drill as one pixel, your canvas is a 160×200 image. This is a relatively low resolution compared to modern digital photos — it is roughly equivalent to a thumbnail image — which is why image selection and canvas sizing matter so much for detail quality.</p>
 
           <h2 id="source-photo" data-i18n="brc_h2_source">Source Photo Resolution Requirements</h2>
-          <p>The source photo needs to provide at least as much detail as your canvas resolution. If your canvas is 160×200 cells, your source photo needs at least 160×200 pixels to provide one pixel of information per cell. In practice, you want more than this minimum.</p>
-          <p>Providing more pixels than the canvas has cells gives the color quantization algorithm better information to work with. It can sample from multiple pixels per cell to determine the best average color, rather than simply using whatever single pixel falls in each cell's position. This produces smoother color transitions and more accurate color matching.</p>
-          <p>A practical guideline: provide at least 2–4 pixels per drill cell in each dimension. For a 160×200-cell canvas, a source photo of 640×800 pixels (4 pixels per cell) is plenty. For large canvases, the photo resolution rarely limits quality — a 50×70cm square drill canvas has 200×280 cells, and any modern smartphone photo provides far more than the 800×1120 pixels needed at 4× sampling.</p>
+          <p data-i18n="brc_p_source_1">The source photo needs to provide at least as much detail as your canvas resolution. If your canvas is 160×200 cells, your source photo needs at least 160×200 pixels to provide one pixel of information per cell. In practice, you want more than this minimum.</p>
+          <p data-i18n="brc_p_source_2">Providing more pixels than the canvas has cells gives the color quantization algorithm better information to work with. It can sample from multiple pixels per cell to determine the best average color, rather than simply using whatever single pixel falls in each cell's position. This produces smoother color transitions and more accurate color matching.</p>
+          <p data-i18n="brc_p_source_3">A practical guideline: provide at least 2–4 pixels per drill cell in each dimension. For a 160×200-cell canvas, a source photo of 640×800 pixels (4 pixels per cell) is plenty. For large canvases, the photo resolution rarely limits quality — a 50×70cm square drill canvas has 200×280 cells, and any modern smartphone photo provides far more than the 800×1120 pixels needed at 4× sampling.</p>
 
           <table class="resolution-table" aria-label="Minimum photo resolution for diamond painting canvas sizes">
             <thead>
@@ -210,11 +210,11 @@
             </tbody>
           </table>
 
-          <p>The good news: virtually all modern phone cameras produce photos in the range of 3000–8000 pixels in their longest dimension. This far exceeds what any diamond painting canvas requires. Source photo resolution is almost never the limiting factor in pattern quality. Contrast, composition, and color distribution are far more important.</p>
+          <p data-i18n="brc_p_photo_res">The good news: virtually all modern phone cameras produce photos in the range of 3000–8000 pixels in their longest dimension. This far exceeds what any diamond painting canvas requires. Source photo resolution is almost never the limiting factor in pattern quality. Contrast, composition, and color distribution are far more important.</p>
 
           <h2 id="print-resolution" data-i18n="brc_h2_print">Print Resolution for Pattern Reference Sheets</h2>
-          <p>When you export a pattern to use as a reference while crafting — either printing it on paper or viewing it on a tablet — the output resolution determines how clearly you can read the symbols in each cell.</p>
-          <p>Diamond painting pattern symbols are small. A pattern for a 40×50cm canvas printed on an A4 sheet has approximately 160 columns across 210mm of paper — about 0.8 cells per millimeter, or 19 cells per centimeter. At 100% scale, each cell is approximately 1.3mm square. At 150 DPI, each cell is rendered at about 8 pixels — barely enough to distinguish symbols. At 300 DPI, each cell is 16 pixels — clearly readable for most symbol sets.</p>
+          <p data-i18n="brc_p_print_intro">When you export a pattern to use as a reference while crafting — either printing it on paper or viewing it on a tablet — the output resolution determines how clearly you can read the symbols in each cell.</p>
+          <p data-i18n="brc_p_print_detail">Diamond painting pattern symbols are small. A pattern for a 40×50cm canvas printed on an A4 sheet has approximately 160 columns across 210mm of paper — about 0.8 cells per millimeter, or 19 cells per centimeter. At 100% scale, each cell is approximately 1.3mm square. At 150 DPI, each cell is rendered at about 8 pixels — barely enough to distinguish symbols. At 300 DPI, each cell is 16 pixels — clearly readable for most symbol sets.</p>
 
           <div class="formula-box">
             <div class="formula-title">Print Resolution Guideline</div>
@@ -229,8 +229,8 @@
           </div>
 
           <h3 data-i18n="brc_h3_pages">Printing Across Multiple Pages</h3>
-          <p>For large canvases, the pattern reference may need to be split across multiple A4 or A3 sheets to maintain readable symbol size. A 50×70cm canvas pattern has 200×280 cells. Printing at 300 DPI at a scale where each cell is 1.5mm would produce an image approximately 300mm×420mm — exactly A3 size. On A4 paper, you would need to divide the pattern into 4 sections (2×2 grid), each printed at 300 DPI for comfortable symbol reading.</p>
-          <p>Many crafters find it practical to use a digital reference (tablet or laptop) instead of or in addition to a printed sheet. This allows zooming in on specific sections without losing sharpness, and enables the use of digital highlighting tools to mark completed areas.</p>
+          <p data-i18n="brc_p_pages_1">For large canvases, the pattern reference may need to be split across multiple A4 or A3 sheets to maintain readable symbol size. A 50×70cm canvas pattern has 200×280 cells. Printing at 300 DPI at a scale where each cell is 1.5mm would produce an image approximately 300mm×420mm — exactly A3 size. On A4 paper, you would need to divide the pattern into 4 sections (2×2 grid), each printed at 300 DPI for comfortable symbol reading.</p>
+          <p data-i18n="brc_p_pages_2">Many crafters find it practical to use a digital reference (tablet or laptop) instead of or in addition to a printed sheet. This allows zooming in on specific sections without losing sharpness, and enables the use of digital highlighting tools to mark completed areas.</p>
 
           <h2 id="canvas-size-table" data-i18n="brc_h2_table">Complete Canvas Size and Drill Count Reference</h2>
 
@@ -305,8 +305,8 @@
           </table>
 
           <h2 id="cross-stitch-comparison" data-i18n="brc_h2_crossstitch">Diamond Painting vs Cross Stitch Resolution</h2>
-          <p>For crafters coming from a cross stitch background, understanding how diamond painting resolution compares to cross stitch fabric counts helps calibrate expectations.</p>
-          <p>Cross stitch fabric (Aida cloth) comes in several standard counts — the count refers to the number of stitches per inch:</p>
+          <p data-i18n="brc_p_crossstitch_intro">For crafters coming from a cross stitch background, understanding how diamond painting resolution compares to cross stitch fabric counts helps calibrate expectations.</p>
+          <p data-i18n="brc_p_crossstitch_list">Cross stitch fabric (Aida cloth) comes in several standard counts — the count refers to the number of stitches per inch:</p>
 
           <table class="resolution-table" aria-label="Cross stitch count vs diamond painting comparison">
             <thead>
@@ -345,13 +345,13 @@
             </tbody>
           </table>
 
-          <p>In practical terms, diamond painting operates at roughly half the resolution of 18-count cross stitch. A design that works at 14-count Aida cross stitch will generally work well as a diamond painting pattern on an equivalent-sized canvas. Designs intended for 28-count evenweave may lose some fine detail when adapted to diamond painting resolution.</p>
+          <p data-i18n="brc_p_crossstitch_compare">In practical terms, diamond painting operates at roughly half the resolution of 18-count cross stitch. A design that works at 14-count Aida cross stitch will generally work well as a diamond painting pattern on an equivalent-sized canvas. Designs intended for 28-count evenweave may lose some fine detail when adapted to diamond painting resolution.</p>
 
           <h2 id="practical-advice" data-i18n="brc_h2_practical">Practical Advice for Common Scenarios</h2>
           <h3 data-i18n="brc_h3_portrait">Getting Good Detail in a Portrait</h3>
-          <p>Portrait faces need at minimum 50–60 cells across the width of the face to show recognizable features. Calculate: if the face occupies half the canvas width, your canvas needs to be at least (50 ÷ 0.5 ÷ 4) = 25cm wide in square drills to meet this minimum. For comfortable detail, 40–50cm wide is better. Larger is better for portraits, within the bounds of the time you want to invest.</p>
+          <p data-i18n="brc_p_portrait">Portrait faces need at minimum 50–60 cells across the width of the face to show recognizable features. Calculate: if the face occupies half the canvas width, your canvas needs to be at least (50 ÷ 0.5 ÷ 4) = 25cm wide in square drills to meet this minimum. For comfortable detail, 40–50cm wide is better. Larger is better for portraits, within the bounds of the time you want to invest.</p>
           <h3 data-i18n="brc_h3_convert">Converting a Cross Stitch Design to Diamond Painting</h3>
-          <p>If you have a cross stitch chart you want to adapt to diamond painting, map each stitch to one drill. On 14-count Aida, a 140-stitch-wide design would be 10 inches (25.4cm) wide in cross stitch. The same 140-cell design in square drill diamond painting would be 140 ÷ 4 = 35cm wide. You can scale up or down from there based on your preference.</p>
+          <p data-i18n="brc_p_convert">If you have a cross stitch chart you want to adapt to diamond painting, map each stitch to one drill. On 14-count Aida, a 140-stitch-wide design would be 10 inches (25.4cm) wide in cross stitch. The same 140-cell design in square drill diamond painting would be 140 ÷ 4 = 35cm wide. You can scale up or down from there based on your preference.</p>
 
         </div>
 
