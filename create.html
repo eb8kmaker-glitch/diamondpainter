@@ -279,6 +279,22 @@
     z-index: 1;
   }
 
+  /* ════ 좌측 광고 컬럼 ════ */
+  .ad-col-left {
+    width: 168px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 20px;
+    background: rgba(8,14,34,0.55);
+    border-right: 1px solid var(--glass-border);
+    overflow: hidden;
+  }
+  @media (max-width: 1200px) {
+    .ad-col-left { display: none; }
+  }
+
   /* ════ 사이드 패널 공통 ════ */
   .left-panel {
     width: var(--panel-w);
@@ -1196,6 +1212,15 @@
 
 <!-- ─── Workspace ─── -->
 <div class="workspace">
+
+  <!-- Kakao Ad: 160×600 Skyscraper -->
+  <div class="ad-col-left">
+    <ins class="kakao_ad_area" style="display:none;"
+      data-ad-unit="DAN-WoZfvnQ2ekkF5mw1"
+      data-ad-width="160"
+      data-ad-height="600"></ins>
+    <script type="text/javascript" src="//t1.kakaocdn.net/kas/static/ba.min.js" async></script>
+  </div>
 
   <!-- Left Panel -->
   <div class="left-panel">
