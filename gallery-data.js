@@ -23,25 +23,16 @@
  */
 const GALLERY_DATA = [
 
-  // ── 예시 항목 (실제 이미지로 교체하세요) ──────────────────────────────────
-  // {
-  //   id: 1,
-  //   title: "Golden Retriever",
-  //   title_ko: "골든 리트리버",
-  //   category: "pets",
-  //   image: "gallery/images/golden-retriever.jpg",
-  //   colors: 32,
-  //   size: "40×50cm",
-  //   featured: true
-  // },
-  // {
-  //   id: 2,
-  //   title: "Mountain Landscape",
-  //   title_ko: "산 풍경",
-  //   category: "landscapes",
-  //   image: "gallery/images/mountain.jpg",
-  //   colors: 28,
-  //   size: "50×70cm"
-  // },
+  {
+    id: 1,
+    title: "Garden Landscape Window",
+    title_ko: "정원 풍경 스테인드글라스",
+    category: "landscapes",
+    image: "gallery/images/tiffany-garden-window.jpg",
+    colors: 45,
+    size: "50×70cm",
+    featured: true,
+    attribution: "Agnes F. Northrop / Tiffany Studios, 1912 · The Metropolitan Museum of Art (Public Domain)"
+  },
 
 ];

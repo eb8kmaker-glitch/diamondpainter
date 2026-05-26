@@ -216,6 +216,13 @@
     }
     .lightbox-stat span:first-child { color: var(--text3); }
     .lightbox-stat span:last-child  { font-weight: 500; }
+    .lightbox-attribution {
+      font-size: 11px;
+      color: var(--text3);
+      line-height: 1.5;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-light);
+    }
     .lightbox-actions {
       margin-top: auto;
       padding-top: 20px;
@@ -328,6 +335,7 @@
       <span class="category-badge" id="lightbox-cat"></span>
       <h2 id="lightbox-title"></h2>
       <div class="lightbox-stat-row" id="lightbox-stats"></div>
+      <div id="lightbox-attribution" class="lightbox-attribution" style="display:none;"></div>
       <div class="lightbox-actions">
         <a href="create.html" class="btn-primary" style="text-align:center;" data-i18n="gallery_lb_cta">Create a Pattern Like This →</a>
       </div>
@@ -499,6 +507,14 @@
     if (item.colors) statsHtml += `<div class="lightbox-stat"><span>${colorLabel}</span><span>${item.colors}</span></div>`;
     if (item.size)   statsHtml += `<div class="lightbox-stat"><span>${sizeLabel}</span><span>${item.size}</span></div>`;
     statsEl.innerHTML = statsHtml;
+
+    const attrEl = document.getElementById('lightbox-attribution');
+    if (item.attribution) {
+      attrEl.textContent = item.attribution;
+      attrEl.style.display = 'block';
+    } else {
+      attrEl.style.display = 'none';
+    }
 
     document.getElementById('lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
