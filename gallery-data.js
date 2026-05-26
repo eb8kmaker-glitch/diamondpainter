@@ -31,9 +31,9 @@ const GALLERY_DATA = [
     image:    "gallery/images/tiffany-garden-window_pattern.png",   // 갤러리 썸네일 = 도안
     original: "gallery/images/tiffany-garden-window_original.jpg",  // 원본 사진
     pattern:  "gallery/images/tiffany-garden-window_pattern.png",   // 도안
-    preview:  null,                                                   // 예상도 이미지 (없으면 JSON으로 자동 렌더링)
+    preview:  "gallery/images/tiffany-garden-window_preview.jpg",    // 예상도 이미지
     patternJson: "gallery/images/tiffany-garden-window_pattern.json", // 예상도 렌더링용 패턴 데이터
-    colors: 60,
+    colors: 35,
     size: "100×52.5cm",
     featured: true,
     attribution: "Agnes F. Northrop / Tiffany Studios, 1912 · The Metropolitan Museum of Art (Public Domain)"
