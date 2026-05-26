@@ -3216,15 +3216,30 @@ function getGridDimensions() {
 
 function updateCalcDisplay() {
   const { beadMm, canvasW, canvasH } = canvasState;
-  const gW = Math.round(canvasW / beadMm);
-  const gH = Math.round(canvasH / beadMm);
+  let gW = Math.round(canvasW / beadMm);
+  let gH = Math.round(canvasH / beadMm);
+
+  // 이미지가 로드된 경우 실제 생성 비율과 동일하게 조정
+  const img = state.sourceImage;
+  if (img) {
+    const imgRatio   = img.width / img.height;
+    const canvasRatio = canvasW / canvasH;
+    if (imgRatio > canvasRatio) {
+      gH = Math.round(gW / imgRatio);
+    } else {
+      gW = Math.round(gH * imgRatio);
+    }
+  }
+
+  gW = Math.max(10, Math.min(800, gW));
+  gH = Math.max(10, Math.min(800, gH));
   const total = gW * gH;
 
   document.getElementById('calc-grid').textContent  = `${gW} × ${gH}`;
   document.getElementById('calc-total').textContent = total.toLocaleString();
 
-  const wCm = (canvasW / 10).toFixed(0);
-  const hCm = (canvasH / 10).toFixed(0);
+  const wCm = (gW * beadMm / 10).toFixed(1);
+  const hCm = (gH * beadMm / 10).toFixed(1);
   document.getElementById('calc-size').textContent  = `${wCm} × ${hCm} cm`;
 }
 
@@ -3311,6 +3326,7 @@ function loadImageFile(file) {
       previewImg.style.display = 'block';
       document.getElementById('btn-generate').disabled = false;
       setStatus('done', `${t('status_img_loaded')}: ${img.width}×${img.height}px`);
+      updateCalcDisplay();
     };
     img.src = ev.target.result;
   };
