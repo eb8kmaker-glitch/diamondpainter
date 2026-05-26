@@ -6,11 +6,49 @@
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8254204287118850"
        crossorigin="anonymous"></script>
-<title>Create Diamond Painting Pattern — Diamond Painter</title>
-<meta name="description" content="Free online diamond painting pattern generator. Upload any photo and get a DMC color-coded pattern with bead counts and custom canvas sizes.">
-<link rel="canonical" href="https://diamondpainter.app/create.html">
-<meta property="og:title" content="Create Diamond Painting Pattern — Diamond Painter">
-<meta property="og:description" content="Turn any photo into a DMC color-coded diamond painting pattern for free.">
+<title>Diamond Painting Converter &amp; Generator — Free Online | Diamond Painter</title>
+<meta name="description" content="Free online diamond painting converter and generator. Upload any photo or image and instantly get a DMC color-coded diamond painting pattern. 457 colors, 40+ canvas sizes, no sign-up, no watermarks.">
+<meta name="keywords" content="diamond painting converter, diamond painting generator, image to diamond painting converter, diamond art generator, diamond painting pattern maker, convert photo to diamond painting free, diamond painting pattern maker online free">
+<link rel="canonical" href="https://diamondpainter.app/create">
+<meta property="og:title" content="Diamond Painting Converter &amp; Generator — Free Online">
+<meta property="og:description" content="Convert any photo into a DMC color-coded diamond painting pattern instantly. 457 colors, 40+ canvas sizes, no sign-up, no watermarks — free online converter and generator.">
+<meta property="og:image" content="https://diamondpainter.app/og-image.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://diamondpainter.app/create">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Diamond Painting Converter &amp; Generator — Free Online">
+<meta name="twitter:description" content="Convert any photo into a diamond painting pattern for free. 457 DMC colors, 40+ canvas sizes, instant download.">
+<meta name="twitter:image" content="https://diamondpainter.app/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Diamond Painter — Diamond Painting Converter & Generator",
+  "applicationCategory": "DesignApplication",
+  "applicationSubCategory": "Diamond Painting Converter",
+  "operatingSystem": "Windows, macOS, Linux, iOS, Android (web browser)",
+  "description": "Free online diamond painting converter and generator. Upload any photo or image and convert it to a DMC color-coded diamond painting pattern. 457 DMC colors, 40+ canvas sizes, round and square drill support, built-in editor, print-ready export. No sign-up required.",
+  "url": "https://diamondpainter.app/create",
+  "screenshot": "https://diamondpainter.app/og-image.png",
+  "featureList": [
+    "Convert any image or photo to diamond painting pattern",
+    "Diamond painting generator with 457 DMC colors",
+    "Lab k-means color clustering for accurate DMC matching",
+    "40+ canvas sizes plus fully custom dimensions",
+    "Round (2.8mm) and square (2.5mm) drill support",
+    "Built-in pattern editor: paint, fill, erase, eyedropper, color-replace",
+    "Floyd-Steinberg dithering for smooth gradients",
+    "High-resolution print-ready PNG export",
+    "100% browser-based — photos never uploaded to server"
+  ],
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "inLanguage": ["en", "ko", "ja", "zh"]
+}
+</script>
 <style>
   .site-topbar {
     height: 40px;
@@ -1167,6 +1205,103 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(111,231,255,0.15); border-radius: 4px; }
 
+  /* ── btn-preview ── */
+  .btn-preview { background: linear-gradient(135deg, #7c5ce7, #0eb4d4); color: #fff; border-color: transparent; }
+  .btn-preview:hover:not(:disabled) { opacity: 0.88; }
+  .btn-preview:disabled { opacity: 0.35; }
+
+  /* ── 예상도 모달 ── */
+  .preview-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(4,8,20,0.92);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .preview-overlay.open { display: flex; }
+  .preview-box {
+    background: #0d1638;
+    border: 1px solid rgba(111,231,255,0.15);
+    border-radius: 14px;
+    overflow: hidden;
+    max-width: min(92vw, 1000px);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    max-height: 92vh;
+    position: relative;
+  }
+  .preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(111,231,255,0.10);
+    flex-shrink: 0;
+  }
+  .preview-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+  }
+  .preview-header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .preview-img-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    background: #080e22;
+    min-height: 200px;
+  }
+  .preview-img-wrap img {
+    max-width: 100%;
+    max-height: calc(92vh - 80px);
+    display: block;
+    object-fit: contain;
+  }
+  .preview-spinner-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 60px 40px;
+    color: var(--text2);
+    font-size: 13px;
+  }
+  .preview-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(111,231,255,0.15);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: preview-spin 0.7s linear infinite;
+  }
+  @keyframes preview-spin { to { transform: rotate(360deg); } }
+  .preview-close-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid rgba(111,231,255,0.18);
+    background: transparent;
+    color: var(--text2);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .preview-close-btn:hover { background: rgba(111,231,255,0.08); }
+
   /* ════ AdSense Placeholder Slots ════
      CLS 방지: min-height로 공간 고정.
      slot ID 교체 후 <ins> 태그로 내부 교체.
@@ -1381,6 +1516,7 @@
     <button class="btn" id="btn-load" data-i18n="btn_load">📂 불러오기</button>
     <button class="btn" id="btn-save" disabled data-i18n="btn_save">💾 저장</button>
     <button class="btn primary" id="btn-export" disabled data-i18n="btn_export">📤 이미지 저장</button>
+    <button class="btn btn-preview" id="btn-preview" disabled data-i18n="btn_preview">✨ 예상도</button>
     <select id="lang-select" class="lang-select">
       <option value="ko">한국어</option>
       <option value="en">English</option>
@@ -1698,6 +1834,11 @@ const i18n = {
     btn_load:          '📂 불러오기',
     btn_save:          '💾 저장',
     btn_export:        '📤 이미지 저장',
+    btn_preview:       '✨ 예상도',
+    preview_title:     '완성 예상도',
+    preview_rendering: '렌더링 중…',
+    preview_download:  'JPEG 저장',
+    preview_close:     '닫기',
     // 패널 제목
     section_upload:      '이미지 가져오기',
     section_settings:    '도안 설정',
@@ -1811,6 +1952,11 @@ const i18n = {
     btn_load:          '📂 Load JSON',
     btn_save:          '💾 Save JSON',
     btn_export:        '📤 Export PNG',
+    btn_preview:       '✨ Preview',
+    preview_title:     'Finished Preview',
+    preview_rendering: 'Rendering…',
+    preview_download:  'Save JPEG',
+    preview_close:     'Close',
     section_upload:      'Import Image',
     section_settings:    'Pattern Setup',
     section_tools:       'Edit Tools',
@@ -1907,6 +2053,11 @@ const i18n = {
     btn_load:          '📂 読み込み',
     btn_save:          '💾 保存',
     btn_export:        '📤 画像保存',
+    btn_preview:       '✨ 完成予想',
+    preview_title:     '完成予想図',
+    preview_rendering: 'レンダリング中…',
+    preview_download:  'JPEG保存',
+    preview_close:     '閉じる',
     section_upload:      '画像インポート',
     section_settings:    '図案設定',
     section_tools:       '編集ツール',
@@ -2003,6 +2154,11 @@ const i18n = {
     btn_load:          '📂 加载',
     btn_save:          '💾 保存',
     btn_export:        '📤 导出图片',
+    btn_preview:       '✨ 完成预览',
+    preview_title:     '完成预览图',
+    preview_rendering: '渲染中…',
+    preview_download:  '保存JPEG',
+    preview_close:     '关闭',
     section_upload:      '导入图片',
     section_settings:    '图案设置',
     section_tools:       '编辑工具',
@@ -2573,33 +2729,105 @@ function deltaE(lab1, lab2) {
   return Math.sqrt((lab1[0]-lab2[0])**2 + (lab1[1]-lab2[1])**2 + (lab1[2]-lab2[2])**2);
 }
 
-// Precompute LAB for all DMC colors
-const DMC_LAB = DMC_COLORS.map(c => rgbToLab(...c.rgb));
+/** Convert Lab → LCH (Lightness, Chroma, Hue°). */
+function labToLch(lab) {
+  const C = Math.sqrt(lab[1]*lab[1] + lab[2]*lab[2]);
+  let H = Math.atan2(lab[2], lab[1]) * 180 / Math.PI;
+  if (H < 0) H += 360;
+  return [lab[0], C, H];
+}
 
-function nearestDMC(r, g, b, excludeSet) {
-  const lab = rgbToLab(r, g, b);
-  let best = 0, bestDist = Infinity;
+/**
+ * Perceptual distance with LCH weighting: Hue 50%, Chroma 30%, Lightness 20%.
+ * Hue contribution is attenuated when chroma is low — grays have no meaningful hue.
+ */
+function lchWeightedDist(lab1, lab2) {
+  const [L1, C1, H1] = labToLch(lab1);
+  const [L2, C2, H2] = labToLch(lab2);
+
+  let dH = H1 - H2;
+  if (dH >  180) dH -= 360;
+  if (dH < -180) dH += 360;
+
+  const dL = L1 - L2;
+  const dC = C1 - C2;
+
+  // Attenuate hue contribution for near-gray colors (C < 35 → partial attenuation)
+  const hueAtten = Math.min(Math.min(C1, C2) / 35, 1.0);
+  const scaledDH = dH * hueAtten;
+
+  // Normalize each axis to comparable ~[0,100] scale then apply weights:
+  //   L: already 0–100
+  //   C: 0–~128 → ×0.78
+  //   H: 0–360, attenuated → ×0.278
+  const nC = dC * 0.78;
+  const nH = scaledDH * 0.278;
+
+  return Math.sqrt(0.20 * dL*dL + 0.30 * nC*nC + 0.50 * nH*nH);
+}
+
+// Precompute LAB and LCH for all DMC colors
+const DMC_LAB = DMC_COLORS.map(c => rgbToLab(...c.rgb));
+const DMC_LCH = DMC_LAB.map(labToLch);
+
+/**
+ * Find nearest DMC index for a Lab color.
+ * Uses LCH-weighted perceptual distance + neutral penalty + saturation preservation.
+ */
+function nearestDMCfromLab(lab, excludeSet) {
+  const [, srcC] = labToLch(lab);
+
+  let best = 0, bestScore = Infinity;
   for (let i = 0; i < DMC_LAB.length; i++) {
     if (excludeSet && excludeSet.has(i)) continue;
-    const d = deltaE(lab, DMC_LAB[i]);
-    if (d < bestDist) { bestDist = d; best = i; }
+    let score = lchWeightedDist(lab, DMC_LAB[i]);
+    // Neutral penalty: penalize dull DMC candidates when source color is vivid
+    if (srcC > 22 && DMC_LCH[i][1] < 15) score += 22;
+    if (score < bestScore) { bestScore = score; best = i; }
   }
+
+  // Saturation preservation: if the best match is much duller than the source,
+  // relax the threshold and search for a more chromatic alternative.
+  if (srcC > 25) {
+    const dstC = DMC_LCH[best][1];
+    if ((srcC - dstC) > srcC * 0.38) {
+      let bestVivid = best, bestVividScore = bestScore * 1.45;
+      for (let i = 0; i < DMC_LAB.length; i++) {
+        if (excludeSet && excludeSet.has(i)) continue;
+        if (DMC_LCH[i][1] < srcC * 0.50) continue; // require minimum chroma
+        const s = lchWeightedDist(lab, DMC_LAB[i]);
+        if (s < bestVividScore) { bestVividScore = s; bestVivid = i; }
+      }
+      best = bestVivid;
+    }
+  }
+
   return best;
 }
 
+function nearestDMC(r, g, b, excludeSet) {
+  return nearestDMCfromLab(rgbToLab(r, g, b), excludeSet);
+}
+
 // ═══════════════════════════════════════════════════════════════
-// K-MEANS COLOR QUANTIZATION
+// K-MEANS COLOR QUANTIZATION (CIE L*a*b* space)
 // ═══════════════════════════════════════════════════════════════
-function kMeans(pixels, k, maxIter = 20, onProgress) {
-  // Sample for speed
+/**
+ * K-means++ clustering in Lab space.
+ * Returns k Lab centroids (not RGB).
+ *
+ * Operating in Lab prevents RGB bias: cyan/teal centroids no longer
+ * drift toward brown/gray as they would in RGB Euclidean clustering.
+ */
+function kMeansLab(labPixels, k, maxIter = 20, onProgress) {
   const maxSamples = 8000;
-  let samples = pixels;
-  if (pixels.length > maxSamples) {
-    const step = Math.ceil(pixels.length / maxSamples);
-    samples = pixels.filter((_, i) => i % step === 0);
+  let samples = labPixels;
+  if (labPixels.length > maxSamples) {
+    const step = Math.ceil(labPixels.length / maxSamples);
+    samples = labPixels.filter((_, i) => i % step === 0);
   }
 
-  // Init centroids with k-means++ style
+  // k-means++ initialization in Lab space
   const centroids = [];
   centroids.push([...samples[Math.floor(Math.random() * samples.length)]]);
 
@@ -2613,21 +2841,20 @@ function kMeans(pixels, k, maxIter = 20, onProgress) {
       return minD;
     });
     const total = dists.reduce((a, b) => a + b, 0);
-    let r = Math.random() * total, acc = 0;
-    let chosen = 0;
+    let rv = Math.random() * total, acc = 0, chosen = 0;
     for (let i = 0; i < dists.length; i++) {
       acc += dists[i];
-      if (acc >= r) { chosen = i; break; }
+      if (acc >= rv) { chosen = i; break; }
     }
     centroids.push([...samples[chosen]]);
   }
 
-  let assignments = new Int32Array(samples.length);
+  const assignments = new Int32Array(samples.length);
 
   for (let iter = 0; iter < maxIter; iter++) {
     onProgress && onProgress(Math.round((iter / maxIter) * 60));
 
-    // Assign
+    // Assign each sample to nearest centroid
     for (let i = 0; i < samples.length; i++) {
       const p = samples[i];
       let best = 0, bestD = Infinity;
@@ -2638,8 +2865,8 @@ function kMeans(pixels, k, maxIter = 20, onProgress) {
       assignments[i] = best;
     }
 
-    // Update centroids
-    const sums = Array.from({length: k}, () => [0,0,0,0]);
+    // Recompute centroids as Lab averages
+    const sums = Array.from({length: k}, () => [0, 0, 0, 0]);
     for (let i = 0; i < samples.length; i++) {
       const c = assignments[i];
       sums[c][0] += samples[i][0];
@@ -2651,15 +2878,17 @@ function kMeans(pixels, k, maxIter = 20, onProgress) {
     let moved = false;
     for (let c = 0; c < k; c++) {
       if (sums[c][3] > 0) {
-        const nr = sums[c][0]/sums[c][3], ng = sums[c][1]/sums[c][3], nb = sums[c][2]/sums[c][3];
-        if (Math.abs(nr - centroids[c][0]) + Math.abs(ng - centroids[c][1]) + Math.abs(nb - centroids[c][2]) > 0.5) moved = true;
-        centroids[c] = [nr, ng, nb];
+        const nL = sums[c][0]/sums[c][3];
+        const na = sums[c][1]/sums[c][3];
+        const nb = sums[c][2]/sums[c][3];
+        if (Math.abs(nL-centroids[c][0]) + Math.abs(na-centroids[c][1]) + Math.abs(nb-centroids[c][2]) > 0.1) moved = true;
+        centroids[c] = [nL, na, nb];
       }
     }
     if (!moved) break;
   }
 
-  return centroids.map(c => c.map(Math.round));
+  return centroids; // Lab centroids
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2932,25 +3161,27 @@ async function generatePattern() {
   showProcessing(true, t('proc_kmeans'), 10);
   await sleep(30);
 
-  // Step 2: K-means
-  const centroids = kMeans(pixels, k, 20, pct => {
+  // Step 2: Convert pixels to Lab, then cluster in Lab space.
+  // Lab-space k-means prevents RGB bias that causes teal/cyan centroids to drift toward brown.
+  const labPixels = pixels.map(([r, g, b]) => rgbToLab(r, g, b));
+
+  const centroidLabs = kMeansLab(labPixels, k, 20, pct => {
     showProcessing(true, t('proc_clustering'), 10 + pct * 0.6);
   });
 
   showProcessing(true, t('proc_dmc'), 70);
   await sleep(30);
 
-  // Step 3: Map each centroid to the nearest DMC not yet used.
-  // If two centroids would pick the same DMC, the later one falls back to the
-  // next-nearest unique DMC — so the final palette has exactly k colors.
+  // Step 3: Map each Lab centroid to nearest DMC (perceptual LCH weighting).
+  // Collision resolution: if two centroids pick the same DMC, fall back to next-nearest unique.
   const usedDmc = new Set();
   const centroidToDmc = [];
   const mergedPairs = [];
 
-  for (let i = 0; i < centroids.length; i++) {
-    const [r, g, b] = centroids[i];
-    const firstChoice = nearestDMC(r, g, b);
-    const unique      = nearestDMC(r, g, b, usedDmc);
+  for (let i = 0; i < centroidLabs.length; i++) {
+    const lab = centroidLabs[i];
+    const firstChoice = nearestDMCfromLab(lab);
+    const unique      = nearestDMCfromLab(lab, usedDmc);
     if (firstChoice !== unique) {
       mergedPairs.push({
         centroid: i,
@@ -2962,7 +3193,7 @@ async function generatePattern() {
     centroidToDmc.push(unique);
   }
 
-  console.log(`[DiamondPainter] Quantized centroids : ${centroids.length}`);
+  console.log(`[DiamondPainter] Quantized centroids : ${centroidLabs.length}`);
   console.log(`[DiamondPainter] Unique DMC assigned : ${usedDmc.size}`);
   if (mergedPairs.length > 0) {
     console.log(`[DiamondPainter] DMC collisions resolved (${mergedPairs.length}):`, mergedPairs);
@@ -2984,20 +3215,57 @@ async function generatePattern() {
   showProcessing(true, t('proc_grid'), 80);
   await sleep(30);
 
-  // Step 4: Assign each pixel to nearest centroid then palette index
+  // Step 4: Assign pixels to centroids with Floyd-Steinberg dithering (40% strength).
+  // Error diffusion in Lab space preserves perceptual color balance across smooth gradients.
+  const DITHER_STR = 0.40;
+  const errBuf = new Float32Array(gridW * gridH * 3); // accumulated Lab error per pixel
+
   const grid = [];
-  for (let i = 0; i < pixels.length; i++) {
-    const [r,g,b] = pixels[i];
-    // Find nearest centroid (fast)
-    let best = 0, bestD = Infinity;
-    for (let c = 0; c < centroids.length; c++) {
-      const d = (r-centroids[c][0])**2 + (g-centroids[c][1])**2 + (b-centroids[c][2])**2;
-      if (d < bestD) { bestD = d; best = c; }
+  for (let py = 0; py < gridH; py++) {
+    for (let px = 0; px < gridW; px++) {
+      const i = py * gridW + px;
+      const [pL, pa, pb] = labPixels[i];
+
+      // Apply accumulated dithering error to this pixel's Lab value
+      const effL = pL + errBuf[i*3    ];
+      const effa = pa + errBuf[i*3 + 1];
+      const effb = pb + errBuf[i*3 + 2];
+
+      // Find nearest centroid in Lab space
+      let best = 0, bestD = Infinity;
+      for (let c = 0; c < centroidLabs.length; c++) {
+        const dL = effL - centroidLabs[c][0];
+        const da = effa - centroidLabs[c][1];
+        const db = effb - centroidLabs[c][2];
+        const d = dL*dL + da*da + db*db;
+        if (d < bestD) { bestD = d; best = c; }
+      }
+
+      const dmcIdx = centroidToDmc[best];
+      const dmcLab = DMC_LAB[dmcIdx];
+
+      // Quantization error: difference between effective color and assigned DMC
+      const eL = (effL - dmcLab[0]) * DITHER_STR;
+      const ea = (effa - dmcLab[1]) * DITHER_STR;
+      const eb = (effb - dmcLab[2]) * DITHER_STR;
+
+      // Floyd-Steinberg diffusion to 4 neighbors
+      const diffuse = (tx, ty, w) => {
+        if (tx < 0 || tx >= gridW || ty >= gridH) return;
+        const ti = (ty * gridW + tx) * 3;
+        errBuf[ti    ] += eL * w;
+        errBuf[ti + 1] += ea * w;
+        errBuf[ti + 2] += eb * w;
+      };
+      diffuse(px+1, py,   7/16);
+      diffuse(px-1, py+1, 3/16);
+      diffuse(px,   py+1, 5/16);
+      diffuse(px+1, py+1, 1/16);
+
+      const palIdx = paletteMap.get(dmcIdx);
+      state.palette[palIdx].count++;
+      grid.push({ palIdx });
     }
-    const dmcIdx = centroidToDmc[best];
-    const palIdx = paletteMap.get(dmcIdx);
-    state.palette[palIdx].count++;
-    grid.push({ palIdx });
   }
 
   // Sort palette by count desc
@@ -3438,15 +3706,30 @@ function getGridDimensions() {
 
 function updateCalcDisplay() {
   const { beadMm, canvasW, canvasH } = canvasState;
-  const gW = Math.round(canvasW / beadMm);
-  const gH = Math.round(canvasH / beadMm);
+  let gW = Math.round(canvasW / beadMm);
+  let gH = Math.round(canvasH / beadMm);
+
+  // 이미지가 로드된 경우 실제 생성 비율과 동일하게 조정
+  const img = state.sourceImage;
+  if (img) {
+    const imgRatio   = img.width / img.height;
+    const canvasRatio = canvasW / canvasH;
+    if (imgRatio > canvasRatio) {
+      gH = Math.round(gW / imgRatio);
+    } else {
+      gW = Math.round(gH * imgRatio);
+    }
+  }
+
+  gW = Math.max(10, Math.min(800, gW));
+  gH = Math.max(10, Math.min(800, gH));
   const total = gW * gH;
 
   document.getElementById('calc-grid').textContent  = `${gW} × ${gH}`;
   document.getElementById('calc-total').textContent = total.toLocaleString();
 
-  const wCm = (canvasW / 10).toFixed(0);
-  const hCm = (canvasH / 10).toFixed(0);
+  const wCm = (gW * beadMm / 10).toFixed(1);
+  const hCm = (gH * beadMm / 10).toFixed(1);
   document.getElementById('calc-size').textContent  = `${wCm} × ${hCm} cm`;
 }
 
@@ -3533,6 +3816,7 @@ function loadImageFile(file) {
       previewImg.style.display = 'block';
       document.getElementById('btn-generate').disabled = false;
       setStatus('done', `${t('status_img_loaded')}: ${img.width}×${img.height}px`);
+      updateCalcDisplay();
     };
     img.src = ev.target.result;
   };
@@ -3838,8 +4122,76 @@ function showNotif(msg, type='') {
   notifTimer = setTimeout(() => { el.className = ''; }, 3000);
 }
 
+// ═══════════════════════════════════════════════════════════════
+// 완성 예상도 모달
+// ═══════════════════════════════════════════════════════════════
+const previewOverlay = document.createElement('div');
+previewOverlay.className = 'preview-overlay';
+previewOverlay.id = 'preview-overlay';
+previewOverlay.innerHTML = `
+  <div class="preview-box">
+    <div class="preview-header">
+      <h3 id="preview-modal-title"></h3>
+      <div class="preview-header-actions">
+        <button class="btn" id="btn-preview-download" style="display:none"></button>
+        <button class="preview-close-btn" id="preview-close">✕</button>
+      </div>
+    </div>
+    <div class="preview-img-wrap" id="preview-img-wrap"></div>
+  </div>
+`;
+document.body.appendChild(previewOverlay);
+
+function closePreviewModal() {
+  previewOverlay.classList.remove('open');
+}
+
+document.getElementById('preview-close').addEventListener('click', closePreviewModal);
+previewOverlay.addEventListener('click', e => {
+  if (e.target === previewOverlay) closePreviewModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && previewOverlay.classList.contains('open')) closePreviewModal();
+});
+
+document.getElementById('btn-preview').addEventListener('click', async () => {
+  if (!state.pattern) return;
+
+  const titleEl    = document.getElementById('preview-modal-title');
+  const imgWrap    = document.getElementById('preview-img-wrap');
+  const dlBtn      = document.getElementById('btn-preview-download');
+
+  titleEl.textContent = t('preview_title');
+  dlBtn.style.display = 'none';
+  imgWrap.innerHTML = `
+    <div class="preview-spinner-wrap">
+      <div class="preview-spinner"></div>
+      <span>${t('preview_rendering')}</span>
+    </div>`;
+  previewOverlay.classList.add('open');
+
+  try {
+    const patternData = { version: 1, pattern: state.pattern, palette: state.palette };
+    const dataUrl = await renderFinishedPreview(patternData);
+
+    if (!previewOverlay.classList.contains('open')) return; // 닫힌 경우 무시
+    imgWrap.innerHTML = `<img src="${dataUrl}" alt="${t('preview_title')}">`;
+
+    dlBtn.textContent = t('preview_download');
+    dlBtn.style.display = '';
+    dlBtn.onclick = () => {
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = 'diamond-preview.jpg';
+      a.click();
+    };
+  } catch (e) {
+    imgWrap.innerHTML = `<div class="preview-spinner-wrap"><span>⚠ Render failed</span></div>`;
+  }
+});
+
 function enableButtons() {
-  ['btn-generate','btn-autofill','btn-replace-color','btn-clear-progress','btn-save','btn-export','btn-download-pattern'].forEach(id => {
+  ['btn-generate','btn-autofill','btn-replace-color','btn-clear-progress','btn-save','btn-export','btn-preview','btn-download-pattern'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = false;
   });
@@ -3860,6 +4212,7 @@ document.getElementById('lang-select').addEventListener('change', e => {
 document.documentElement.lang = currentLang; // html[lang] 초기 설정
 applyTranslations();
 </script>
+<script src="/js/renderFinishedPreview.js"></script>
 <script src="ads.js" defer></script>
 <script type="module" src="/analytics.js"></script>
 </body>

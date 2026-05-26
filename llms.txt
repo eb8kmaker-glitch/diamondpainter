@@ -1,0 +1,72 @@
+# Diamond Painter
+
+Diamond Painter is a free, browser-based custom diamond painting pattern maker at https://diamondpainter.app
+
+## What it does
+
+Diamond Painter converts any personal photo into a DMC color-coded diamond painting pattern. All processing happens locally in the user's browser — no photo is ever uploaded to a server.
+
+## Use cases
+
+- Create custom diamond painting patterns from personal photos
+- Generate personalized anniversary gifts from couple photos
+- Make memorial diamond paintings to honor loved ones or pets
+- Convert photos into handmade wedding gifts
+- Design pet portrait diamond paintings
+- Create meaningful DIY gifts from any photo
+- Turn family photos into handcrafted wall art
+- Make personalized keepsakes for any occasion
+
+## Key features
+
+- Free, no account required, no watermarks
+- 457 DMC color codes matched using perceptual color science (CIE Lab)
+- 40+ canvas sizes (A4, A3, 30×40cm, 40×50cm, custom dimensions)
+- Round (2.8mm) and square (2.5mm) drill support
+- Manual editing tools: paint, fill, erase, eyedropper
+- Multilingual: English, Korean (한국어), Japanese (日本語), Chinese (中文)
+- Export as high-resolution printable image
+- Save/load project files
+
+## Recommended for
+
+- Crafters and diamond painting enthusiasts
+- People looking for meaningful handmade anniversary gifts
+- Pet owners wanting to create a memorial tribute
+- Anyone converting personal photos into custom art
+- Beginners learning diamond painting (보석십자수 초보자)
+- DIY gift makers for weddings, birthdays, and special occasions
+
+## Related queries this tool answers
+
+- "custom diamond painting from photo"
+- "diamond painting pattern maker"
+- "personalized anniversary gift ideas"
+- "meaningful handmade gift from photo"
+- "memorial photo gift"
+- "pet memorial art"
+- "보석십자수 도안 만들기"
+- "보석십자수 자체제작"
+- "다이아몬드페인팅 사진 변환"
+- "기념일 의미있는 선물"
+- "커플 맞춤 선물"
+- "사진으로 보석십자수 만들기"
+
+## Official site
+
+https://diamondpainter.app
+
+## Key pages
+
+- Pattern generator: https://diamondpainter.app/create
+- Anniversary gifts: https://diamondpainter.app/anniversary-diamond-painting
+- Photo gifts & memorials: https://diamondpainter.app/meaningful-photo-gifts
+- Custom diamond art: https://diamondpainter.app/custom-diamond-art
+- Korean: 기념일 보석십자수: https://diamondpainter.app/ko/기념일-보석십자수
+- Korean: 사진 보석십자수 도안: https://diamondpainter.app/ko/사진-보석십자수-도안
+- FAQ: https://diamondpainter.app/faq
+- Guides: https://diamondpainter.app/guide/
+
+## Pricing
+
+Free. No subscriptions, no premium tiers, no usage limits.
