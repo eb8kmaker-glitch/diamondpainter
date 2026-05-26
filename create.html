@@ -1482,6 +1482,8 @@
     .guide-bottom     { padding: 28px 14px 32px; }
   }
 </style>
+<!-- jsPDF 2.x — PDF 저장 기능용 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -1516,6 +1518,7 @@
     <button class="btn" id="btn-load" data-i18n="btn_load">📂 불러오기</button>
     <button class="btn" id="btn-save" disabled data-i18n="btn_save">💾 저장</button>
     <button class="btn primary" id="btn-export" disabled data-i18n="btn_export">📤 이미지 저장</button>
+    <button class="btn" id="btn-pdf" disabled data-i18n="btn_pdf">📄 PDF 저장</button>
     <button class="btn btn-preview" id="btn-preview" disabled data-i18n="btn_preview">✨ 예상도</button>
     <select id="lang-select" class="lang-select">
       <option value="ko">한국어</option>
@@ -1926,6 +1929,7 @@ const i18n = {
     notif_saved:          '도안이 저장되었습니다.',
     notif_loaded:         '도안을 불러왔습니다!',
     notif_exported:       'PNG로 내보냈습니다.',
+    notif_pdf_done:       'PDF 저장 완료.',
     notif_restored:       '이전 편집 내용을 복원했습니다!',
     notif_invalid:        '올바르지 않은 파일 형식입니다.',
     notif_picked:         '선택한 색상',
@@ -1943,6 +1947,19 @@ const i18n = {
     empty_desc:  '이미지를 가져온 후 도안을 생성하고<br>DMC 색상을 편집하세요',
     // progress
     progress_placed: '적용됨',
+    btn_pdf:              '📄 PDF 저장',
+    pdf_title_pattern:    'Diamond Painting Pattern',
+    pdf_title_legend:     'Color Legend',
+    pdf_col_sym:          'Sym',
+    pdf_col_dmc:          'DMC',
+    pdf_col_name:         'Color Name',
+    pdf_col_swatch:       'Swatch',
+    pdf_col_count:        'Beads',
+    pdf_col_ratio:        '%',
+    pdf_sum_grid:         'Grid Size',
+    pdf_sum_total:        'Total Beads',
+    pdf_sum_colors:       'Colors',
+    pdf_sum_size:         'Real Size',
   },
   en: {
     btn_generate:      '⚡ Generate Pattern',
@@ -2030,6 +2047,7 @@ const i18n = {
     notif_saved:          'Pattern saved.',
     notif_loaded:         'Pattern loaded!',
     notif_exported:       'Exported as PNG.',
+    notif_pdf_done:       'PDF saved.',
     notif_restored:       'Previous edits restored!',
     notif_invalid:        'Invalid file format.',
     notif_picked:         'Selected color',
@@ -2044,6 +2062,19 @@ const i18n = {
     empty_title: 'Diamond Painting Pattern Editor',
     empty_desc:  'Import an image, generate a pattern,<br>and edit DMC colors',
     progress_placed: 'applied',
+    btn_pdf:              '📄 Save PDF',
+    pdf_title_pattern:    'Diamond Painting Pattern',
+    pdf_title_legend:     'Color Legend',
+    pdf_col_sym:          'Sym',
+    pdf_col_dmc:          'DMC',
+    pdf_col_name:         'Color Name',
+    pdf_col_swatch:       'Swatch',
+    pdf_col_count:        'Beads',
+    pdf_col_ratio:        '%',
+    pdf_sum_grid:         'Grid Size',
+    pdf_sum_total:        'Total Beads',
+    pdf_sum_colors:       'Colors',
+    pdf_sum_size:         'Real Size',
   },
   ja: {
     btn_generate:      '⚡ 図案生成',
@@ -2131,6 +2162,7 @@ const i18n = {
     notif_saved:          '図案を保存しました。',
     notif_loaded:         '図案を読み込みました！',
     notif_exported:       'PNG保存しました。',
+    notif_pdf_done:       'PDF保存しました。',
     notif_restored:       '前回の編集を復元しました！',
     notif_invalid:        '無効なファイル形式です。',
     notif_picked:         '選択色',
@@ -2145,6 +2177,19 @@ const i18n = {
     empty_title: 'ダイヤモンドアート図案エディタ',
     empty_desc:  '画像をインポートして図案を生成し、<br>DMC色を編集してください',
     progress_placed: '適用済み',
+    btn_pdf:              '📄 PDF保存',
+    pdf_title_pattern:    'Diamond Painting Pattern',
+    pdf_title_legend:     'Color Legend',
+    pdf_col_sym:          'Sym',
+    pdf_col_dmc:          'DMC',
+    pdf_col_name:         'Color Name',
+    pdf_col_swatch:       'Swatch',
+    pdf_col_count:        'Beads',
+    pdf_col_ratio:        '%',
+    pdf_sum_grid:         'Grid Size',
+    pdf_sum_total:        'Total Beads',
+    pdf_sum_colors:       'Colors',
+    pdf_sum_size:         'Real Size',
   },
   zh: {
     btn_generate:      '⚡ 生成图案',
@@ -2232,6 +2277,7 @@ const i18n = {
     notif_saved:          '图案已保存。',
     notif_loaded:         '图案加载成功！',
     notif_exported:       '已导出为PNG。',
+    notif_pdf_done:       'PDF已保存。',
     notif_restored:       '已恢复上次的编辑！',
     notif_invalid:        '无效的文件格式。',
     notif_picked:         '已选色',
@@ -2246,6 +2292,19 @@ const i18n = {
     empty_title: '钻石画图案编辑器',
     empty_desc:  '导入图片并生成图案，<br>然后编辑DMC颜色',
     progress_placed: '已应用',
+    btn_pdf:              '📄 保存PDF',
+    pdf_title_pattern:    'Diamond Painting Pattern',
+    pdf_title_legend:     'Color Legend',
+    pdf_col_sym:          'Sym',
+    pdf_col_dmc:          'DMC',
+    pdf_col_name:         'Color Name',
+    pdf_col_swatch:       'Swatch',
+    pdf_col_count:        'Beads',
+    pdf_col_ratio:        '%',
+    pdf_sum_grid:         'Grid Size',
+    pdf_sum_total:        'Total Beads',
+    pdf_sum_colors:       'Colors',
+    pdf_sum_size:         'Real Size',
   },
 };
 
@@ -4191,7 +4250,7 @@ document.getElementById('btn-preview').addEventListener('click', async () => {
 });
 
 function enableButtons() {
-  ['btn-generate','btn-autofill','btn-replace-color','btn-clear-progress','btn-save','btn-export','btn-preview','btn-download-pattern'].forEach(id => {
+  ['btn-generate','btn-autofill','btn-replace-color','btn-clear-progress','btn-save','btn-export','btn-preview','btn-download-pattern','btn-pdf'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = false;
   });
@@ -4200,6 +4259,257 @@ function enableButtons() {
 document.getElementById('btn-download-pattern').addEventListener('click', () => {
   document.getElementById('btn-export').click();
 });
+
+// ═══════════════════════════════════════════════════════════════
+// PDF 저장 기능
+// ═══════════════════════════════════════════════════════════════
+
+// PDF 셀에 사용할 ASCII 기호 (jsPDF 기본 폰트 호환)
+const PDF_CELL_SYMS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*+=';
+
+function generatePDF() {
+  if (!state.pattern) return;
+
+  const { jsPDF } = window.jspdf;
+  const { width: gridW, height: gridH, grid } = state.pattern;
+
+  // 셀 색상 인덱스 — 사용자 편집 우선
+  function getCellIdx(col, row) {
+    const i = row * gridW + col;
+    const u = state.userGrid[i];
+    return u >= 0 ? u : grid[i].palIdx;
+  }
+
+  // ── 레이아웃 상수 ──
+  const PAGE_W = 210, PAGE_H = 297; // A4 mm
+  const MARGIN = 10;
+  const HEADER_H = 8;  // 페이지 상단 헤더 높이
+  const USABLE_W = PAGE_W - 2 * MARGIN;
+  const USABLE_H = PAGE_H - 2 * MARGIN - HEADER_H;
+  const CONTENT_Y = MARGIN + HEADER_H; // 셀 영역 시작 y
+
+  // ── 셀 크기 결정 ──
+  const MIN_CELL_MM = 2.5;
+  const idealCell = Math.min(USABLE_W / gridW, USABLE_H / gridH);
+  const cellMM = Math.max(MIN_CELL_MM, idealCell);
+
+  // ── 타일링 계산 ──
+  const cellsPerPageW = Math.floor(USABLE_W / cellMM);
+  const cellsPerPageH = Math.floor(USABLE_H / cellMM);
+  const overlapCells = Math.max(1, Math.ceil(5 / cellMM)); // 5mm 겹침
+  const stepH = Math.max(1, cellsPerPageW - overlapCells);
+  const stepV = Math.max(1, cellsPerPageH - overlapCells);
+  const tilesH = Math.ceil(gridW / stepH);
+  const tilesV = Math.ceil(gridH / stepV);
+  const isTiled = tilesH > 1 || tilesV > 1;
+
+  // ── jsPDF 인스턴스 ──
+  const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+
+  // ── 헬퍼: 페이지 상단 헤더 그리기 ──
+  function drawPageHeader(label) {
+    doc.setFillColor(20, 20, 40);
+    doc.rect(MARGIN, MARGIN, USABLE_W, HEADER_H - 1, 'F');
+    doc.setFontSize(6.5);
+    doc.setTextColor(200, 200, 220);
+    doc.text(
+      `Diamond Painter  |  ${gridW}\xD7${gridH}  |  ${label}`,
+      MARGIN + 2, MARGIN + HEADER_H - 2
+    );
+  }
+
+  // ═════════════════════════════════════
+  // 페이지 1+: 격자 타일 페이지
+  // ═════════════════════════════════════
+  let firstPage = true;
+
+  for (let tv = 0; tv < tilesV; tv++) {
+    for (let th = 0; th < tilesH; th++) {
+      if (!firstPage) doc.addPage();
+      firstPage = false;
+
+      const startCol = th * stepH;
+      const startRow = tv * stepV;
+      const endCol = Math.min(startCol + cellsPerPageW, gridW);
+      const endRow = Math.min(startRow + cellsPerPageH, gridH);
+
+      // 타일 좌표 레이블 (A1, B2 …)
+      const tileLabel = isTiled
+        ? `${String.fromCharCode(65 + tv)}${th + 1}  (col ${startCol + 1}-${endCol}, row ${startRow + 1}-${endRow})`
+        : 'Pattern';
+      drawPageHeader(tileLabel);
+
+      // 격자 그리기
+      const symFontSize = Math.max(3, cellMM * 1.7);
+      doc.setFontSize(symFontSize);
+
+      for (let row = startRow; row < endRow; row++) {
+        for (let col = startCol; col < endCol; col++) {
+          const palIdx = getCellIdx(col, row);
+          if (palIdx < 0 || palIdx >= state.palette.length) continue;
+          const entry = state.palette[palIdx];
+          const [r, g, b] = entry.color;
+
+          const x = MARGIN + (col - startCol) * cellMM;
+          const y = CONTENT_Y + (row - startRow) * cellMM;
+
+          // 셀 색상 채우기
+          doc.setFillColor(r, g, b);
+          doc.rect(x, y, cellMM, cellMM, 'F');
+
+          // 격자선 — 5셀마다 굵게 (강한 격자선)
+          const isThickH = (col % 5 === 0);
+          const isThickV = (row % 5 === 0);
+          doc.setDrawColor(isThickH || isThickV ? 80 : 160, isThickH || isThickV ? 80 : 160, isThickH || isThickV ? 80 : 160);
+          doc.setLineWidth(isThickH || isThickV ? 0.15 : 0.05);
+          doc.rect(x, y, cellMM, cellMM, 'S');
+
+          // 기호 텍스트 (셀이 충분히 클 때)
+          if (cellMM >= 2.5) {
+            const sym = PDF_CELL_SYMS[palIdx % PDF_CELL_SYMS.length];
+            const luma = 0.299 * r + 0.587 * g + 0.114 * b;
+            const tc = luma < 140 ? 240 : 20;
+            doc.setTextColor(tc, tc, tc);
+            doc.text(sym, x + cellMM / 2, y + cellMM * 0.72, { align: 'center' });
+          }
+        }
+      }
+
+      // 타일 모서리 좌표 표시
+      if (isTiled) {
+        doc.setFontSize(6);
+        doc.setTextColor(80, 80, 80);
+        doc.text(tileLabel, PAGE_W - MARGIN, PAGE_H - MARGIN + 3, { align: 'right' });
+      }
+    }
+  }
+
+  // ═════════════════════════════════════
+  // 색상표 페이지
+  // ═════════════════════════════════════
+  doc.addPage();
+  drawPageHeader(t('pdf_title_legend'));
+
+  // 비즈 크기 (mm)
+  const beadMM = parseFloat(document.querySelector('input[name="bead-type"]:checked')?.value || '2.8');
+  const realW = (gridW * beadMM / 10).toFixed(1);
+  const realH = (gridH * beadMM / 10).toFixed(1);
+  const totalBeads = state.palette.reduce((s, e) => s + e.count, 0);
+
+  // ── 요약 카드 ──
+  let cy = CONTENT_Y + 2;
+  doc.setFillColor(230, 235, 250);
+  doc.rect(MARGIN, cy, USABLE_W, 16, 'F');
+
+  const summaryItems = [
+    [t('pdf_sum_grid'),   `${gridW} \xD7 ${gridH}`],
+    [t('pdf_sum_total'),  totalBeads.toLocaleString()],
+    [t('pdf_sum_colors'), `${state.palette.length}`],
+    [t('pdf_sum_size'),   `${realW} \xD7 ${realH} cm`],
+  ];
+  summaryItems.forEach(([label, val], i) => {
+    const sx = MARGIN + 3 + i * (USABLE_W / 4);
+    doc.setFontSize(6.5);
+    doc.setTextColor(100, 100, 120);
+    doc.text(label, sx, cy + 5);
+    doc.setFontSize(9);
+    doc.setTextColor(20, 20, 50);
+    doc.text(val, sx, cy + 12);
+  });
+  cy += 20;
+
+  // ── 테이블 헤더 ──
+  const COL = {
+    sym:    { x: MARGIN,       w: 10 },
+    dmc:    { x: MARGIN + 10,  w: 16 },
+    name:   { x: MARGIN + 26,  w: 58 },
+    swatch: { x: MARGIN + 84,  w: 14 },
+    count:  { x: MARGIN + 98,  w: 24 },
+    ratio:  { x: MARGIN + 122, w: 15 },
+    bar:    { x: MARGIN + 137, w: USABLE_W - 137 },
+  };
+  const ROW_H = 5.5;
+  const TABLE_HEADER_H = 6;
+
+  function drawTableHeader(y) {
+    doc.setFillColor(30, 30, 55);
+    doc.rect(MARGIN, y, USABLE_W, TABLE_HEADER_H, 'F');
+    doc.setFontSize(6.5);
+    doc.setTextColor(220, 220, 240);
+    [
+      [COL.sym.x,    t('pdf_col_sym')],
+      [COL.dmc.x,    t('pdf_col_dmc')],
+      [COL.name.x,   t('pdf_col_name')],
+      [COL.swatch.x, t('pdf_col_swatch')],
+      [COL.count.x,  t('pdf_col_count')],
+      [COL.ratio.x,  t('pdf_col_ratio')],
+      [COL.bar.x,    'Distribution'],
+    ].forEach(([x, lbl]) => doc.text(lbl, x + 1, y + 4.2));
+  }
+
+  drawTableHeader(cy);
+  cy += TABLE_HEADER_H + 1;
+
+  const maxCount = state.palette[0]?.count || 1;
+
+  // ── 색상 행 ──
+  state.palette.forEach((entry, pi) => {
+    // 페이지 넘침 처리
+    if (cy + ROW_H > PAGE_H - MARGIN) {
+      doc.addPage();
+      drawPageHeader(t('pdf_title_legend'));
+      cy = CONTENT_Y + 2;
+      drawTableHeader(cy);
+      cy += TABLE_HEADER_H + 1;
+    }
+
+    // 줄무늬 배경
+    if (pi % 2 === 0) {
+      doc.setFillColor(244, 245, 252);
+      doc.rect(MARGIN, cy, USABLE_W, ROW_H, 'F');
+    }
+
+    const [r, g, b] = entry.color;
+    const sym = PDF_CELL_SYMS[pi % PDF_CELL_SYMS.length];
+    const ratio = totalBeads > 0 ? (entry.count / totalBeads * 100).toFixed(1) : '0.0';
+
+    doc.setFontSize(6.5);
+    doc.setTextColor(30, 30, 30);
+
+    // 기호
+    doc.text(sym, COL.sym.x + 1, cy + 3.8);
+    // DMC 번호
+    doc.text(String(entry.dmc), COL.dmc.x + 1, cy + 3.8);
+    // 색상명 (35자 제한)
+    doc.text(entry.name.length > 35 ? entry.name.slice(0, 34) + '…' : entry.name, COL.name.x + 1, cy + 3.8);
+    // 색상 견본
+    doc.setFillColor(r, g, b);
+    doc.rect(COL.swatch.x + 1, cy + 0.5, 10, ROW_H - 1, 'F');
+    doc.setDrawColor(160, 160, 160);
+    doc.setLineWidth(0.1);
+    doc.rect(COL.swatch.x + 1, cy + 0.5, 10, ROW_H - 1, 'S');
+    // 비즈 수
+    doc.setTextColor(30, 30, 30);
+    doc.text(entry.count.toLocaleString(), COL.count.x + 1, cy + 3.8);
+    // 비율
+    doc.text(`${ratio}%`, COL.ratio.x + 1, cy + 3.8);
+    // 가로 막대 차트
+    const barW = Math.max(0.3, (entry.count / maxCount) * COL.bar.w);
+    doc.setFillColor(r, g, b);
+    doc.rect(COL.bar.x, cy + 1, barW, ROW_H - 2, 'F');
+
+    cy += ROW_H;
+  });
+
+  // ── 파일명 & 저장 ──
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+  const filename = `diamondpainter_${gridW}x${gridH}_${state.palette.length}colors_${dateStr}.pdf`;
+  doc.save(filename);
+  showNotif(t('notif_pdf_done'), 'success');
+}
+
+document.getElementById('btn-pdf').addEventListener('click', generatePDF);
 
 // ─── 언어 선택 ───
 document.getElementById('lang-select').addEventListener('change', e => {
