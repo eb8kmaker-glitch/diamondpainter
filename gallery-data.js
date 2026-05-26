@@ -31,7 +31,8 @@ const GALLERY_DATA = [
     image:    "gallery/images/tiffany-garden-window_pattern.png",   // 갤러리 썸네일 = 도안
     original: "gallery/images/tiffany-garden-window_original.jpg",  // 원본 사진
     pattern:  "gallery/images/tiffany-garden-window_pattern.png",   // 도안
-    preview:  null,                                                   // 예상도 (미구현)
+    preview:  null,                                                   // 예상도 이미지 (없으면 JSON으로 자동 렌더링)
+    patternJson: "gallery/images/tiffany-garden-window_pattern.json", // 예상도 렌더링용 패턴 데이터
     colors: 45,
     size: "50×70cm",
     featured: true,
