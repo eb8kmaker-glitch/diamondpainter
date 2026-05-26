@@ -2351,33 +2351,105 @@ function deltaE(lab1, lab2) {
   return Math.sqrt((lab1[0]-lab2[0])**2 + (lab1[1]-lab2[1])**2 + (lab1[2]-lab2[2])**2);
 }
 
-// Precompute LAB for all DMC colors
-const DMC_LAB = DMC_COLORS.map(c => rgbToLab(...c.rgb));
+/** Convert Lab → LCH (Lightness, Chroma, Hue°). */
+function labToLch(lab) {
+  const C = Math.sqrt(lab[1]*lab[1] + lab[2]*lab[2]);
+  let H = Math.atan2(lab[2], lab[1]) * 180 / Math.PI;
+  if (H < 0) H += 360;
+  return [lab[0], C, H];
+}
 
-function nearestDMC(r, g, b, excludeSet) {
-  const lab = rgbToLab(r, g, b);
-  let best = 0, bestDist = Infinity;
+/**
+ * Perceptual distance with LCH weighting: Hue 50%, Chroma 30%, Lightness 20%.
+ * Hue contribution is attenuated when chroma is low — grays have no meaningful hue.
+ */
+function lchWeightedDist(lab1, lab2) {
+  const [L1, C1, H1] = labToLch(lab1);
+  const [L2, C2, H2] = labToLch(lab2);
+
+  let dH = H1 - H2;
+  if (dH >  180) dH -= 360;
+  if (dH < -180) dH += 360;
+
+  const dL = L1 - L2;
+  const dC = C1 - C2;
+
+  // Attenuate hue contribution for near-gray colors (C < 35 → partial attenuation)
+  const hueAtten = Math.min(Math.min(C1, C2) / 35, 1.0);
+  const scaledDH = dH * hueAtten;
+
+  // Normalize each axis to comparable ~[0,100] scale then apply weights:
+  //   L: already 0–100
+  //   C: 0–~128 → ×0.78
+  //   H: 0–360, attenuated → ×0.278
+  const nC = dC * 0.78;
+  const nH = scaledDH * 0.278;
+
+  return Math.sqrt(0.20 * dL*dL + 0.30 * nC*nC + 0.50 * nH*nH);
+}
+
+// Precompute LAB and LCH for all DMC colors
+const DMC_LAB = DMC_COLORS.map(c => rgbToLab(...c.rgb));
+const DMC_LCH = DMC_LAB.map(labToLch);
+
+/**
+ * Find nearest DMC index for a Lab color.
+ * Uses LCH-weighted perceptual distance + neutral penalty + saturation preservation.
+ */
+function nearestDMCfromLab(lab, excludeSet) {
+  const [, srcC] = labToLch(lab);
+
+  let best = 0, bestScore = Infinity;
   for (let i = 0; i < DMC_LAB.length; i++) {
     if (excludeSet && excludeSet.has(i)) continue;
-    const d = deltaE(lab, DMC_LAB[i]);
-    if (d < bestDist) { bestDist = d; best = i; }
+    let score = lchWeightedDist(lab, DMC_LAB[i]);
+    // Neutral penalty: penalize dull DMC candidates when source color is vivid
+    if (srcC > 22 && DMC_LCH[i][1] < 15) score += 22;
+    if (score < bestScore) { bestScore = score; best = i; }
   }
+
+  // Saturation preservation: if the best match is much duller than the source,
+  // relax the threshold and search for a more chromatic alternative.
+  if (srcC > 25) {
+    const dstC = DMC_LCH[best][1];
+    if ((srcC - dstC) > srcC * 0.38) {
+      let bestVivid = best, bestVividScore = bestScore * 1.45;
+      for (let i = 0; i < DMC_LAB.length; i++) {
+        if (excludeSet && excludeSet.has(i)) continue;
+        if (DMC_LCH[i][1] < srcC * 0.50) continue; // require minimum chroma
+        const s = lchWeightedDist(lab, DMC_LAB[i]);
+        if (s < bestVividScore) { bestVividScore = s; bestVivid = i; }
+      }
+      best = bestVivid;
+    }
+  }
+
   return best;
 }
 
+function nearestDMC(r, g, b, excludeSet) {
+  return nearestDMCfromLab(rgbToLab(r, g, b), excludeSet);
+}
+
 // ═══════════════════════════════════════════════════════════════
-// K-MEANS COLOR QUANTIZATION
+// K-MEANS COLOR QUANTIZATION (CIE L*a*b* space)
 // ═══════════════════════════════════════════════════════════════
-function kMeans(pixels, k, maxIter = 20, onProgress) {
-  // Sample for speed
+/**
+ * K-means++ clustering in Lab space.
+ * Returns k Lab centroids (not RGB).
+ *
+ * Operating in Lab prevents RGB bias: cyan/teal centroids no longer
+ * drift toward brown/gray as they would in RGB Euclidean clustering.
+ */
+function kMeansLab(labPixels, k, maxIter = 20, onProgress) {
   const maxSamples = 8000;
-  let samples = pixels;
-  if (pixels.length > maxSamples) {
-    const step = Math.ceil(pixels.length / maxSamples);
-    samples = pixels.filter((_, i) => i % step === 0);
+  let samples = labPixels;
+  if (labPixels.length > maxSamples) {
+    const step = Math.ceil(labPixels.length / maxSamples);
+    samples = labPixels.filter((_, i) => i % step === 0);
   }
 
-  // Init centroids with k-means++ style
+  // k-means++ initialization in Lab space
   const centroids = [];
   centroids.push([...samples[Math.floor(Math.random() * samples.length)]]);
 
@@ -2391,21 +2463,20 @@ function kMeans(pixels, k, maxIter = 20, onProgress) {
       return minD;
     });
     const total = dists.reduce((a, b) => a + b, 0);
-    let r = Math.random() * total, acc = 0;
-    let chosen = 0;
+    let rv = Math.random() * total, acc = 0, chosen = 0;
     for (let i = 0; i < dists.length; i++) {
       acc += dists[i];
-      if (acc >= r) { chosen = i; break; }
+      if (acc >= rv) { chosen = i; break; }
     }
     centroids.push([...samples[chosen]]);
   }
 
-  let assignments = new Int32Array(samples.length);
+  const assignments = new Int32Array(samples.length);
 
   for (let iter = 0; iter < maxIter; iter++) {
     onProgress && onProgress(Math.round((iter / maxIter) * 60));
 
-    // Assign
+    // Assign each sample to nearest centroid
     for (let i = 0; i < samples.length; i++) {
       const p = samples[i];
       let best = 0, bestD = Infinity;
@@ -2416,8 +2487,8 @@ function kMeans(pixels, k, maxIter = 20, onProgress) {
       assignments[i] = best;
     }
 
-    // Update centroids
-    const sums = Array.from({length: k}, () => [0,0,0,0]);
+    // Recompute centroids as Lab averages
+    const sums = Array.from({length: k}, () => [0, 0, 0, 0]);
     for (let i = 0; i < samples.length; i++) {
       const c = assignments[i];
       sums[c][0] += samples[i][0];
@@ -2429,15 +2500,17 @@ function kMeans(pixels, k, maxIter = 20, onProgress) {
     let moved = false;
     for (let c = 0; c < k; c++) {
       if (sums[c][3] > 0) {
-        const nr = sums[c][0]/sums[c][3], ng = sums[c][1]/sums[c][3], nb = sums[c][2]/sums[c][3];
-        if (Math.abs(nr - centroids[c][0]) + Math.abs(ng - centroids[c][1]) + Math.abs(nb - centroids[c][2]) > 0.5) moved = true;
-        centroids[c] = [nr, ng, nb];
+        const nL = sums[c][0]/sums[c][3];
+        const na = sums[c][1]/sums[c][3];
+        const nb = sums[c][2]/sums[c][3];
+        if (Math.abs(nL-centroids[c][0]) + Math.abs(na-centroids[c][1]) + Math.abs(nb-centroids[c][2]) > 0.1) moved = true;
+        centroids[c] = [nL, na, nb];
       }
     }
     if (!moved) break;
   }
 
-  return centroids.map(c => c.map(Math.round));
+  return centroids; // Lab centroids
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2710,25 +2783,27 @@ async function generatePattern() {
   showProcessing(true, t('proc_kmeans'), 10);
   await sleep(30);
 
-  // Step 2: K-means
-  const centroids = kMeans(pixels, k, 20, pct => {
+  // Step 2: Convert pixels to Lab, then cluster in Lab space.
+  // Lab-space k-means prevents RGB bias that causes teal/cyan centroids to drift toward brown.
+  const labPixels = pixels.map(([r, g, b]) => rgbToLab(r, g, b));
+
+  const centroidLabs = kMeansLab(labPixels, k, 20, pct => {
     showProcessing(true, t('proc_clustering'), 10 + pct * 0.6);
   });
 
   showProcessing(true, t('proc_dmc'), 70);
   await sleep(30);
 
-  // Step 3: Map each centroid to the nearest DMC not yet used.
-  // If two centroids would pick the same DMC, the later one falls back to the
-  // next-nearest unique DMC — so the final palette has exactly k colors.
+  // Step 3: Map each Lab centroid to nearest DMC (perceptual LCH weighting).
+  // Collision resolution: if two centroids pick the same DMC, fall back to next-nearest unique.
   const usedDmc = new Set();
   const centroidToDmc = [];
   const mergedPairs = [];
 
-  for (let i = 0; i < centroids.length; i++) {
-    const [r, g, b] = centroids[i];
-    const firstChoice = nearestDMC(r, g, b);
-    const unique      = nearestDMC(r, g, b, usedDmc);
+  for (let i = 0; i < centroidLabs.length; i++) {
+    const lab = centroidLabs[i];
+    const firstChoice = nearestDMCfromLab(lab);
+    const unique      = nearestDMCfromLab(lab, usedDmc);
     if (firstChoice !== unique) {
       mergedPairs.push({
         centroid: i,
@@ -2740,7 +2815,7 @@ async function generatePattern() {
     centroidToDmc.push(unique);
   }
 
-  console.log(`[DiamondPainter] Quantized centroids : ${centroids.length}`);
+  console.log(`[DiamondPainter] Quantized centroids : ${centroidLabs.length}`);
   console.log(`[DiamondPainter] Unique DMC assigned : ${usedDmc.size}`);
   if (mergedPairs.length > 0) {
     console.log(`[DiamondPainter] DMC collisions resolved (${mergedPairs.length}):`, mergedPairs);
@@ -2762,20 +2837,57 @@ async function generatePattern() {
   showProcessing(true, t('proc_grid'), 80);
   await sleep(30);
 
-  // Step 4: Assign each pixel to nearest centroid then palette index
+  // Step 4: Assign pixels to centroids with Floyd-Steinberg dithering (40% strength).
+  // Error diffusion in Lab space preserves perceptual color balance across smooth gradients.
+  const DITHER_STR = 0.40;
+  const errBuf = new Float32Array(gridW * gridH * 3); // accumulated Lab error per pixel
+
   const grid = [];
-  for (let i = 0; i < pixels.length; i++) {
-    const [r,g,b] = pixels[i];
-    // Find nearest centroid (fast)
-    let best = 0, bestD = Infinity;
-    for (let c = 0; c < centroids.length; c++) {
-      const d = (r-centroids[c][0])**2 + (g-centroids[c][1])**2 + (b-centroids[c][2])**2;
-      if (d < bestD) { bestD = d; best = c; }
+  for (let py = 0; py < gridH; py++) {
+    for (let px = 0; px < gridW; px++) {
+      const i = py * gridW + px;
+      const [pL, pa, pb] = labPixels[i];
+
+      // Apply accumulated dithering error to this pixel's Lab value
+      const effL = pL + errBuf[i*3    ];
+      const effa = pa + errBuf[i*3 + 1];
+      const effb = pb + errBuf[i*3 + 2];
+
+      // Find nearest centroid in Lab space
+      let best = 0, bestD = Infinity;
+      for (let c = 0; c < centroidLabs.length; c++) {
+        const dL = effL - centroidLabs[c][0];
+        const da = effa - centroidLabs[c][1];
+        const db = effb - centroidLabs[c][2];
+        const d = dL*dL + da*da + db*db;
+        if (d < bestD) { bestD = d; best = c; }
+      }
+
+      const dmcIdx = centroidToDmc[best];
+      const dmcLab = DMC_LAB[dmcIdx];
+
+      // Quantization error: difference between effective color and assigned DMC
+      const eL = (effL - dmcLab[0]) * DITHER_STR;
+      const ea = (effa - dmcLab[1]) * DITHER_STR;
+      const eb = (effb - dmcLab[2]) * DITHER_STR;
+
+      // Floyd-Steinberg diffusion to 4 neighbors
+      const diffuse = (tx, ty, w) => {
+        if (tx < 0 || tx >= gridW || ty >= gridH) return;
+        const ti = (ty * gridW + tx) * 3;
+        errBuf[ti    ] += eL * w;
+        errBuf[ti + 1] += ea * w;
+        errBuf[ti + 2] += eb * w;
+      };
+      diffuse(px+1, py,   7/16);
+      diffuse(px-1, py+1, 3/16);
+      diffuse(px,   py+1, 5/16);
+      diffuse(px+1, py+1, 1/16);
+
+      const palIdx = paletteMap.get(dmcIdx);
+      state.palette[palIdx].count++;
+      grid.push({ palIdx });
     }
-    const dmcIdx = centroidToDmc[best];
-    const palIdx = paletteMap.get(dmcIdx);
-    state.palette[palIdx].count++;
-    grid.push({ palIdx });
   }
 
   // Sort palette by count desc
