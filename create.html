@@ -1510,7 +1510,7 @@
 
   .stats-thead {
     display: grid;
-    grid-template-columns: 14px 14px 36px 1fr 40px 28px;
+    grid-template-columns: 18px 14px 14px 36px 1fr 40px 28px;
     gap: 2px;
     padding: 4px 10px 3px;
     font-family: var(--ui);
@@ -1538,7 +1538,7 @@
 
   .stats-row {
     display: grid;
-    grid-template-columns: 14px 14px 36px 1fr 40px 28px;
+    grid-template-columns: 18px 14px 14px 36px 1fr 40px 28px;
     gap: 2px;
     padding: 3px 10px;
     align-items: center;
@@ -1609,15 +1609,19 @@
     text-align: right;
     white-space: nowrap;
   }
-  /* 보유 색상 체크 오버레이 */
-  .stats-own-mark {
-    position: absolute;
-    top: 1px; left: 2px;
-    font-size: 7px;
-    color: var(--success);
-    z-index: 3;
-    pointer-events: none;
+  /* 보유 색상 토글 버튼 */
+  .stats-own-btn {
+    font-size: 12px;
+    text-align: center;
+    color: var(--text3);
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.15s, transform 0.1s;
+    user-select: none;
   }
+  .stats-own-btn:hover { color: var(--text2); }
+  .stats-own-btn.owned { color: #f0c030; text-shadow: 0 0 6px rgba(240,192,48,0.45); }
+  .stats-own-btn:active { transform: scale(0.82); }
 </style>
 </head>
 <body>
@@ -1716,12 +1720,12 @@
       <div class="field">
         <label data-i18n="label_canvas_size">캔버스 크기</label>
         <div class="canvas-size-grid">
-          <button class="size-btn" data-w="210" data-h="297">A4</button>
-          <button class="size-btn" data-w="297" data-h="420">A3</button>
+          <button class="size-btn" data-w="200" data-h="200">20×20</button>
           <button class="size-btn" data-w="300" data-h="400">30×40</button>
           <button class="size-btn active" data-w="400" data-h="500">40×50</button>
-          <button class="size-btn" data-w="500" data-h="700">50×70</button>
-          <button class="size-btn" data-w="500" data-h="800">50×80</button>
+          <button class="size-btn" data-w="500" data-h="600">50×60</button>
+          <button class="size-btn" data-w="600" data-h="800">60×80</button>
+          <button class="size-btn" data-w="800" data-h="1000">80×100</button>
           <button class="size-btn size-btn-custom" id="btn-custom-size" data-w="0" data-h="0" data-i18n="size_custom">사용자 지정</button>
         </div>
       </div>
@@ -1730,12 +1734,12 @@
       <div class="field" id="custom-size-fields" style="display:none">
         <div class="field-row" style="gap:6px">
           <div style="flex:1">
-            <label style="font-size:9px;margin-bottom:3px;display:block" data-i18n="label_custom_w">가로 (mm)</label>
-            <input type="number" id="custom-w" value="400" min="50" max="2000" style="width:100%">
+            <label style="font-size:9px;margin-bottom:3px;display:block" data-i18n="label_custom_w">가로 (cm)</label>
+            <input type="number" id="custom-w" value="40" min="5" max="200" step="5" style="width:100%">
           </div>
           <div style="flex:1">
-            <label style="font-size:9px;margin-bottom:3px;display:block" data-i18n="label_custom_h">세로 (mm)</label>
-            <input type="number" id="custom-h" value="500" min="50" max="2000" style="width:100%">
+            <label style="font-size:9px;margin-bottom:3px;display:block" data-i18n="label_custom_h">세로 (cm)</label>
+            <input type="number" id="custom-h" value="50" min="5" max="200" step="5" style="width:100%">
           </div>
         </div>
       </div>
@@ -1763,6 +1767,17 @@
           <input type="range" id="k-colors" min="5" max="80" value="35">
           <span class="value-badge" id="k-val">35</span>
         </div>
+      </div>
+
+      <!-- 내 보유 색상만 사용 -->
+      <div class="field">
+        <label style="cursor:pointer">
+          <div class="checkbox-row">
+            <input type="checkbox" id="chk-use-owned" disabled>
+            <span data-i18n="use_owned_only">내 보유 색상만 사용</span>
+          </div>
+        </label>
+        <div id="owned-only-status" style="font-size:9px;color:var(--text3);margin-top:3px;padding-left:18px" data-i18n="use_owned_only_hint">생성 후 ★로 보유 색상 표시</div>
       </div>
 
       <!-- 체크박스 옵션 -->
@@ -1995,8 +2010,8 @@ const i18n = {
     bead_square:       '사각 (2.5mm)',
     label_canvas_size: '도안 크기',
     size_custom:       '사용자 지정',
-    label_custom_w:    '가로 (mm)',
-    label_custom_h:    '세로 (mm)',
+    label_custom_w:    '가로 (cm)',
+    label_custom_h:    '세로 (cm)',
     label_colors:      'DMC 색상 수',
     label_keep_ratio:  '비율 유지',
     label_show_symbols:'기호 표시',
@@ -2104,6 +2119,11 @@ const i18n = {
     stats_sort_asc:   '오름차순',
     stats_sort_desc:  '내림차순',
     stats_owned:      '보유 색상만',
+    use_owned_only:        '내 보유 색상만 사용',
+    use_owned_only_hint:   '생성 후 ★로 보유 색상 표시',
+    use_owned_only_count:  '보유 {n}개 — 재생성 시 적용',
+    owned_mark:            '보유 색상으로 표시',
+    owned_unmark:          '보유 색상 해제',
   },
   en: {
     btn_generate:      '⚡ Generate Pattern',
@@ -2134,8 +2154,8 @@ const i18n = {
     bead_square:       'Square (2.5mm)',
     label_canvas_size: 'Pattern Size',
     size_custom:       'Custom',
-    label_custom_w:    'Width (mm)',
-    label_custom_h:    'Height (mm)',
+    label_custom_w:    'Width (cm)',
+    label_custom_h:    'Height (cm)',
     label_colors:      'DMC Color Count',
     label_keep_ratio:  'Maintain ratio',
     label_show_symbols:'Show symbols',
@@ -2228,6 +2248,11 @@ const i18n = {
     stats_sort_asc:   'Asc',
     stats_sort_desc:  'Desc',
     stats_owned:      'Owned only',
+    use_owned_only:        'Use only owned colors',
+    use_owned_only_hint:   'Mark owned colors with ★ after generating',
+    use_owned_only_count:  '{n} owned — applies on regenerate',
+    owned_mark:            'Mark as owned',
+    owned_unmark:          'Unmark as owned',
   },
   ja: {
     btn_generate:      '⚡ 図案生成',
@@ -2258,8 +2283,8 @@ const i18n = {
     bead_square:       '角ビーズ (2.5mm)',
     label_canvas_size: '図案サイズ',
     size_custom:       'カスタム',
-    label_custom_w:    '幅 (mm)',
-    label_custom_h:    '高さ (mm)',
+    label_custom_w:    '幅 (cm)',
+    label_custom_h:    '高さ (cm)',
     label_colors:      'DMC色数',
     label_keep_ratio:  '縦横比を維持',
     label_show_symbols:'記号を表示',
@@ -2352,6 +2377,11 @@ const i18n = {
     stats_sort_asc:   '昇順',
     stats_sort_desc:  '降順',
     stats_owned:      '所有のみ',
+    use_owned_only:        '所有色のみ使用',
+    use_owned_only_hint:   '生成後に★で所有色を表示',
+    use_owned_only_count:  '{n}色保有 — 再生成時に適用',
+    owned_mark:            '保有色としてマーク',
+    owned_unmark:          '保有色を解除',
   },
   zh: {
     btn_generate:      '⚡ 生成图案',
@@ -2382,8 +2412,8 @@ const i18n = {
     bead_square:       '方钻 (2.5mm)',
     label_canvas_size: '图案尺寸',
     size_custom:       '自定义',
-    label_custom_w:    '宽度 (mm)',
-    label_custom_h:    '高度 (mm)',
+    label_custom_w:    '宽度 (cm)',
+    label_custom_h:    '高度 (cm)',
     label_colors:      'DMC颜色数量',
     label_keep_ratio:  '保持纵横比',
     label_show_symbols:'显示符号',
@@ -2476,6 +2506,11 @@ const i18n = {
     stats_sort_asc:   '升序',
     stats_sort_desc:  '降序',
     stats_owned:      '仅拥有',
+    use_owned_only:        '仅使用已有颜色',
+    use_owned_only_hint:   '生成后用★标记已有颜色',
+    use_owned_only_count:  '已有{n}色 — 重新生成时应用',
+    owned_mark:            '标记为已有',
+    owned_unmark:          '取消标记',
   },
 };
 
@@ -2933,6 +2968,7 @@ const DMC_COLORS = [
 // ── 비즈 통계 테이블 상태 ──
 let beadStatSort = { key: 'count', dir: 'desc' };
 let _showOwnedOnly = false;
+let _useOwnedOnly = false;
 let ownedDmcSet = new Set(JSON.parse(localStorage.getItem('dp_owned_dmc') || '[]'));
 let _statsDebounceTimer = null;
 
@@ -3010,16 +3046,28 @@ const DMC_LCH = DMC_LAB.map(labToLch);
  * Find nearest DMC index for a Lab color.
  * Uses LCH-weighted perceptual distance + neutral penalty + saturation preservation.
  */
-function nearestDMCfromLab(lab, excludeSet) {
+function nearestDMCfromLab(lab, excludeSet, allowSet) {
   const [, srcC] = labToLch(lab);
+  const hasAllow = allowSet && allowSet.size > 0;
 
   let best = 0, bestScore = Infinity;
   for (let i = 0; i < DMC_LAB.length; i++) {
     if (excludeSet && excludeSet.has(i)) continue;
+    if (hasAllow && !allowSet.has(i)) continue;
     let score = lchWeightedDist(lab, DMC_LAB[i]);
     // Neutral penalty: penalize dull DMC candidates when source color is vivid
     if (srcC > 22 && DMC_LCH[i][1] < 15) score += 22;
     if (score < bestScore) { bestScore = score; best = i; }
+  }
+
+  // Fallback: if allowSet + excludeSet eliminated everything, ignore allowSet
+  if (bestScore === Infinity && hasAllow) {
+    for (let i = 0; i < DMC_LAB.length; i++) {
+      if (excludeSet && excludeSet.has(i)) continue;
+      let score = lchWeightedDist(lab, DMC_LAB[i]);
+      if (srcC > 22 && DMC_LCH[i][1] < 15) score += 22;
+      if (score < bestScore) { bestScore = score; best = i; }
+    }
   }
 
   // Saturation preservation: if the best match is much duller than the source,
@@ -3030,6 +3078,7 @@ function nearestDMCfromLab(lab, excludeSet) {
       let bestVivid = best, bestVividScore = bestScore * 1.45;
       for (let i = 0; i < DMC_LAB.length; i++) {
         if (excludeSet && excludeSet.has(i)) continue;
+        if (hasAllow && !allowSet.has(i)) continue;
         if (DMC_LCH[i][1] < srcC * 0.50) continue; // require minimum chroma
         const s = lchWeightedDist(lab, DMC_LAB[i]);
         if (s < bestVividScore) { bestVividScore = s; bestVivid = i; }
@@ -3414,10 +3463,15 @@ async function generatePattern() {
   const centroidToDmc = [];
   const mergedPairs = [];
 
+  // Build owned-color allow-set when "use owned only" is enabled
+  const ownedAllowSet = (_useOwnedOnly && ownedDmcSet.size > 0)
+    ? new Set(DMC_COLORS.reduce((acc, c, i) => { if (ownedDmcSet.has(String(c.code))) acc.push(i); return acc; }, []))
+    : null;
+
   for (let i = 0; i < centroidLabs.length; i++) {
     const lab = centroidLabs[i];
-    const firstChoice = nearestDMCfromLab(lab);
-    const unique      = nearestDMCfromLab(lab, usedDmc);
+    const firstChoice = nearestDMCfromLab(lab, null, ownedAllowSet);
+    const unique      = nearestDMCfromLab(lab, usedDmc, ownedAllowSet);
     if (firstChoice !== unique) {
       mergedPairs.push({
         centroid: i,
@@ -3643,6 +3697,7 @@ function updateColorList() {
   thead.className = 'stats-thead';
   const si = (key) => beadStatSort.key === key ? (beadStatSort.dir === 'asc' ? ' ↑' : ' ↓') : '';
   thead.innerHTML = `
+    <div title="${t('owned_mark')}">★</div>
     <div title="${t('stats_swatch')}">■</div>
     <div>${t('stats_symbol')}</div>
     <div class="stats-th-sortable${beadStatSort.key==='dmc'?' sort-active':''}" data-sort="dmc">${t('stats_dmc')}${si('dmc')}</div>
@@ -3685,7 +3740,7 @@ function updateColorList() {
     row.style.setProperty('--bar-color', `rgb(${r},${g},${b})`);
 
     row.innerHTML = `
-      ${isOwned ? '<div class="stats-own-mark">✓</div>' : ''}
+      <div class="stats-own-btn${isOwned ? ' owned' : ''}" title="${isOwned ? t('owned_unmark') : t('owned_mark')}">${isOwned ? '★' : '☆'}</div>
       <div class="stats-swatch" style="background:rgb(${r},${g},${b})" title="DMC ${s.dmcNo}"></div>
       <div class="stats-sym">${s.symbol}</div>
       <div class="stats-dmc-no" title="DMC ${s.dmcNo}">${s.dmcNo}</div>
@@ -3693,6 +3748,17 @@ function updateColorList() {
       <div class="stats-count">${s.count.toLocaleString()}</div>
       <div class="stats-ratio">${s.ratio.toFixed(1)}%</div>
     `;
+
+    // ★/☆ 클릭: 보유 색상 토글
+    row.querySelector('.stats-own-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      const key = String(s.dmcNo);
+      if (ownedDmcSet.has(key)) ownedDmcSet.delete(key);
+      else ownedDmcSet.add(key);
+      localStorage.setItem('dp_owned_dmc', JSON.stringify([...ownedDmcSet]));
+      updateColorList();
+      updateOwnedOnlyStatus();
+    });
 
     // 클릭: 팔레트 색상 선택 + 하이라이트 토글
     row.addEventListener('click', () => {
@@ -3705,7 +3771,7 @@ function updateColorList() {
       if (state.pattern) redrawAllUserCells();
     });
 
-    // 우클릭: 보유 색상 토글
+    // 우클릭도 동일하게 보유 토글 (기존 UX 유지)
     row.addEventListener('contextmenu', e => {
       e.preventDefault();
       const key = String(s.dmcNo);
@@ -3713,6 +3779,7 @@ function updateColorList() {
       else ownedDmcSet.add(key);
       localStorage.setItem('dp_owned_dmc', JSON.stringify([...ownedDmcSet]));
       updateColorList();
+      updateOwnedOnlyStatus();
     });
 
     container.appendChild(row);
@@ -4104,8 +4171,8 @@ document.getElementById('btn-custom-size').addEventListener('click', function() 
   this.classList.add('active');
   document.getElementById('custom-size-fields').style.display = 'block';
   canvasState.isCustom = true;
-  const w = parseInt(document.getElementById('custom-w').value) || 400;
-  const h = parseInt(document.getElementById('custom-h').value) || 500;
+  const w = (parseInt(document.getElementById('custom-w').value) || 40) * 10;
+  const h = (parseInt(document.getElementById('custom-h').value) || 50) * 10;
   canvasState.canvasW = w;
   canvasState.canvasH = h;
   updateCalcDisplay();
@@ -4113,16 +4180,40 @@ document.getElementById('btn-custom-size').addEventListener('click', function() 
 
 // 사용자 지정 입력 필드
 document.getElementById('custom-w').addEventListener('input', function() {
-  canvasState.canvasW = Math.max(50, parseInt(this.value) || 400);
+  canvasState.canvasW = Math.max(50, (parseInt(this.value) || 40) * 10);
   updateCalcDisplay();
 });
 document.getElementById('custom-h').addEventListener('input', function() {
-  canvasState.canvasH = Math.max(50, parseInt(this.value) || 500);
+  canvasState.canvasH = Math.max(50, (parseInt(this.value) || 50) * 10);
   updateCalcDisplay();
+});
+
+// 보유 색상 상태 표시 업데이트
+function updateOwnedOnlyStatus() {
+  const chk = document.getElementById('chk-use-owned');
+  const hint = document.getElementById('owned-only-status');
+  if (!chk || !hint) return;
+  const n = ownedDmcSet.size;
+  if (n === 0) {
+    chk.disabled = true;
+    chk.checked = false;
+    _useOwnedOnly = false;
+    hint.setAttribute('data-i18n', 'use_owned_only_hint');
+    hint.textContent = t('use_owned_only_hint');
+  } else {
+    chk.disabled = false;
+    hint.removeAttribute('data-i18n');
+    hint.textContent = t('use_owned_only_count').replace('{n}', n);
+  }
+}
+
+document.getElementById('chk-use-owned').addEventListener('change', function() {
+  _useOwnedOnly = this.checked;
 });
 
 // 초기 계산 표시
 updateCalcDisplay();
+updateOwnedOnlyStatus();
 document.getElementById('k-colors').addEventListener('input', function() {
   document.getElementById('k-val').textContent = this.value;
 });
