@@ -1,153 +1,112 @@
-﻿/**
- * Diamond Painter — AdSense Ad Slot Manager
- * ==========================================
- * Publisher ID: ca-pub-8254204287118850
+/**
+ * Diamond Painter — AdSense Slot Manager
+ * =======================================
+ * Publisher : ca-pub-8254204287118850
+ * Script    : loaded once via <head> (adsbygoogle.js)
+ * This file : injected with `defer` — runs after DOM is ready
  *
- * CURRENT STATE:
- *   All ad slots render safe placeholder containers only.
- *   No live ads are injected until slot IDs are configured below.
+ * Slot registry. To deactivate a slot temporarily, set slotId: null.
+ * ads.js will fall back to the placeholder shell (no ad request made).
  *
- * HOW TO ACTIVATE REAL ADS (step by step):
- * ─────────────────────────────────────────
- * 1. Log in to Google AdSense (adsense.google.com)
- * 2. Go to Ads → By ad unit → Create new ad unit
- * 3. Choose ad type (Display, In-article, etc.)
- * 4. Copy the numeric slot ID from the generated <ins> code
- *    Example: data-ad-slot="1234567890"
- * 5. In the SLOTS object below, set the slotId for each position
- * 6. Call DiamondPainterAds.activate() or reload the page
- *
- * RECOMMENDED AD UNIT TYPES:
- * ─────────────────────────────────────────
- *   ArticleTopAd    → Display / Leaderboard (728×90 or responsive)
- *   ArticleMiddleAd → In-article (responsive)
- *   SidebarAd       → Display / Rectangle (300×250)
- *   FooterAd        → Display / Leaderboard (responsive)
- *
- * UX GUIDELINES (to protect AdSense standing):
- * ─────────────────────────────────────────────
- *   - Do not place more than 3 ad units per page
- *   - Never place ads inside the create.html tool canvas area
- *   - Keep at least 200px of content between consecutive ads
- *   - Never use fixed-position ads that obscure content
- *   - Always set aria-label="Advertisement" on ad containers
+ * DiamondPainterAds.status() — print slot states to console
  */
-
 (function () {
   'use strict';
 
   var AD_CLIENT = 'ca-pub-8254204287118850';
 
-  /**
-   * Configure slot IDs here once you have them from AdSense.
-   * Leave slotId as null to keep the placeholder — no live ad will load.
-   *
-   * name         : human-readable label for debugging
-   * selector     : CSS selector that matches the ad slot container
-   * slotId       : numeric AdSense slot ID string, or null to stay as placeholder
-   * format       : 'auto' | 'rectangle' | 'leaderboard' | 'in-article'
-   * fullWidth    : true for responsive full-width banners
-   */
+  /* ─── Slot Registry ─────────────────────────────────────────── */
   var SLOTS = [
     {
-      name:      'ArticleTopAd',
-      selector:  '.ad-slot--article-top',
-      slotId:    null,           // ← replace with your slot ID, e.g. '1234567890'
+      name:      'diamond-painter-right',
+      selector:  '#ad-ResultSidebarAd',
+      slotId:    '9943734977',
       format:    'auto',
       fullWidth: true,
     },
     {
-      name:      'ArticleMiddleAd',
-      selector:  '.ad-slot--article-middle',
-      slotId:    null,
-      format:    'fluid',
-      layout:    'in-article',
-      fullWidth: false,
-    },
-    {
-      name:      'SidebarAd',
-      selector:  '.ad-slot--sidebar',
-      slotId:    null,
+      name:      'diamond-painter-download',
+      selector:  '#ad-DownloadBottomAd',
+      slotId:    '9109999600',
       format:    'auto',
-      fullWidth: false,
+      fullWidth: true,
     },
     {
-      name:      'FooterAd',
-      selector:  '.ad-slot--footer',
-      slotId:    null,
+      name:      'diamond-painter-footer',
+      selector:  '#ad-FooterGuideAd',
+      slotId:    '7744947044',
       format:    'auto',
       fullWidth: true,
     },
   ];
 
-  /**
-   * Injects a live <ins class="adsbygoogle"> unit into a container.
-   * Only called when slotId is configured.
-   */
+  /* ─── Inject a live <ins> into the container div ─────────────── */
   function injectAdUnit(container, slot) {
+    if (container.dataset.adActivated) return; // guard: prevent double-inject
+    container.dataset.adActivated = 'true';
+
     var ins = document.createElement('ins');
     ins.className = 'adsbygoogle';
-    ins.style.display = 'block';
-    ins.setAttribute('data-ad-client', AD_CLIENT);
-    ins.setAttribute('data-ad-slot',   slot.slotId);
-    ins.setAttribute('data-ad-format', slot.format);
+    ins.style.cssText = 'display:block;width:100%;';
+    ins.setAttribute('data-ad-client',              AD_CLIENT);
+    ins.setAttribute('data-ad-slot',                slot.slotId);
+    ins.setAttribute('data-ad-format',              slot.format);
+    ins.setAttribute('data-full-width-responsive',  slot.fullWidth ? 'true' : 'false');
 
-    if (slot.layout) {
-      ins.setAttribute('data-ad-layout', slot.layout);
-    }
-    if (slot.fullWidth) {
-      ins.setAttribute('data-full-width-responsive', 'true');
-    }
-
-    // Clear placeholder content and insert ad unit
+    // Clear placeholder shell, insert real unit
     container.innerHTML = '';
     container.appendChild(ins);
 
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (e) {
-      console.warn('[DiamondPainterAds] Failed to push ad:', slot.name, e);
+      console.warn('[DiamondPainterAds] push failed:', slot.name, e);
     }
+
+    /* Unfilled fallback:
+       Google sets data-ad-status="filled"|"unfilled" after ~2-3 s.
+       If still not filled after 4 s, restore the placeholder shell so
+       the reserved space keeps its visual cue (border + label via CSS). */
+    setTimeout(function () {
+      var status = ins.getAttribute('data-ad-status');
+      if (status !== 'filled') {
+        container.removeAttribute('data-ad-activated');
+        container.innerHTML = '';                // clear collapsed ins
+        container.classList.add('ad-unfilled'); // CSS ::before / ::after kick in
+      }
+    }, 4000);
   }
 
-  /**
-   * Activates all configured ad slots on the current page.
-   * Slots with slotId = null are left as visual placeholders.
-   * Safe to call multiple times — will not double-inject.
-   */
+  /* ─── Activate all configured slots ──────────────────────────── */
   function activate() {
     SLOTS.forEach(function (slot) {
-      if (!slot.slotId) return; // placeholder mode — skip
+      if (!slot.slotId) return; // null → placeholder only, no ad request
 
-      var containers = document.querySelectorAll(slot.selector);
-      containers.forEach(function (container) {
-        if (container.dataset.adActivated) return; // already injected
-        container.dataset.adActivated = 'true';
-        injectAdUnit(container, slot);
-      });
+      var container = document.querySelector(slot.selector);
+      if (container) injectAdUnit(container, slot);
     });
   }
 
-  /**
-   * Returns the current slot configuration.
-   * Useful for debugging which slots are active on a page.
-   */
+  /* ─── Debug helper ───────────────────────────────────────────── */
   function status() {
-    var result = SLOTS.map(function (s) {
-      var els = document.querySelectorAll(s.selector).length;
+    var rows = SLOTS.map(function (s) {
+      var el  = document.querySelector(s.selector);
+      var ins = el ? el.querySelector('ins.adsbygoogle') : null;
       return {
-        name:     s.name,
-        selector: s.selector,
-        active:   !!s.slotId,
-        slotId:   s.slotId || '(placeholder)',
-        onPage:   els,
+        name:      s.name,
+        selector:  s.selector,
+        slotId:    s.slotId || '(placeholder)',
+        active:    !!s.slotId,
+        onPage:    !!el,
+        injected:  !!ins,
+        adStatus:  ins ? (ins.getAttribute('data-ad-status') || 'pending') : '—',
       };
     });
-    console.table(result);
-    return result;
+    console.table(rows);
+    return rows;
   }
 
-  // Public API
+  /* ─── Public API ─────────────────────────────────────────────── */
   window.DiamondPainterAds = {
     client:   AD_CLIENT,
     slots:    SLOTS,
@@ -155,12 +114,11 @@
     status:   status,
   };
 
-  // Auto-activate on DOMContentLoaded
-  // (has no effect until slotIds are configured)
+  /* ─── Auto-activate on DOM ready ─────────────────────────────── */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', activate);
   } else {
-    activate();
+    activate(); // already parsed (defer fires after HTML parse)
   }
 
 }());

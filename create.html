@@ -1166,6 +1166,186 @@
   ::-webkit-scrollbar { width: 3px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(111,231,255,0.15); border-radius: 4px; }
+
+  /* ════ AdSense Placeholder Slots ════
+     CLS 방지: min-height로 공간 고정.
+     slot ID 교체 후 <ins> 태그로 내부 교체.
+  ════════════════════════════════════ */
+  .adsense-slot {
+    background: rgba(200,210,235,0.04);
+    border: 1px dashed rgba(200,210,235,0.15);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .adsense-slot__label {
+    font-size: 9px;
+    color: rgba(200,210,235,0.25);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    pointer-events: none;
+    user-select: none;
+  }
+  /* ResultSidebarAd: 우측 패널 — desktop only (>900px) */
+  #ad-ResultSidebarAd {
+    min-height: 280px;   /* CLS 방지: 광고 로드 전 공간 확보 */
+    margin: 6px 10px;
+    width: calc(100% - 20px);
+    overflow: hidden;
+    flex-shrink: 0;
+    display: block;
+    position: relative;
+  }
+  /* DownloadBottomAd: 다운로드 버튼 하단 슬롯 */
+  #ad-DownloadBottomAd {
+    min-height: 280px;       /* CLS 방지 */
+    margin: 28px 10px 40px; /* top: 버튼과 28px 간격 / bottom: guide-bottom과 40px 간격 */
+    width: calc(100% - 20px);
+    overflow: hidden;
+    flex-shrink: 0;
+    display: block;
+    position: relative;
+  }
+  @media (max-width: 900px) {
+    #ad-DownloadBottomAd { margin: 24px 0 40px; width: 100%; }
+  }
+  /* Download 패널 */
+  .panel-download {
+    padding: 8px 10px 4px;
+    flex-shrink: 0;
+  }
+  .btn-download-pattern {
+    width: 100%;
+    padding: 9px 12px;
+    background: linear-gradient(135deg, rgba(111,231,255,0.1), rgba(200,166,255,0.07));
+    border: 1px solid rgba(111,231,255,0.22);
+    border-radius: var(--radius-sm);
+    color: var(--cyan);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    font-family: var(--ui);
+    letter-spacing: -0.01em;
+  }
+  .btn-download-pattern:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(111,231,255,0.16), rgba(200,166,255,0.11));
+    box-shadow: 0 0 14px rgba(111,231,255,0.12);
+  }
+  .btn-download-pattern:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* ─── Footer Guide AdSense 전용 섹션 ───
+     Guide Section 직전, 위아래 44px spacing.
+     Kakao guide-bottom과 content block으로 분리.  */
+  .footer-guide-ad {
+    background: rgba(6,10,24,0.97);
+    border-top: 1px solid var(--glass-border);
+    padding: 44px 24px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  #ad-FooterGuideAd {
+    max-width: 728px;
+    min-height: 90px;   /* CLS 방지 */
+    margin: 0 auto;
+    overflow: hidden;
+    display: block;
+    position: relative;
+  }
+
+  /* ─── AdSense 미로드 / unfilled placeholder fallback ───────────
+     ads.js가 ins를 주입하면 ::before·::after는 ins 뒤에 위치.
+     광고가 뜨면 iframe이 z-index:1로 위를 덮어 placeholder 가림.
+     미로드(unfilled) 시 빈 컨테이너가 border+label을 그대로 노출.  */
+  #ad-ResultSidebarAd::before,
+  #ad-DownloadBottomAd::before,
+  #ad-FooterGuideAd::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(200,210,235,0.04);
+    border: 1px dashed rgba(200,210,235,0.12);
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  #ad-ResultSidebarAd::after,
+  #ad-DownloadBottomAd::after,
+  #ad-FooterGuideAd::after {
+    content: 'Ad';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: rgba(200,210,235,0.2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    pointer-events: none;
+    z-index: 0;
+  }
+  /* 주입된 ins는 pseudo-element 위에 레이어 */
+  #ad-ResultSidebarAd ins,
+  #ad-DownloadBottomAd ins,
+  #ad-FooterGuideAd ins {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  /* ─── 하단 가이드 섹션 ─── */
+  .guide-bottom {
+    background: rgba(4,8,20,0.99);
+    border-top: 1px solid var(--glass-border);
+    padding: 40px 24px 44px;   /* top 40px: AdSense 섹션 이후 충분한 시각적 분리 */
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .guide-bottom__inner { max-width: 860px; margin: 0 auto; }
+  .guide-bottom__title {
+    font-size: 11px;
+    color: var(--text3);
+    text-align: center;
+    margin-bottom: 14px;
+    letter-spacing: 0.04em;
+  }
+  .guide-bottom__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+  .guide-bottom__link {
+    font-size: 10px;
+    color: var(--text3);
+    text-decoration: none;
+    padding: 4px 10px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .guide-bottom__link:hover { color: var(--cyan); border-color: rgba(111,231,255,0.25); }
+  /* Kakao 래퍼: 링크 아래 배치, AdSense와 콘텐츠로 분리됨 */
+  .guide-kakao { text-align: center; margin-top: 28px; }
+
+  /* 반응형 */
+  @media (max-width: 900px) {
+    #ad-ResultSidebarAd { display: none; }
+  }
+  @media (max-width: 600px) {
+    .footer-guide-ad  { padding: 32px 12px; }
+    .guide-bottom     { padding: 28px 14px 32px; }
+  }
 </style>
 </head>
 <body>
@@ -1453,9 +1633,51 @@
       </div>
     </div>
 
+    <!-- ResultSidebarAd: diamond-painter-right / slot 9943734977 — ads.js 주입 -->
+    <div id="ad-ResultSidebarAd" aria-label="Advertisement"></div>
+
     <!-- DMC 팔레트 관리 -->
     <div class="panel-title" style="padding: 10px 14px 0; margin-bottom:0" data-i18n="section_dmc_palette">DMC 팔레트</div>
     <div class="color-list" id="color-list"></div>
+
+    <!-- Download Pattern 버튼 -->
+    <div class="panel-download">
+      <button class="btn-download-pattern" id="btn-download-pattern" disabled>📥 Download Pattern</button>
+    </div>
+    <!-- DownloadBottomAd: diamond-painter-download / slot 9109999600 — ads.js 주입 -->
+    <div id="ad-DownloadBottomAd" aria-label="Advertisement"></div>
+  </div>
+</div>
+
+<!-- ─── Footer Guide Ad: AdSense 7744947044 ───
+     Guide Section 직전 독립 섹션 (위아래 44px padding).
+     아래 guide-bottom의 콘텐츠(제목+링크)가 Kakao와 시각적으로 분리.  -->
+<section class="footer-guide-ad">
+  <!-- FooterGuideAd: diamond-painter-footer / slot 7744947044 — ads.js 주입 -->
+  <div id="ad-FooterGuideAd" aria-label="Advertisement"></div>
+</section>
+
+<!-- ─── Guide Bottom Section ───
+     구조: 제목 → 링크 → Kakao (AdSense와 콘텐츠 블록으로 분리)  -->
+<div class="guide-bottom">
+  <div class="guide-bottom__inner">
+    <p class="guide-bottom__title">Learn more about diamond painting</p>
+    <div class="guide-bottom__links">
+      <a href="../guide/diamond-painting-beginner-guide.html" class="guide-bottom__link">Beginner Guide</a>
+      <a href="../guide/how-to-make-diamond-painting-patterns.html" class="guide-bottom__link">How to Make Patterns</a>
+      <a href="../guide/dmc-color-guide.html" class="guide-bottom__link">DMC Color Guide</a>
+      <a href="../guide/square-vs-round-drill.html" class="guide-bottom__link">Square vs Round Drill</a>
+      <a href="../guide/diamond-painting-tips.html" class="guide-bottom__link">Tips &amp; Tricks</a>
+      <a href="../guide/best-image-types-for-diamond-painting.html" class="guide-bottom__link">Best Image Types</a>
+    </div>
+    <!-- Kakao 728×90: 링크 아래 배치 — AdSense와 제목+링크 콘텐츠로 분리됨 -->
+    <div class="guide-kakao">
+      <ins class="kakao_ad_area" style="display:none;"
+        data-ad-unit="DAN-IhSMDRvA0QRGGtj5"
+        data-ad-width="728"
+        data-ad-height="90"></ins>
+      <script type="text/javascript" src="//t1.kakaocdn.net/kas/static/ba.min.js" async></script>
+    </div>
   </div>
 </div>
 
@@ -3617,11 +3839,15 @@ function showNotif(msg, type='') {
 }
 
 function enableButtons() {
-  ['btn-generate','btn-autofill','btn-replace-color','btn-clear-progress','btn-save','btn-export'].forEach(id => {
+  ['btn-generate','btn-autofill','btn-replace-color','btn-clear-progress','btn-save','btn-export','btn-download-pattern'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = false;
   });
 }
+
+document.getElementById('btn-download-pattern').addEventListener('click', () => {
+  document.getElementById('btn-export').click();
+});
 
 // ─── 언어 선택 ───
 document.getElementById('lang-select').addEventListener('change', e => {
