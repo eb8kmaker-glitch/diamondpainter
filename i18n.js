@@ -3,8 +3,12 @@
 
   var T = {
     ko: {
-      nav_guide: '가이드', nav_faq: 'FAQ', nav_about: '소개', nav_contact: '문의', nav_try_free: '무료 시작 →',
+      nav_guide: '가이드', nav_gallery: '갤러리', nav_faq: 'FAQ', nav_about: '소개', nav_contact: '문의', nav_try_free: '무료 시작 →',
       bc_home: '홈', bc_guide: '가이드', bc_faq: 'FAQ', bc_about: '소개', bc_contact: '문의', bc_privacy: '개인정보처리방침',
+      gallery_hero_title: '보석십자수 도안 갤러리', gallery_hero_desc: '다양한 도안 예시를 구경해보세요 — 반려동물, 인물, 풍경 등.',
+      gallery_cat_all: '전체', gallery_cat_pets: '반려동물', gallery_cat_portraits: '인물', gallery_cat_landscapes: '풍경', gallery_cat_anime: '애니/일러스트', gallery_cat_other: '기타',
+      gallery_cta_title: '내 도안 직접 만들기', gallery_cta_desc: '사진을 업로드하면 DMC 코드가 포함된 보석십자수 도안이 즉시 생성됩니다 — 완전 무료.',
+      gallery_cta_btn: '◆ 도안 만들기 →', gallery_lb_cta: '이런 도안 만들기 →',
       footer_tagline: '사진을 아름다운 다이아몬드 페인팅 패턴으로 — 무료, 브라우저에서, 가입 불필요.',
       footer_tool: '도구', footer_guides: '가이드', footer_info: '정보',
       footer_create_pattern: '패턴 만들기', footer_beginner_guide: '초보자 가이드', footer_custom_tutorial: '커스텀 튜토리얼',
@@ -189,8 +193,12 @@
       faq_gifts_q5: '사진으로 의미있는 선물을 만들 수 있나요?', faq_gifts_a5: '네. 반려동물 사진, 가족 사진, 연인 사진 등 어떤 사진이든 보석십자수 도안으로 변환할 수 있습니다. 직접 만든 보석십자수는 세상에 하나뿐인 수공예 선물로, 생일·기념일·결혼·추모 등 모든 특별한 날에 어울립니다.',
     },
     en: {
-      nav_guide: 'Guide', nav_faq: 'FAQ', nav_about: 'About', nav_contact: 'Contact', nav_try_free: 'Try Free →',
+      nav_guide: 'Guide', nav_gallery: 'Gallery', nav_faq: 'FAQ', nav_about: 'About', nav_contact: 'Contact', nav_try_free: 'Try Free →',
       bc_home: 'Home', bc_guide: 'Guide', bc_faq: 'FAQ', bc_about: 'About', bc_contact: 'Contact', bc_privacy: 'Privacy Policy',
+      gallery_hero_title: 'Diamond Painting Pattern Gallery', gallery_hero_desc: 'Browse example patterns created with Diamond Painter — pets, portraits, landscapes, and more.',
+      gallery_cat_all: 'All', gallery_cat_pets: 'Pets', gallery_cat_portraits: 'Portraits', gallery_cat_landscapes: 'Landscapes', gallery_cat_anime: 'Anime / Illustration', gallery_cat_other: 'Other',
+      gallery_cta_title: 'Create Your Own Pattern', gallery_cta_desc: 'Upload any photo and get a full DMC color-coded diamond painting pattern in seconds — completely free.',
+      gallery_cta_btn: '◆ Start Creating →', gallery_lb_cta: 'Create a Pattern Like This →',
       footer_tagline: 'Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.',
       footer_tool: 'Tool', footer_guides: 'Guides', footer_info: 'Info',
       footer_create_pattern: 'Create Pattern', footer_beginner_guide: 'Beginner Guide', footer_custom_tutorial: 'Custom Tutorial',
@@ -375,7 +383,7 @@
       faq_gifts_q5: '사진으로 의미있는 선물을 만들 수 있나요?', faq_gifts_a5: '네. 반려동물 사진, 가족 사진, 연인 사진 등 어떤 사진이든 보석십자수 도안으로 변환할 수 있습니다. 직접 만든 보석십자수는 세상에 하나뿐인 수공예 선물로, 생일·기념일·결혼·추모 등 모든 특별한 날에 어울립니다.',
     },
     ja: {
-      nav_guide: 'ガイド', nav_faq: 'よくある質問', nav_about: 'について', nav_contact: 'お問い合わせ', nav_try_free: '無料で試す →',
+      nav_guide: 'ガイド', nav_gallery: 'ギャラリー', nav_faq: 'よくある質問', nav_about: 'について', nav_contact: 'お問い合わせ', nav_try_free: '無料で試す →',
       bc_home: 'ホーム', bc_guide: 'ガイド', bc_faq: 'よくある質問', bc_about: 'について', bc_contact: 'お問い合わせ', bc_privacy: 'プライバシーポリシー',
       footer_tagline: 'どんな写真もダイヤモンドペインティングパターンに — 無料、ブラウザで、登録不要。',
       footer_tool: 'ツール', footer_guides: 'ガイド', footer_info: '情報',
@@ -536,7 +544,7 @@
       about_qf_title: 'クイックファクト', about_qf_cost_label: '費用', about_qf_cost_val: '無料', about_qf_account_label: 'アカウント必要', about_qf_account_val: '不要', about_qf_photo_label: '写真アップロード', about_qf_photo_val: 'なし', about_qf_dmc_label: 'DMCカラー', about_qf_langs_label: '言語', about_qf_watermark_label: 'ウォーターマーク', about_qf_watermark_val: 'なし',
     },
     zh: {
-      nav_guide: '指南', nav_faq: '常见问题', nav_about: '关于', nav_contact: '联系我们', nav_try_free: '免费试用 →',
+      nav_guide: '指南', nav_gallery: '作品集', nav_faq: '常见问题', nav_about: '关于', nav_contact: '联系我们', nav_try_free: '免费试用 →',
       bc_home: '主页', bc_guide: '指南', bc_faq: '常见问题', bc_about: '关于', bc_contact: '联系我们', bc_privacy: '隐私政策',
       footer_tagline: '将任何照片转换为精美的钻石画图案 — 免费、在浏览器中、无需注册。',
       footer_tool: '工具', footer_guides: '指南', footer_info: '信息',

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8254204287118850" crossorigin="anonymous"></script>
+  <title>Diamond Painting Pattern Gallery | Diamond Painter</title>
+  <meta name="description" content="Browse diamond painting pattern examples made with Diamond Painter. See what's possible with custom photo-to-pattern conversion — pets, portraits, landscapes, and more.">
+  <link rel="canonical" href="https://diamondpainter.app/gallery">
+  <meta property="og:title" content="Diamond Painting Pattern Gallery | Diamond Painter">
+  <meta property="og:description" content="Browse example diamond painting patterns — pets, portraits, landscapes, and more. Create your own for free.">
+  <meta property="og:url" content="https://diamondpainter.app/gallery">
+  <meta property="og:image" content="https://diamondpainter.app/og-image.svg">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* ── Hero ─────────────────────────────────────────── */
+    .gallery-hero {
+      padding: 56px 0 52px;
+    }
+    .gallery-hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .gallery-hero p {
+      font-size: 17px;
+      line-height: 1.7;
+      max-width: 560px;
+      opacity: 0.7;
+    }
+
+    /* ── Filter bar ───────────────────────────────────── */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .filter-btn {
+      padding: 7px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text2);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* ── Gallery grid ─────────────────────────────────── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .gallery-card {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      background: #fff;
+      cursor: pointer;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .gallery-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(8,14,34,0.10);
+    }
+    .gallery-card-thumb {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      background: var(--bg-alt);
+    }
+    .gallery-card-body {
+      padding: 14px 16px 16px;
+    }
+    .gallery-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .category-badge {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+    .cat-pets      { background: #fff3e0; color: #e07b00; }
+    .cat-portraits { background: #f3e8ff; color: #7c3aed; }
+    .cat-landscapes{ background: #e8f5e9; color: #2e7d32; }
+    .cat-anime     { background: #fce4ec; color: #c2185b; }
+    .cat-other     { background: #e8eaf6; color: #3949ab; }
+    .gallery-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text1);
+      margin-bottom: 4px;
+    }
+    .gallery-card-info {
+      font-size: 12px;
+      color: var(--text3);
+    }
+
+    /* ── Empty state ──────────────────────────────────── */
+    .gallery-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 24px;
+    }
+    .gallery-empty-icon {
+      font-size: 56px;
+      margin-bottom: 20px;
+      opacity: 0.25;
+    }
+    .gallery-empty h3 {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 10px;
+    }
+    .gallery-empty p {
+      font-size: 15px;
+      color: var(--text3);
+      max-width: 360px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+
+    /* ── Lightbox ─────────────────────────────────────── */
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8,14,34,0.88);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .lightbox-overlay.open {
+      display: flex;
+    }
+    .lightbox-box {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      max-width: 780px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      max-height: 90vh;
+      position: relative;
+    }
+    .lightbox-img-wrap {
+      background: var(--bg-alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .lightbox-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      max-height: 90vh;
+      display: block;
+    }
+    .lightbox-info {
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+    }
+    .lightbox-info .category-badge {
+      align-self: flex-start;
+    }
+    .lightbox-info h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--text1);
+    }
+    .lightbox-stat-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .lightbox-stat {
+      font-size: 13px;
+      color: var(--text2);
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .lightbox-stat span:first-child { color: var(--text3); }
+    .lightbox-stat span:last-child  { font-weight: 500; }
+    .lightbox-actions {
+      margin-top: auto;
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(8,14,34,0.6);
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: background 0.15s;
+    }
+    .lightbox-close:hover { background: rgba(8,14,34,0.9); }
+    @media (max-width: 680px) {
+      .lightbox-box {
+        grid-template-columns: 1fr;
+      }
+      .lightbox-img-wrap {
+        max-height: 50vw;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon" aria-hidden="true">◆</div>
+      Diamond Painter
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="guide/index.html" data-i18n="nav_guide">Guide</a></li>
+      <li><a href="gallery.html" class="active" data-i18n="nav_gallery">Gallery</a></li>
+      <li><a href="faq.html" data-i18n="nav_faq">FAQ</a></li>
+      <li><a href="about.html" data-i18n="nav_about">About</a></li>
+      <li><a href="contact.html" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <div class="nav-spacer"></div>
+    <select class="dp-lang-select" aria-label="Language">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+      <option value="zh">中文</option>
+    </select>
+    <a href="create.html" class="nav-cta" data-i18n="nav_try_free">Try Free →</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<section class="gallery-hero hero-dark" aria-labelledby="gallery-heading">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html" data-i18n="bc_home">Home</a>
+      <span class="breadcrumb-sep" aria-hidden="true">›</span>
+      <span aria-current="page" data-i18n="nav_gallery">Gallery</span>
+    </nav>
+    <h1 id="gallery-heading" data-i18n="gallery_hero_title">Diamond Painting Pattern Gallery</h1>
+    <p data-i18n="gallery_hero_desc">Browse example patterns created with Diamond Painter. See what's possible — from pet portraits to landscapes.</p>
+  </div>
+</section>
+
+<section class="section-sm" aria-label="Gallery">
+  <div class="container">
+
+    <div class="filter-bar" role="group" aria-label="Filter by category">
+      <button class="filter-btn active" data-cat="all" data-i18n="gallery_cat_all">All</button>
+      <button class="filter-btn" data-cat="pets" data-i18n="gallery_cat_pets">Pets</button>
+      <button class="filter-btn" data-cat="portraits" data-i18n="gallery_cat_portraits">Portraits</button>
+      <button class="filter-btn" data-cat="landscapes" data-i18n="gallery_cat_landscapes">Landscapes</button>
+      <button class="filter-btn" data-cat="anime" data-i18n="gallery_cat_anime">Anime / Illustration</button>
+      <button class="filter-btn" data-cat="other" data-i18n="gallery_cat_other">Other</button>
+    </div>
+
+    <div class="gallery-grid" id="gallery-grid" aria-live="polite"></div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-sm" style="background:var(--bg-alt);padding-top:56px;padding-bottom:56px;" aria-labelledby="gallery-cta-heading">
+  <div class="container text-center">
+    <h2 class="section-title" id="gallery-cta-heading" style="font-size:26px;" data-i18n="gallery_cta_title">Create Your Own Pattern</h2>
+    <p class="section-subtitle" style="margin:12px auto 24px;" data-i18n="gallery_cta_desc">Upload any photo and generate a full DMC color-coded diamond painting pattern in seconds — completely free.</p>
+    <a href="create.html" class="btn-primary" data-i18n="gallery_cta_btn">◆ Start Creating →</a>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox-overlay" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+  <div class="lightbox-box">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close">✕</button>
+    <div class="lightbox-img-wrap">
+      <img id="lightbox-img" src="" alt="">
+    </div>
+    <div class="lightbox-info">
+      <span class="category-badge" id="lightbox-cat"></span>
+      <h2 id="lightbox-title"></h2>
+      <div class="lightbox-stat-row" id="lightbox-stats"></div>
+      <div class="lightbox-actions">
+        <a href="create.html" class="btn-primary" style="text-align:center;" data-i18n="gallery_lb_cta">Create a Pattern Like This →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AdSense footer -->
+<div class="container">
+  <div style="text-align:center;margin:24px 0;">
+    <ins class="kakao_ad_area" style="display:none;"
+      data-ad-unit="DAN-IhSMDRvA0QRGGtj5"
+      data-ad-width="728"
+      data-ad-height="90"></ins>
+    <script type="text/javascript" src="//t1.kakaocdn.net/kas/static/ba.min.js" async></script>
+  </div>
+</div>
+
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:14px;display:inline-flex;">
+          <div class="nav-logo-icon" aria-hidden="true">◆</div>
+          Diamond Painter
+        </a>
+        <p class="footer-tagline" data-i18n="footer_tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_tool">Tool</h4>
+        <a href="create.html" data-i18n="footer_create_pattern">Create Pattern</a>
+        <a href="guide/diamond-painting-beginner-guide.html" data-i18n="footer_beginner_guide">Beginner Guide</a>
+        <a href="guide/custom-diamond-painting-tutorial.html" data-i18n="footer_custom_tutorial">Custom Tutorial</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_guides">Guides</h4>
+        <a href="guide/index.html" data-i18n="footer_all_guides">All Guides</a>
+        <a href="guide/diamond-painting-tips.html" data-i18n="footer_tips">Tips &amp; Tricks</a>
+        <a href="guide/best-diamond-painting-accessories.html" data-i18n="footer_accessories">Accessories</a>
+        <a href="guide/dmc-color-guide.html" data-i18n="footer_dmc_guide">DMC Color Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_info">Info</h4>
+        <a href="gallery.html" data-i18n="nav_gallery">Gallery</a>
+        <a href="faq.html" data-i18n="footer_faq">FAQ</a>
+        <a href="about.html" data-i18n="footer_about">About</a>
+        <a href="contact.html" data-i18n="footer_contact">Contact</a>
+        <a href="privacy-policy.html" data-i18n="footer_privacy">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer_copyright">© 2025 Diamond Painter. All rights reserved.</p>
+      <p data-i18n="footer_made_for">Made for diamond painting enthusiasts everywhere.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── Nav toggle ───────────────────────────────────── */
+  const toggle = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+  toggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+  });
+
+  /* ── Category labels ──────────────────────────────── */
+  const CAT_LABELS = {
+    en: { pets: 'Pets', portraits: 'Portraits', landscapes: 'Landscapes', anime: 'Anime', other: 'Other' },
+    ko: { pets: '반려동물', portraits: '인물', landscapes: '풍경', anime: '애니/일러스트', other: '기타' },
+    ja: { pets: 'ペット', portraits: 'ポートレート', landscapes: '風景', anime: 'アニメ', other: 'その他' },
+    zh: { pets: '宠物', portraits: '人像', landscapes: '风景', anime: '动漫', other: '其他' },
+  };
+  const CAT_CLASS = { pets: 'cat-pets', portraits: 'cat-portraits', landscapes: 'cat-landscapes', anime: 'cat-anime', other: 'cat-other' };
+
+  /* ── Gallery render ───────────────────────────────── */
+  let currentCat = 'all';
+  let currentLang = (localStorage.getItem('dp_lang') || navigator.language.split('-')[0] || 'en');
+  if (!['ko','en','ja','zh'].includes(currentLang)) currentLang = 'en';
+
+  function getLang() {
+    return (localStorage.getItem('dp_lang') || 'en');
+  }
+
+  function catLabel(cat) {
+    const lang = getLang();
+    return (CAT_LABELS[lang] || CAT_LABELS.en)[cat] || cat;
+  }
+
+  function formatMeta(item) {
+    const parts = [];
+    if (item.colors) parts.push(item.colors + ' DMC colors');
+    if (item.size)   parts.push(item.size);
+    return parts.join(' · ');
+  }
+
+  function renderGallery() {
+    const grid = document.getElementById('gallery-grid');
+    const lang = getLang();
+    const data = typeof GALLERY_DATA !== 'undefined' ? GALLERY_DATA : [];
+
+    // Sort: featured first
+    const sorted = [...data].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+
+    const filtered = currentCat === 'all' ? sorted : sorted.filter(p => p.category === currentCat);
+
+    if (filtered.length === 0) {
+      const emptyTitle   = { en: 'No patterns yet', ko: '아직 도안이 없습니다', ja: 'パターンはまだありません', zh: '暂无作品' }[lang] || 'No patterns yet';
+      const emptySubtitle = { en: 'Check back soon — example patterns are on the way.', ko: '곧 업데이트 됩니다.', ja: 'もうしばらくお待ちください。', zh: '敬请期待。' }[lang] || 'Check back soon.';
+      const createLabel  = { en: 'Create Your Own →', ko: '내 도안 만들기 →', ja: '自分で作る →', zh: '立即创建 →' }[lang] || 'Create Your Own →';
+      grid.innerHTML = `
+        <div class="gallery-empty">
+          <div class="gallery-empty-icon">◆</div>
+          <h3>${emptyTitle}</h3>
+          <p>${emptySubtitle}</p>
+          <a href="create.html" class="btn-primary">${createLabel}</a>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(item => {
+      const title = (lang === 'ko' && item.title_ko) ? item.title_ko : item.title;
+      const meta  = formatMeta(item);
+      return `
+        <article class="gallery-card" role="button" tabindex="0" aria-label="${title}"
+          data-id="${item.id}" onclick="openLightbox(${item.id})"
+          onkeydown="if(event.key==='Enter')openLightbox(${item.id})">
+          <img class="gallery-card-thumb" src="${item.image}" alt="${title}" loading="lazy">
+          <div class="gallery-card-body">
+            <div class="gallery-card-meta">
+              <span class="category-badge ${CAT_CLASS[item.category] || 'cat-other'}">${catLabel(item.category)}</span>
+            </div>
+            <div class="gallery-card-title">${title}</div>
+            ${meta ? `<div class="gallery-card-info">${meta}</div>` : ''}
+          </div>
+        </article>`;
+    }).join('');
+  }
+
+  /* ── Filter buttons ───────────────────────────────── */
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCat = btn.dataset.cat;
+      renderGallery();
+    });
+  });
+
+  /* ── Lightbox ─────────────────────────────────────── */
+  function openLightbox(id) {
+    const data = typeof GALLERY_DATA !== 'undefined' ? GALLERY_DATA : [];
+    const item = data.find(p => p.id === id);
+    if (!item) return;
+    const lang  = getLang();
+    const title = (lang === 'ko' && item.title_ko) ? item.title_ko : item.title;
+    const colorLabel = { en: 'DMC Colors', ko: 'DMC 색상', ja: 'DMC カラー', zh: 'DMC 颜色' }[lang] || 'DMC Colors';
+    const sizeLabel  = { en: 'Canvas Size', ko: '캔버스 크기', ja: 'キャンバスサイズ', zh: '画布尺寸' }[lang] || 'Canvas Size';
+
+    document.getElementById('lightbox-img').src = item.image;
+    document.getElementById('lightbox-img').alt = title;
+    document.getElementById('lightbox-title').textContent = title;
+    const catEl = document.getElementById('lightbox-cat');
+    catEl.textContent = catLabel(item.category);
+    catEl.className = 'category-badge ' + (CAT_CLASS[item.category] || 'cat-other');
+
+    const statsEl = document.getElementById('lightbox-stats');
+    let statsHtml = '';
+    if (item.colors) statsHtml += `<div class="lightbox-stat"><span>${colorLabel}</span><span>${item.colors}</span></div>`;
+    if (item.size)   statsHtml += `<div class="lightbox-stat"><span>${sizeLabel}</span><span>${item.size}</span></div>`;
+    statsEl.innerHTML = statsHtml;
+
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  document.getElementById('lightbox').addEventListener('click', e => {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  /* ── Init ─────────────────────────────────────────── */
+  renderGallery();
+
+  // Re-render when i18n changes language
+  document.addEventListener('dp-lang-changed', renderGallery);
+</script>
+<script src="gallery-data.js"></script>
+<script src="i18n.js"></script>
+<script src="ads.js" defer></script>
+<script type="module" src="/analytics.js"></script>
+</body>
+</html>
