@@ -2,85 +2,78 @@
  * renderFinishedPreview.js
  *
  * Renders a realistic finished diamond painting preview from pattern JSON data.
- * Simulates the visual appearance of completed square resin drills on canvas:
- *   - Square drill geometry with 1px canvas gap
- *   - Bevel highlight / shadow (light from top-left ~11 o'clock)
- *   - Adaptive specular highlight (brighter on dark drills, subtle on light ones)
- *   - Resin saturation boost
- *   - Warm linen canvas backing visible through gaps
+ * Goal: looks like a real photo of completed square resin drills — not a filtered image.
  *
- * Style goal: elegant and realistic — not glittery or over-processed.
+ * Pipeline per drill:
+ *   1. Color enhancement (vibrance → saturation → brightness → S-curve → black-point gamma)
+ *   2. 4×4 bevel (white/black blend per pixel, light source top-left ~35°)
+ *   3. Selective sparkle (~5.5% of drills get a strong specular point at (1,1))
  *
- * Reusable: include on any page as a plain <script> tag.
+ * No gap between drills — drill separation is achieved by bevel contrast alone.
+ * No blur, no global overlay, no gray haze.
  *
  * API:
  *   renderFinishedPreview(source: string | Object) → Promise<string>
- *     source  — URL string pointing to a pattern .json file, OR a pre-parsed data object
- *     returns — JPEG data URL of the rendered preview image
+ *     source  — URL to a pattern .json file, or a pre-parsed data object
+ *     returns — JPEG data URL (cached by URL for instant repeat calls)
  *
- * The result is automatically cached by URL so repeated calls are instant.
- *
- * Compatible with create.html pattern format:
+ * Pattern format (create.html):
  *   { version, pattern: { width, height, grid: [{palIdx}] }, palette: [{color:[r,g,b]}] }
  */
 (function (global) {
   'use strict';
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // Configuration
-  // ─────────────────────────────────────────────────────────────────────────
+  // ── Configuration ──────────────────────────────────────────────────────────
 
-  /** Total cell size in output pixels (drill + gap). */
-  const CELL  = 4;
-
-  /** Drill area within each cell (top-left DRILL×DRILL pixels). */
-  const DRILL = 3;
-
-  /** Canvas backing colour — warm linen tone visible in the 1px gaps. */
-  const GAP_R = 154, GAP_G = 146, GAP_B = 136;
+  /** Pixels per drill (no gap — entire cell is drill face). */
+  const CELL = 4;
 
   /**
-   * Bevel parameters.
-   * Light source: top-left (~11 o'clock), single directional.
-   * Values are additive RGB offsets applied to the resin-adjusted base colour.
+   * 4×4 bevel weight table.
+   * Positive → blend toward white (highlight).
+   * Negative → blend toward black (shadow).
+   * Light source: top-left, ~35°.
+   *
+   *  (0,0)TL  (1,0)T   (2,0)T   (3,0)TR
+   *  (0,1)L   (1,1)C   (2,1)C   (3,1)R
+   *  (0,2)L   (1,2)C   (2,2)C   (3,2)R
+   *  (0,3)BL  (1,3)B   (2,3)B   (3,3)BR
    */
-  const B_TL     =  88;   // top-left corner   (top + left bevels combined)
-  const B_TOP    =  68;   // top edge
-  const B_TR     =  22;   // top-right corner  (top only, partially blocked)
-  const B_LEFT   =  40;   // left edge
-  const S_RIGHT  = -44;   // right edge shadow (mild — partially lit by ambient)
-  const S_BL     =   8;   // bottom-left corner (slight residual left-bevel)
-  const S_BOTTOM = -28;   // bottom center shadow
-  const S_BR     = -78;   // bottom-right corner (deepest shadow)
+  const BEVEL = [
+  //   col0    col1    col2    col3
+    [  0.26,   0.20,   0.18,   0.08 ],  // row 0 — top face
+    [  0.20,   0.00,   0.00,  -0.12 ],  // row 1
+    [  0.18,   0.00,   0.00,  -0.14 ],  // row 2
+    [  0.04,  -0.18,  -0.20,  -0.24 ],  // row 3 — bottom face
+  ];
 
-  /**
-   * Specular highlight blended into pixel (1,1) — the inner top-left face.
-   * Uses a slightly cool white (255,255,255) → (248,251,255) to mimic neutral light.
-   * Blend factor is adaptive: dark drills get a stronger visible sparkle.
-   */
-  const SPEC_BASE  = 0.38;  // base blend toward white
-  const SPEC_BOOST = 0.18;  // extra boost for dark drills (lum < 85)
-  const SPEC_R = 248, SPEC_G = 251, SPEC_B = 255;  // slightly cool specular white
+  /** Fraction of drills that receive a sparkle highlight (~5.5%). */
+  const SPARKLE_RATE       = 0.055;
+  /** Base white-blend for the sparkle pixel (1,1). */
+  const SPARKLE_WHITE      = 0.80;
+  /** Extra boost for dark drills (lum < 80) — they need more sparkle to read. */
+  const SPARKLE_DARK_BOOST = 0.12;
+  /** Reduced sparkle for very bright drills (lum > 210) — already near-white. */
+  const SPARKLE_BRIGHT_MUL = 0.60;
 
-  /**
-   * Resin colour adjustment.
-   * Real resin drills appear slightly more saturated than the source colour.
-   * Factor > 1 pushes channels away from grey (boosts saturation).
-   */
-  const RESIN_SAT = 1.08;
+  // Color enhancement pipeline
+  const VIBRANCE   = 0.18;  // vibrance boost (targets less-saturated channels)
+  const SAT_FACTOR = 1.08;  // flat saturation multiplier
+  const BRIGHTNESS = 1.12;  // brightness multiplier
+  const CONTRAST   = 0.15;  // S-curve contrast strength (0 = off, 0.5 = strong)
+  const BP_GAMMA   = 1.06;  // black-point gamma (slightly lifts shadows)
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // Internal helpers
-  // ─────────────────────────────────────────────────────────────────────────
+  // JPEG output quality — higher preserves fine bevel edges.
+  const JPEG_QUALITY = 0.94;
+
+  // ── Internal state ─────────────────────────────────────────────────────────
 
   const _cache = {};
 
-  /** Clamp a value to [0, 255]. */
-  function clamp(v) {
-    return v < 0 ? 0 : v > 255 ? 255 : v | 0;
-  }
+  // ── Helpers ────────────────────────────────────────────────────────────────
 
-  /** Write one pixel into an ImageData buffer. */
+  function clamp(v) { return v < 0 ? 0 : v > 255 ? 255 : v | 0; }
+
   function setpx(data, stride, x, y, r, g, b) {
     const i = (y * stride + x) << 2;
     data[i    ] = clamp(r);
@@ -90,28 +83,76 @@
   }
 
   /**
-   * Apply resin saturation boost.
-   * Nudges the colour away from its perceptual grey midpoint,
-   * making it appear richer and slightly more luminous — as resin does.
+   * Blend a channel value toward white (w > 0) or black (w < 0).
+   *   w = +1.0 → 255 (pure white)
+   *   w = -1.0 → 0   (pure black)
    */
-  function resinAdjust(r, g, b) {
-    const avg = (r + g + b) / 3;
-    return [
-      clamp(avg + (r - avg) * RESIN_SAT),
-      clamp(avg + (g - avg) * RESIN_SAT),
-      clamp(avg + (b - avg) * RESIN_SAT),
-    ];
+  function blend(c, w) {
+    return w >= 0 ? c + (255 - c) * w : c + c * w;
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // Core rendering
-  // ─────────────────────────────────────────────────────────────────────────
+  /**
+   * Deterministic per-drill hash [0, 1).
+   * Same drill index always produces the same value — sparkle placement is stable.
+   */
+  function hashDrill(i) {
+    let h = Math.imul(i ^ 0xdeadbeef, 0x9e3779b9);
+    h = Math.imul(h ^ (h >>> 16), 0x85ebca6b);
+    h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
+    return ((h ^ (h >>> 16)) >>> 0) / 0xffffffff;
+  }
+
+  // ── Color Enhancement Pipeline ─────────────────────────────────────────────
 
   /**
-   * Pure synchronous render — CPU-bound Canvas / ImageData work.
-   * Accepts a pre-parsed pattern data object.
-   * Returns a JPEG data URL string.
+   * Apply full resin color enhancement to one RGB triplet.
+   * Operates in [0, 1] float space, returns rounded [0, 255] integers.
    */
+  function enhanceColor(r, g, b) {
+    let fr = r / 255, fg = g / 255, fb = b / 255;
+
+    // 1. Vibrance — boost the least-saturated channel more.
+    //    Prevents already-vivid colours from over-saturating while lifting dull ones.
+    const mx = Math.max(fr, fg, fb);
+    const mn = Math.min(fr, fg, fb);
+    const sat = mx === 0 ? 0 : (mx - mn) / mx;
+    const vf  = (1 - sat) * VIBRANCE;
+    const avg = (fr + fg + fb) / 3;
+    fr = fr + (fr - avg) * vf;
+    fg = fg + (fg - avg) * vf;
+    fb = fb + (fb - avg) * vf;
+
+    // 2. Saturation — flat boost (simulates resin's saturating effect).
+    const avg2 = (fr + fg + fb) / 3;
+    fr = avg2 + (fr - avg2) * SAT_FACTOR;
+    fg = avg2 + (fg - avg2) * SAT_FACTOR;
+    fb = avg2 + (fb - avg2) * SAT_FACTOR;
+
+    // 3. Brightness
+    fr = Math.min(fr * BRIGHTNESS, 1);
+    fg = Math.min(fg * BRIGHTNESS, 1);
+    fb = Math.min(fb * BRIGHTNESS, 1);
+
+    // 4. S-curve contrast — pulls midtones apart for depth.
+    function sCurve(v) {
+      const t = (v - 0.5) * (1 + CONTRAST * 2);
+      return t < -0.5 ? 0 : t > 0.5 ? 1 : t + 0.5;
+    }
+    fr = sCurve(fr);
+    fg = sCurve(fg);
+    fb = sCurve(fb);
+
+    // 5. Black-point gamma — gently lifts near-black values so dark drills
+    //    read as dark-but-rich rather than flat black.
+    fr = Math.pow(Math.max(fr, 0), 1 / BP_GAMMA);
+    fg = Math.pow(Math.max(fg, 0), 1 / BP_GAMMA);
+    fb = Math.pow(Math.max(fb, 0), 1 / BP_GAMMA);
+
+    return [Math.round(fr * 255), Math.round(fg * 255), Math.round(fb * 255)];
+  }
+
+  // ── Core Rendering ─────────────────────────────────────────────────────────
+
   function _render(patternData) {
     const { pattern, palette } = patternData;
     const { width, height, grid } = pattern;
@@ -126,76 +167,41 @@
     const img = ctx.createImageData(cw, ch);
     const px  = img.data;
 
-    // ── 1. Fill entire buffer with canvas backing colour ──────────────────
-    for (let i = 0, n = px.length; i < n; i += 4) {
-      px[i    ] = GAP_R;
-      px[i + 1] = GAP_G;
-      px[i + 2] = GAP_B;
-      px[i + 3] = 255;
-    }
+    // Pre-enhance all palette entries once (avoids redundant work per drill).
+    const enhanced = palette.map(entry => enhanceColor(entry.color[0], entry.color[1], entry.color[2]));
 
-    // ── 2. Draw each drill ────────────────────────────────────────────────
     for (let ci = 0, n = grid.length; ci < n; ci++) {
       const palIdx = grid[ci].palIdx;
       if (palIdx < 0 || palIdx >= palette.length) continue;
 
-      const [br, bg, bb] = palette[palIdx].color;
-      const [r,  g,  b ] = resinAdjust(br, bg, bb);
+      const [r, g, b] = enhanced[palIdx];
+      const ox = (ci % width)            * CELL;
+      const oy = Math.floor(ci / width)  * CELL;
 
-      const ox = (ci % width)           * CELL;
-      const oy = Math.floor(ci / width) * CELL;
+      // Luminance for sparkle adaptation.
+      const lum = 0.299 * r + 0.587 * g + 0.114 * b;
 
-      // Adaptive specular strength based on drill luminance:
-      //   Dark drills (low lum) need a stronger highlight to appear "sparkly".
-      //   Light drills are already bright — keep the spec subtle.
-      const lum    = 0.299 * r + 0.587 * g + 0.114 * b;
-      const sAlpha = lum < 85  ? SPEC_BASE + SPEC_BOOST :
-                     lum > 205 ? SPEC_BASE * 0.38        : SPEC_BASE;
+      // Sparkle: deterministic per-drill hash decides if this drill sparkles.
+      const spark  = hashDrill(ci) < SPARKLE_RATE;
+      const sWhite = lum < 80  ? SPARKLE_WHITE + SPARKLE_DARK_BOOST :
+                     lum > 210 ? SPARKLE_WHITE * SPARKLE_BRIGHT_MUL : SPARKLE_WHITE;
 
-      // Specular pixel colour: blend base colour toward cool white.
-      const sr = Math.round(r + (SPEC_R - r) * sAlpha);
-      const sg = Math.round(g + (SPEC_G - g) * sAlpha);
-      const sb = Math.round(b + (SPEC_B - b) * sAlpha);
+      for (let dy = 0; dy < CELL; dy++) {
+        const bRow = BEVEL[dy];
+        for (let dx = 0; dx < CELL; dx++) {
+          // Sparkle overrides pixel (1,1) on selected drills.
+          const w = (spark && dx === 1 && dy === 1) ? sWhite : bRow[dx];
 
-      // ── 3×3 drill pixel layout (relative to ox, oy) ───────────────────
-      //
-      //   (0,0)TL  (1,0)T   (2,0)TR
-      //   (0,1)L   (1,1)SP  (2,1)R
-      //   (0,2)BL  (1,2)B   (2,2)BR
-      //
-      // TL = top-left corner   (brightest — both bevels)
-      // T  = top edge          (bright)
-      // TR = top-right corner  (slight top bevel, beginning of right shadow)
-      // L  = left edge         (bright)
-      // SP = specular point    (near-white highlight — the "sparkle")
-      // R  = right face        (mild shadow)
-      // BL = bottom-left       (very slight residual left-bevel)
-      // B  = bottom center     (mild shadow)
-      // BR = bottom-right      (deepest shadow — corner most in shade)
-
-      setpx(px, cw, ox,     oy,     r + B_TL,        g + B_TL,        b + B_TL);
-      setpx(px, cw, ox + 1, oy,     r + B_TOP,       g + B_TOP,       b + B_TOP);
-      setpx(px, cw, ox + 2, oy,     r + B_TR,        g + B_TR,        b + B_TR);
-
-      setpx(px, cw, ox,     oy + 1, r + B_LEFT,      g + B_LEFT,      b + B_LEFT);
-      setpx(px, cw, ox + 1, oy + 1, sr,              sg,              sb);
-      setpx(px, cw, ox + 2, oy + 1, r + S_RIGHT,     g + S_RIGHT,     b + S_RIGHT);
-
-      setpx(px, cw, ox,     oy + 2, r + S_BL,        g + S_BL,        b + S_BL);
-      setpx(px, cw, ox + 1, oy + 2, r + S_BOTTOM,    g + S_BOTTOM,    b + S_BOTTOM);
-      setpx(px, cw, ox + 2, oy + 2, r + S_BR,        g + S_BR,        b + S_BR);
+          setpx(px, cw, ox + dx, oy + dy, blend(r, w), blend(g, w), blend(b, w));
+        }
+      }
     }
 
     ctx.putImageData(img, 0, 0);
-
-    // JPEG at 0.90 quality: good balance between sharpness and file size.
-    // Higher quality preserves the fine bevel detail better than lower settings.
-    return canvas.toDataURL('image/jpeg', 0.90);
+    return canvas.toDataURL('image/jpeg', JPEG_QUALITY);
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // Public API
-  // ─────────────────────────────────────────────────────────────────────────
+  // ── Public API ─────────────────────────────────────────────────────────────
 
   /**
    * Render a finished diamond painting preview.
@@ -203,7 +209,7 @@
    * @param   {string|Object} source  URL to pattern JSON, or a pre-parsed data object.
    * @returns {Promise<string>}       Resolves to a JPEG data URL.
    *
-   * Results are cached by URL (subsequent calls for the same URL return immediately).
+   * Results are cached by URL — repeated calls for the same URL are instant.
    */
   async function renderFinishedPreview(source) {
     const key = typeof source === 'string' ? source : null;
