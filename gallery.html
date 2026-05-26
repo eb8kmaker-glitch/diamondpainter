@@ -531,13 +531,11 @@
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-  /* ── Init ─────────────────────────────────────────── */
-  renderGallery();
-
   // Re-render when i18n changes language
   document.addEventListener('dp-lang-changed', renderGallery);
 </script>
 <script src="gallery-data.js"></script>
+<script>renderGallery();</script>
 <script src="i18n.js"></script>
 <script src="ads.js" defer></script>
 <script type="module" src="/analytics.js"></script>
