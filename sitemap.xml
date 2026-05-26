@@ -43,6 +43,49 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Gift & Use Case Landing Pages -->
+  <url>
+    <loc>https://diamondpainter.app/anniversary-diamond-painting</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://diamondpainter.app/anniversary-diamond-painting"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://diamondpainter.app/ko/기념일-보석십자수"/>
+  </url>
+
+  <url>
+    <loc>https://diamondpainter.app/meaningful-photo-gifts</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://diamondpainter.app/custom-diamond-art</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Korean Landing Pages -->
+  <url>
+    <loc>https://diamondpainter.app/ko/기념일-보석십자수</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://diamondpainter.app/ko/기념일-보석십자수"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://diamondpainter.app/anniversary-diamond-painting"/>
+  </url>
+
+  <url>
+    <loc>https://diamondpainter.app/ko/사진-보석십자수-도안</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://diamondpainter.app/ko/사진-보석십자수-도안"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://diamondpainter.app/custom-diamond-art"/>
+  </url>
+
   <!-- Guides Hub -->
   <url>
     <loc>https://diamondpainter.app/guide/</loc>
