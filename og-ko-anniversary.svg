@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#080e22"/>
+      <stop offset="55%" style="stop-color:#0d1638"/>
+      <stop offset="100%" style="stop-color:#0f0b36"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff9eb5"/>
+      <stop offset="100%" style="stop-color:#c8a6ff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="15%" r="55%">
+      <stop offset="0%" style="stop-color:#ff9eb5;stop-opacity:0.07"/>
+      <stop offset="100%" style="stop-color:#080e22;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <text x="980" y="200" font-size="200" fill="rgba(255,158,181,0.04)" font-family="Georgia,serif" text-anchor="middle">◆</text>
+  <!-- Logo -->
+  <text x="88" y="240" font-size="50" fill="url(#accent)" font-family="Georgia,serif">◆</text>
+  <text x="148" y="240" font-size="20" fill="rgba(255,255,255,0.5)" font-family="system-ui,sans-serif" font-weight="500" letter-spacing="2">DIAMOND PAINTER</text>
+  <!-- Tag -->
+  <rect x="88" y="262" width="180" height="30" rx="15" fill="rgba(255,158,181,0.12)" stroke="rgba(255,158,181,0.25)" stroke-width="1"/>
+  <text x="178" y="282" font-size="12" fill="#ff9eb5" font-family="system-ui,sans-serif" font-weight="600" text-anchor="middle" letter-spacing="1">💑 기념일 선물</text>
+  <!-- Main title Korean -->
+  <text x="88" y="378" font-size="52" fill="rgba(255,255,255,0.95)" font-family="'Noto Sans KR',system-ui,sans-serif" font-weight="700">세상에 하나뿐인</text>
+  <text x="88" y="448" font-size="52" fill="url(#accent)" font-family="'Noto Sans KR',system-ui,sans-serif" font-weight="700">기념일 보석십자수</text>
+  <!-- Subtitle -->
+  <text x="88" y="512" font-size="22" fill="rgba(255,255,255,0.55)" font-family="'Noto Sans KR',system-ui,sans-serif" font-weight="300">커플 사진으로 만드는 수공예 선물 · 완전 무료</text>
+  <!-- Bottom -->
+  <rect x="88" y="556" width="80" height="2" fill="url(#accent)" opacity="0.6"/>
+  <text x="88" y="592" font-size="16" fill="rgba(255,255,255,0.3)" font-family="system-ui,sans-serif">diamondpainter.app · 회원가입 불필요</text>
+</svg>
