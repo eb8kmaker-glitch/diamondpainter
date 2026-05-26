@@ -1484,6 +1484,141 @@
 </style>
 <!-- jsPDF 2.x — PDF 저장 기능용 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  /* ════ 비즈 통계 테이블 ════ */
+  .stats-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 5px 10px 4px;
+    border-bottom: 1px solid var(--glass-border);
+    flex-shrink: 0;
+  }
+  .stats-owned-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--ui);
+    font-size: 9.5px;
+    color: var(--text3);
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s;
+  }
+  .stats-owned-toggle:hover { color: var(--text2); }
+  .stats-owned-toggle input { accent-color: var(--cyan); cursor: pointer; }
+
+  .stats-thead {
+    display: grid;
+    grid-template-columns: 14px 14px 36px 1fr 40px 28px;
+    gap: 2px;
+    padding: 4px 10px 3px;
+    font-family: var(--ui);
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text3);
+    background: rgba(255,255,255,0.025);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .stats-thead > div { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .stats-th-count,
+  .stats-th-ratio { text-align: right; }
+  .stats-th-sortable {
+    cursor: pointer;
+    color: var(--text2);
+    transition: color 0.15s;
+  }
+  .stats-th-sortable:hover { color: var(--cyan); }
+  .stats-th-sortable.sort-active { color: var(--cyan); }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: 14px 14px 36px 1fr 40px 28px;
+    gap: 2px;
+    padding: 3px 10px;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.025);
+    cursor: pointer;
+    transition: opacity 0.2s;
+    position: relative;
+  }
+  .stats-row::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    height: 100%;
+    width: var(--bar-w, 0%);
+    background: var(--bar-color, transparent);
+    opacity: 0.14;
+    z-index: 0;
+    pointer-events: none;
+    transition: width 0.3s ease;
+  }
+  .stats-row > * { position: relative; z-index: 1; }
+  .stats-row:hover::before { opacity: 0.22; }
+  .stats-row.stats-highlighted { background: rgba(111,231,255,0.05); }
+  .stats-row.stats-active-pal { border-left: 2px solid var(--cyan); padding-left: 8px; }
+  .stats-row.stats-unowned { opacity: 0.38; }
+
+  .stats-swatch {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.12);
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+  }
+  .stats-sym {
+    font-size: 10px;
+    text-align: center;
+    color: var(--text2);
+    overflow: hidden;
+  }
+  .stats-dmc-no {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    color: var(--lavender);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .stats-name {
+    font-family: var(--ui);
+    font-size: 9px;
+    color: var(--text2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .stats-count {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    color: var(--cyan);
+    text-align: right;
+    white-space: nowrap;
+    text-shadow: 0 0 6px rgba(111,231,255,0.3);
+  }
+  .stats-ratio {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text3);
+    text-align: right;
+    white-space: nowrap;
+  }
+  /* 보유 색상 체크 오버레이 */
+  .stats-own-mark {
+    position: absolute;
+    top: 1px; left: 2px;
+    font-size: 7px;
+    color: var(--success);
+    z-index: 3;
+    pointer-events: none;
+  }
+</style>
 </head>
 <body>
 
@@ -1960,6 +2095,15 @@ const i18n = {
     pdf_sum_total:        'Total Beads',
     pdf_sum_colors:       'Colors',
     pdf_sum_size:         'Real Size',
+    stats_bead_count: '비즈 수',
+    stats_ratio:      '비율',
+    stats_dmc:        'DMC #',
+    stats_color_name: '색상명',
+    stats_symbol:     '기호',
+    stats_swatch:     '견본',
+    stats_sort_asc:   '오름차순',
+    stats_sort_desc:  '내림차순',
+    stats_owned:      '보유 색상만',
   },
   en: {
     btn_generate:      '⚡ Generate Pattern',
@@ -2075,6 +2219,15 @@ const i18n = {
     pdf_sum_total:        'Total Beads',
     pdf_sum_colors:       'Colors',
     pdf_sum_size:         'Real Size',
+    stats_bead_count: 'Beads',
+    stats_ratio:      'Ratio',
+    stats_dmc:        'DMC #',
+    stats_color_name: 'Color',
+    stats_symbol:     'Symbol',
+    stats_swatch:     'Swatch',
+    stats_sort_asc:   'Asc',
+    stats_sort_desc:  'Desc',
+    stats_owned:      'Owned only',
   },
   ja: {
     btn_generate:      '⚡ 図案生成',
@@ -2190,6 +2343,15 @@ const i18n = {
     pdf_sum_total:        'Total Beads',
     pdf_sum_colors:       'Colors',
     pdf_sum_size:         'Real Size',
+    stats_bead_count: 'ビーズ数',
+    stats_ratio:      '割合',
+    stats_dmc:        'DMC #',
+    stats_color_name: '色名',
+    stats_symbol:     '記号',
+    stats_swatch:     '見本',
+    stats_sort_asc:   '昇順',
+    stats_sort_desc:  '降順',
+    stats_owned:      '所有のみ',
   },
   zh: {
     btn_generate:      '⚡ 生成图案',
@@ -2305,6 +2467,15 @@ const i18n = {
     pdf_sum_total:        'Total Beads',
     pdf_sum_colors:       'Colors',
     pdf_sum_size:         'Real Size',
+    stats_bead_count: '钻石数',
+    stats_ratio:      '比例',
+    stats_dmc:        'DMC #',
+    stats_color_name: '颜色',
+    stats_symbol:     '符号',
+    stats_swatch:     '色样',
+    stats_sort_asc:   '升序',
+    stats_sort_desc:  '降序',
+    stats_owned:      '仅拥有',
   },
 };
 
@@ -2759,6 +2930,12 @@ const DMC_COLORS = [
 // ═══════════════════════════════════════════════════════════════
 // SYMBOL SET
 // ═══════════════════════════════════════════════════════════════
+// ── 비즈 통계 테이블 상태 ──
+let beadStatSort = { key: 'count', dir: 'desc' };
+let _showOwnedOnly = false;
+let ownedDmcSet = new Set(JSON.parse(localStorage.getItem('dp_owned_dmc') || '[]'));
+let _statsDebounceTimer = null;
+
 const SYMBOLS = ['●','■','▲','★','♦','♥','♠','♣','◆','○','□','△','☆','◇','♡','✦','✚','✖','⊕','⊗','∎','⬟','⬡','⬢','⌘','⍟','⎔','⌖','⌀','⌂','⊞','⊟','⊠','⊡','⋆','⊛','⊙','⊚','⊜','⊝','⊐','⊏','⊑','⊒','⊓','⊔','⊕','⊖','⊘','⊤','⊥','⊦','⊧','⊨','⊩','⊪','⊫','⊬','⊭','⊮','⊯','⊰','⊱','⊲','⊳','⊴','⊵','⊶','⊷','⊸','⊹','⊺','⊻','⊼','⊽','⊾','⊿'];
 
 // ═══════════════════════════════════════════════════════════════
@@ -3399,43 +3576,146 @@ function updatePaletteUI() {
   });
 }
 
+// 현재 격자 기준 색상별 실제 비즈 수 계산 (userGrid 반영)
+function calcBeadStats() {
+  if (!state.pattern) return [];
+  const { width, height, grid } = state.pattern;
+  const n = state.palette.length;
+  const counts = new Int32Array(n);
+  const total = width * height;
+  for (let i = 0; i < total; i++) {
+    const u = state.userGrid[i];
+    counts[u >= 0 ? u : grid[i].palIdx]++;
+  }
+  return state.palette.map((p, i) => ({
+    idx:    i,
+    dmcNo:  p.dmc,
+    name:   p.name,
+    color:  p.color,
+    symbol: p.symbol,
+    count:  counts[i],
+    ratio:  total > 0 ? counts[i] / total * 100 : 0,
+  }));
+}
+
 function updateColorList() {
-  const list = document.getElementById('color-list');
-  list.innerHTML = '';
+  const container = document.getElementById('color-list');
+  if (!container) return;
+  container.innerHTML = '';
   if (!state.pattern) return;
 
-  // 각 색상의 편집 셀 수 계산
-  const editCount = new Array(state.palette.length).fill(0);
-  if (state.userGrid) {
-    for (let i = 0; i < state.userGrid.length; i++) {
-      const u = state.userGrid[i];
-      if (u >= 0) editCount[u]++;
-    }
-  }
+  const stats = calcBeadStats();
+  const maxCount = stats.reduce((m, s) => Math.max(m, s.count), 1);
 
-  state.palette.forEach((p, i) => {
-    const hasEdits = editCount[i] > 0;
-    const isHighlighted = state.highlightPaletteIdx === i;
-    const el = document.createElement('div');
-    el.className = 'color-entry' + (isHighlighted ? ' highlighted' : '');
-    el.innerHTML = `
-      <div class="swatch" style="background:rgb(${p.color[0]},${p.color[1]},${p.color[2]})"></div>
-      <span>${p.symbol}</span>
-      <span class="dmc-code">DMC ${p.dmc}</span>
-      <span class="cell-count">${p.count.toLocaleString()}</span>
-      ${hasEdits ? `<div class="edit-badge" title="${editCount[i]} edited"></div>` : ''}
+  // ── 정렬 ──
+  const sorted = [...stats].sort((a, b) => {
+    let va, vb;
+    if (beadStatSort.key === 'dmc') {
+      va = isNaN(a.dmcNo) ? a.dmcNo : +a.dmcNo;
+      vb = isNaN(b.dmcNo) ? b.dmcNo : +b.dmcNo;
+    } else if (beadStatSort.key === 'ratio') {
+      va = a.ratio; vb = b.ratio;
+    } else {
+      va = a.count; vb = b.count; // default: count
+    }
+    if (va < vb) return beadStatSort.dir === 'asc' ? -1 : 1;
+    if (va > vb) return beadStatSort.dir === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  // ── 보유 색상만 토글 툴바 ──
+  const toolbar = document.createElement('div');
+  toolbar.className = 'stats-toolbar';
+  toolbar.innerHTML = `
+    <label class="stats-owned-toggle">
+      <input type="checkbox" id="stats-owned-chk" ${_showOwnedOnly ? 'checked' : ''}>
+      <span>${t('stats_owned')}</span>
+    </label>
+  `;
+  toolbar.querySelector('#stats-owned-chk').addEventListener('change', e => {
+    _showOwnedOnly = e.target.checked;
+    updateColorList();
+  });
+  container.appendChild(toolbar);
+
+  // ── 컬럼 헤더 (정렬 클릭 지원) ──
+  const thead = document.createElement('div');
+  thead.className = 'stats-thead';
+  const si = (key) => beadStatSort.key === key ? (beadStatSort.dir === 'asc' ? ' ↑' : ' ↓') : '';
+  thead.innerHTML = `
+    <div title="${t('stats_swatch')}">■</div>
+    <div>${t('stats_symbol')}</div>
+    <div class="stats-th-sortable${beadStatSort.key==='dmc'?' sort-active':''}" data-sort="dmc">${t('stats_dmc')}${si('dmc')}</div>
+    <div>${t('stats_color_name')}</div>
+    <div class="stats-th-count stats-th-sortable${beadStatSort.key==='count'?' sort-active':''}" data-sort="count">${t('stats_bead_count')}${si('count')}</div>
+    <div class="stats-th-ratio stats-th-sortable${beadStatSort.key==='ratio'?' sort-active':''}" data-sort="ratio">${t('stats_ratio')}${si('ratio')}</div>
+  `;
+  thead.querySelectorAll('.stats-th-sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.sort;
+      if (beadStatSort.key === key) {
+        beadStatSort.dir = beadStatSort.dir === 'desc' ? 'asc' : 'desc';
+      } else {
+        beadStatSort.key = key;
+        beadStatSort.dir = 'desc';
+      }
+      updateColorList();
+    });
+  });
+  container.appendChild(thead);
+
+  // ── 색상 행 렌더링 ──
+  sorted.forEach(s => {
+    const isOwned = ownedDmcSet.has(String(s.dmcNo));
+    if (_showOwnedOnly && !isOwned) return;
+
+    const isHighlighted = state.highlightPaletteIdx === s.idx;
+    const isActive = state.activePaletteIdx === s.idx;
+    const [r, g, b] = s.color;
+    const barW = (s.count / maxCount * 100).toFixed(1);
+
+    const row = document.createElement('div');
+    row.className = [
+      'stats-row',
+      isHighlighted ? 'stats-highlighted' : '',
+      isActive      ? 'stats-active-pal'  : '',
+      (!isOwned && ownedDmcSet.size > 0) ? 'stats-unowned' : '',
+    ].filter(Boolean).join(' ');
+    row.style.setProperty('--bar-w',     barW + '%');
+    row.style.setProperty('--bar-color', `rgb(${r},${g},${b})`);
+
+    row.innerHTML = `
+      ${isOwned ? '<div class="stats-own-mark">✓</div>' : ''}
+      <div class="stats-swatch" style="background:rgb(${r},${g},${b})" title="DMC ${s.dmcNo}"></div>
+      <div class="stats-sym">${s.symbol}</div>
+      <div class="stats-dmc-no" title="DMC ${s.dmcNo}">${s.dmcNo}</div>
+      <div class="stats-name" title="${s.name}">${s.name}</div>
+      <div class="stats-count">${s.count.toLocaleString()}</div>
+      <div class="stats-ratio">${s.ratio.toFixed(1)}%</div>
     `;
-    el.onclick = () => {
-      state.activePaletteIdx = i;
-      // 하이라이트 토글
-      state.highlightPaletteIdx = (state.highlightPaletteIdx === i) ? -1 : i;
+
+    // 클릭: 팔레트 색상 선택 + 하이라이트 토글
+    row.addEventListener('click', () => {
+      state.activePaletteIdx = s.idx;
+      state.highlightPaletteIdx = (state.highlightPaletteIdx === s.idx) ? -1 : s.idx;
       state.tool = 'paint';
       setActiveTool('paint');
       updatePaletteUI();
       updateColorList();
       if (state.pattern) redrawAllUserCells();
-    };
-    list.appendChild(el);
+    });
+
+    // 우클릭: 보유 색상 토글
+    row.addEventListener('contextmenu', e => {
+      e.preventDefault();
+      const key = String(s.dmcNo);
+      if (ownedDmcSet.has(key)) ownedDmcSet.delete(key);
+      else ownedDmcSet.add(key);
+      localStorage.setItem('dp_owned_dmc', JSON.stringify([...ownedDmcSet]));
+      updateColorList();
+    });
+
+    container.appendChild(row);
   });
 }
 
@@ -3521,6 +3801,9 @@ function placeBead(cx, cy, erase = false) {
   if (state.userGrid[idx] === newVal) return;
   state.userGrid[idx] = newVal;
   drawUserCell(cx, cy);
+  // 통계 패널 실시간 갱신 (100ms debounce)
+  clearTimeout(_statsDebounceTimer);
+  _statsDebounceTimer = setTimeout(updateColorList, 100);
 }
 
 function floodFill(startX, startY, paletteIdx) {
