@@ -231,6 +231,14 @@
       font-size: 40px;
       opacity: 0.18;
     }
+    /* Fade-in animation for tab content (150–200ms) */
+    #lightbox-media > * {
+      animation: lb-fade-in 0.18s ease forwards;
+    }
+    @keyframes lb-fade-in {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0);   }
+    }
     .lb-spinner {
       width: 36px;
       height: 36px;
@@ -566,69 +574,6 @@
     });
   });
 
-  /* ── Diamond preview renderer ─────────────────────── */
-  const _previewCache = {};
-
-  async function renderDiamondPreview(jsonUrl) {
-    if (_previewCache[jsonUrl]) return _previewCache[jsonUrl];
-
-    const res  = await fetch(jsonUrl);
-    const data = await res.json();
-    const { pattern, palette } = data;
-    const { width, height, grid } = pattern;
-
-    const CELL = 3; // px per drill → 400×3=1200, 210×3=630
-    const cw = width  * CELL;
-    const ch = height * CELL;
-
-    const canvas = document.createElement('canvas');
-    canvas.width  = cw;
-    canvas.height = ch;
-    const ctx   = canvas.getContext('2d');
-    const img   = ctx.createImageData(cw, ch);
-    const px    = img.data;
-
-    // Background: light warm gray (canvas texture feel)
-    for (let i = 0; i < px.length; i += 4) {
-      px[i] = px[i+1] = px[i+2] = 215; px[i+3] = 255;
-    }
-
-    // Each 3×3 cell → diamond (rhombus) shape with facet shading:
-    //   _T_
-    //   LCR
-    //   _B_
-    // T=top(bright highlight), L=left(mild highlight),
-    // C=center(base), R=right(mild shadow), B=bottom(dark shadow)
-    const OFFSETS = [
-      [1, 0,  90,  90,  90],   // top    — highlight
-      [0, 1,  45,  45,  45],   // left   — slight highlight
-      [1, 1,   0,   0,   0],   // center — base color
-      [2, 1, -35, -35, -35],   // right  — slight shadow
-      [1, 2, -70, -70, -70],   // bottom — shadow
-    ];
-
-    for (let i = 0; i < grid.length; i++) {
-      const palIdx = grid[i].palIdx;
-      if (palIdx < 0 || palIdx >= palette.length) continue;
-      const [r, g, b] = palette[palIdx].color;
-      const ox = (i % width)           * CELL;
-      const oy = Math.floor(i / width) * CELL;
-
-      for (const [dx, dy, dr, dg, db] of OFFSETS) {
-        const idx = ((oy + dy) * cw + (ox + dx)) * 4;
-        px[idx]   = Math.max(0, Math.min(255, r + dr));
-        px[idx+1] = Math.max(0, Math.min(255, g + dg));
-        px[idx+2] = Math.max(0, Math.min(255, b + db));
-        px[idx+3] = 255;
-      }
-    }
-
-    ctx.putImageData(img, 0, 0);
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
-    _previewCache[jsonUrl] = dataUrl;
-    return dataUrl;
-  }
-
   /* ── Lightbox ─────────────────────────────────────── */
   let _lbItem = null;
 
@@ -650,10 +595,10 @@
             <p>${loadingMsg}</p>
           </div>`;
         try {
-          const dataUrl = await renderDiamondPreview(_lbItem.patternJson);
+          const dataUrl = await renderFinishedPreview(_lbItem.patternJson);
           if (!_lbItem) return; // lightbox closed during render
           const title = (lang === 'ko' && _lbItem.title_ko) ? _lbItem.title_ko : _lbItem.title;
-          mediaEl.innerHTML = `<img src="${dataUrl}" alt="${title} — 예상도" style="image-rendering:pixelated;">`;
+          mediaEl.innerHTML = `<img src="${dataUrl}" alt="${title} — 예상도">`;
         } catch (e) {
           const errMsg = { en: 'Rendering failed', ko: '렌더링 실패', ja: 'レンダリング失敗', zh: '渲染失败' }[lang] || 'Rendering failed';
           mediaEl.innerHTML = `<div class="lightbox-placeholder"><div class="lightbox-placeholder-icon">◆</div><p>${errMsg}</p></div>`;
@@ -743,6 +688,7 @@
   // Re-render when i18n changes language
   document.addEventListener('dp-lang-changed', renderGallery);
 </script>
+<script src="/js/renderFinishedPreview.js"></script>
 <script src="gallery-data.js"></script>
 <script>renderGallery();</script>
 <script src="i18n.js"></script>
