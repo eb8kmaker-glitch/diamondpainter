@@ -162,40 +162,96 @@
       background: #fff;
       border-radius: 16px;
       overflow: hidden;
-      max-width: 780px;
+      max-width: 860px;
       width: 100%;
       display: grid;
-      grid-template-columns: 1fr 280px;
+      grid-template-columns: 1fr 260px;
       max-height: 90vh;
       position: relative;
     }
-    .lightbox-img-wrap {
+    /* Left: tabs + image */
+    .lightbox-left {
+      display: flex;
+      flex-direction: column;
       background: var(--bg-alt);
+      min-height: 0;
+    }
+    .lightbox-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-light);
+      background: #fff;
+      flex-shrink: 0;
+    }
+    .lightbox-tab {
+      flex: 1;
+      padding: 12px 8px;
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text3);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      font-family: inherit;
+    }
+    .lightbox-tab:hover { color: var(--text1); }
+    .lightbox-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .lightbox-tab.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .lightbox-img-wrap {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      position: relative;
     }
     .lightbox-img-wrap img {
-      width: 100%;
-      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
       object-fit: contain;
-      max-height: 90vh;
       display: block;
     }
+    .lightbox-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 40px;
+      text-align: center;
+    }
+    .lightbox-placeholder-icon {
+      font-size: 40px;
+      opacity: 0.18;
+    }
+    .lightbox-placeholder p {
+      font-size: 14px;
+      color: var(--text3);
+      line-height: 1.6;
+      max-width: 220px;
+    }
+    /* Right: info panel */
     .lightbox-info {
-      padding: 32px 28px;
+      padding: 28px 24px;
       display: flex;
       flex-direction: column;
       gap: 12px;
       overflow-y: auto;
+      border-left: 1px solid var(--border-light);
     }
     .lightbox-info .category-badge {
       align-self: flex-start;
     }
     .lightbox-info h2 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 600;
       line-height: 1.3;
       color: var(--text1);
@@ -203,7 +259,7 @@
     .lightbox-stat-row {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 0;
       margin-top: 4px;
     }
     .lightbox-stat {
@@ -211,7 +267,7 @@
       color: var(--text2);
       display: flex;
       justify-content: space-between;
-      padding: 6px 0;
+      padding: 7px 0;
       border-bottom: 1px solid var(--border-light);
     }
     .lightbox-stat span:first-child { color: var(--text3); }
@@ -249,12 +305,19 @@
       transition: background 0.15s;
     }
     .lightbox-close:hover { background: rgba(8,14,34,0.9); }
-    @media (max-width: 680px) {
+    @media (max-width: 720px) {
       .lightbox-box {
         grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        overflow-y: auto;
       }
-      .lightbox-img-wrap {
-        max-height: 50vw;
+      .lightbox-info {
+        border-left: none;
+        border-top: 1px solid var(--border-light);
+        max-height: none;
+      }
+      .lightbox-left {
+        max-height: 60vw;
       }
     }
   </style>
@@ -328,9 +391,18 @@
 <div class="lightbox-overlay" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
   <div class="lightbox-box">
     <button class="lightbox-close" id="lightbox-close" aria-label="Close">✕</button>
-    <div class="lightbox-img-wrap">
-      <img id="lightbox-img" src="" alt="">
+
+    <!-- Left: tabs + image -->
+    <div class="lightbox-left">
+      <div class="lightbox-tabs" role="tablist">
+        <button class="lightbox-tab" role="tab" data-tab="original" data-i18n="gallery_tab_original">원본</button>
+        <button class="lightbox-tab active" role="tab" data-tab="pattern" data-i18n="gallery_tab_pattern">도안</button>
+        <button class="lightbox-tab disabled" role="tab" data-tab="preview" data-i18n="gallery_tab_preview">예상도</button>
+      </div>
+      <div class="lightbox-img-wrap" id="lightbox-media"></div>
     </div>
+
+    <!-- Right: info -->
     <div class="lightbox-info">
       <span class="category-badge" id="lightbox-cat"></span>
       <h2 id="lightbox-title"></h2>
@@ -486,17 +558,53 @@
   });
 
   /* ── Lightbox ─────────────────────────────────────── */
+  let _lbItem = null;
+
+  function renderLightboxTab(tab) {
+    if (!_lbItem) return;
+    const lang = getLang();
+    const mediaEl = document.getElementById('lightbox-media');
+
+    // Update tab button states
+    document.querySelectorAll('.lightbox-tab').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+
+    if (tab === 'preview' || !_lbItem[tab]) {
+      const labels = {
+        preview: {
+          en: 'Completed painting preview', ko: '완성 예상도',
+          ja: '完成予想図', zh: '完成预览图'
+        },
+        original: { en: 'Original image', ko: '원본 이미지', ja: '元画像', zh: '原始图片' },
+        pattern:  { en: 'Pattern', ko: '도안', ja: 'パターン', zh: '图案' }
+      };
+      const comingSoon = { en: 'Coming soon', ko: '준비 중', ja: '準備中', zh: '即将推出' };
+      const label = (labels[tab] || {})[lang] || labels[tab]?.en || tab;
+      const soon  = comingSoon[lang] || comingSoon.en;
+      mediaEl.innerHTML = `
+        <div class="lightbox-placeholder">
+          <div class="lightbox-placeholder-icon">◆</div>
+          <p><strong>${label}</strong><br>${soon}</p>
+        </div>`;
+    } else {
+      const title = (lang === 'ko' && _lbItem.title_ko) ? _lbItem.title_ko : _lbItem.title;
+      const tabLabel = { original: '원본', pattern: '도안', preview: '예상도' }[tab] || tab;
+      mediaEl.innerHTML = `<img src="${_lbItem[tab]}" alt="${title} — ${tabLabel}" loading="lazy">`;
+    }
+  }
+
   function openLightbox(id) {
     const data = typeof GALLERY_DATA !== 'undefined' ? GALLERY_DATA : [];
     const item = data.find(p => p.id === id);
     if (!item) return;
+    _lbItem = item;
+
     const lang  = getLang();
     const title = (lang === 'ko' && item.title_ko) ? item.title_ko : item.title;
     const colorLabel = { en: 'DMC Colors', ko: 'DMC 색상', ja: 'DMC カラー', zh: 'DMC 颜色' }[lang] || 'DMC Colors';
     const sizeLabel  = { en: 'Canvas Size', ko: '캔버스 크기', ja: 'キャンバスサイズ', zh: '画布尺寸' }[lang] || 'Canvas Size';
 
-    document.getElementById('lightbox-img').src = item.image;
-    document.getElementById('lightbox-img').alt = title;
     document.getElementById('lightbox-title').textContent = title;
     const catEl = document.getElementById('lightbox-cat');
     catEl.textContent = catLabel(item.category);
@@ -516,14 +624,36 @@
       attrEl.style.display = 'none';
     }
 
+    // Disable preview tab if no preview image
+    document.querySelectorAll('.lightbox-tab').forEach(btn => {
+      if (btn.dataset.tab === 'preview') {
+        btn.classList.toggle('disabled', !item.preview);
+      }
+      if (btn.dataset.tab === 'original') {
+        btn.classList.toggle('disabled', !item.original);
+      }
+    });
+
+    // Default to pattern tab
+    renderLightboxTab('pattern');
+
     document.getElementById('lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
 
   function closeLightbox() {
+    _lbItem = null;
     document.getElementById('lightbox').classList.remove('open');
     document.body.style.overflow = '';
   }
+
+  // Tab click handlers
+  document.querySelectorAll('.lightbox-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('disabled')) return;
+      renderLightboxTab(btn.dataset.tab);
+    });
+  });
 
   document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
   document.getElementById('lightbox').addEventListener('click', e => {

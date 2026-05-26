@@ -28,7 +28,10 @@ const GALLERY_DATA = [
     title: "Garden Landscape Window",
     title_ko: "정원 풍경 스테인드글라스",
     category: "landscapes",
-    image: "gallery/images/tiffany-garden-window.jpg",
+    image:    "gallery/images/tiffany-garden-window_pattern.png",   // 갤러리 썸네일 = 도안
+    original: "gallery/images/tiffany-garden-window_original.jpg",  // 원본 사진
+    pattern:  "gallery/images/tiffany-garden-window_pattern.png",   // 도안
+    preview:  null,                                                   // 예상도 (미구현)
     colors: 45,
     size: "50×70cm",
     featured: true,
