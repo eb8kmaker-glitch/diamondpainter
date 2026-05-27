@@ -54,4 +54,19 @@ const GALLERY_DATA = [
     featured: true,
   },
 
+
+  {
+    id: 3,
+    title: "Red Rose with Dewdrops",
+    title_ko: "이슬 맺힌 빨간 장미",
+    category: "other",
+    image:    "gallery/images/ray_shrewsberry-ai-generated-8523494_1920_pattern.png",
+    original: "gallery/images/ray_shrewsberry-ai-generated-8523494_1920_original.jpg",
+    pattern:  "gallery/images/ray_shrewsberry-ai-generated-8523494_1920_pattern.png",
+    patternJson: "gallery/images/ray_shrewsberry-ai-generated-8523494_1920_pattern.json",
+    colors: 25,
+    size: "50×50cm",
+    attribution: "Original image by Ray Shrewsberry · Pixabay (AI-generated, free to use)",
+  },
+
 ];

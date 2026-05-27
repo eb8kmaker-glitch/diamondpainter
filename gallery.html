@@ -548,11 +548,12 @@
     grid.innerHTML = filtered.map(item => {
       const title = (lang === 'ko' && item.title_ko) ? item.title_ko : item.title;
       const meta  = formatMeta(item);
+      const thumb = item.preview || item.image;
       return `
         <article class="gallery-card" role="button" tabindex="0" aria-label="${title}"
           data-id="${item.id}" onclick="openLightbox(${item.id})"
           onkeydown="if(event.key==='Enter')openLightbox(${item.id})">
-          <img class="gallery-card-thumb" src="${item.image}" alt="${title}" loading="lazy">
+          <img class="gallery-card-thumb" src="${thumb}" alt="${title}" loading="lazy">
           <div class="gallery-card-body">
             <div class="gallery-card-meta">
               <span class="category-badge ${CAT_CLASS[item.category] || 'cat-other'}">${catLabel(item.category)}</span>
