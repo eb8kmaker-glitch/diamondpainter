@@ -3759,6 +3759,7 @@ function floodFill(startX, startY, paletteIdx) {
 
     visited[idx] = 1;
     state.userGrid[idx] = paletteIdx;
+    state.pattern.grid[idx].palIdx = paletteIdx;
     drawUserCell(x, y);
     stack.push([x+1, y], [x-1, y], [x, y+1], [x, y-1]);
   }
@@ -4113,26 +4114,39 @@ document.getElementById('btn-autofill').addEventListener('click', () => {
 const MAX_UNDO = 50;
 
 function pushUndo() {
-  state.undoStack.push(state.userGrid.slice());
+  const patSnap = new Int32Array(state.pattern.grid.length);
+  for (let i = 0; i < patSnap.length; i++) patSnap[i] = state.pattern.grid[i].palIdx;
+  state.undoStack.push({ userGrid: state.userGrid.slice(), patternGrid: patSnap });
   if (state.undoStack.length > MAX_UNDO) state.undoStack.shift();
   state.redoStack = [];
   updateProgress();
 }
 
+function _snapState() {
+  const patSnap = new Int32Array(state.pattern.grid.length);
+  for (let i = 0; i < patSnap.length; i++) patSnap[i] = state.pattern.grid[i].palIdx;
+  return { userGrid: state.userGrid.slice(), patternGrid: patSnap };
+}
+
+function _restoreState(snap) {
+  state.userGrid = snap.userGrid;
+  for (let i = 0; i < state.pattern.grid.length; i++) state.pattern.grid[i].palIdx = snap.patternGrid[i];
+  drawPatternFull();
+  redrawAllUserCells();
+}
+
 function undo() {
   if (!state.undoStack.length) return;
-  state.redoStack.push(state.userGrid.slice());
-  state.userGrid = state.undoStack.pop();
-  redrawAllUserCells();
+  state.redoStack.push(_snapState());
+  _restoreState(state.undoStack.pop());
   updateUI();
   showNotif(t('notif_undo'));
 }
 
 function redo() {
   if (!state.redoStack.length) return;
-  state.undoStack.push(state.userGrid.slice());
-  state.userGrid = state.redoStack.pop();
-  redrawAllUserCells();
+  state.undoStack.push(_snapState());
+  _restoreState(state.redoStack.pop());
   updateUI();
   showNotif(t('notif_redo'));
 }
