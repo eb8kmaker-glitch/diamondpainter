@@ -481,7 +481,7 @@
     flex: 1;
     overflow-y: auto;
     padding: 8px;
-    min-height: 0;
+    min-height: 280px;
   }
   .palette-scroll::-webkit-scrollbar { width: 3px; }
   .palette-scroll::-webkit-scrollbar-track { background: transparent; }
@@ -849,7 +849,7 @@
     flex: 1;
     overflow-y: auto;
     padding: 6px 10px;
-    min-height: 0;
+    min-height: 320px;
   }
   .color-list::-webkit-scrollbar { width: 3px; }
   .color-list::-webkit-scrollbar-thumb {
@@ -1326,16 +1326,6 @@
     pointer-events: none;
     user-select: none;
   }
-  /* ResultSidebarAd: 우측 패널 — desktop only (>900px) */
-  #ad-ResultSidebarAd {
-    min-height: 280px;   /* CLS 방지: 광고 로드 전 공간 확보 */
-    margin: 6px 10px;
-    width: calc(100% - 20px);
-    overflow: hidden;
-    flex-shrink: 0;
-    display: block;
-    position: relative;
-  }
   /* DownloadBottomAd: 다운로드 버튼 하단 슬롯 */
   #ad-DownloadBottomAd {
     min-height: 280px;       /* CLS 방지 */
@@ -1399,7 +1389,6 @@
      ads.js가 ins를 주입하면 ::before·::after는 ins 뒤에 위치.
      광고가 뜨면 iframe이 z-index:1로 위를 덮어 placeholder 가림.
      미로드(unfilled) 시 빈 컨테이너가 border+label을 그대로 노출.  */
-  #ad-ResultSidebarAd::before,
   #ad-DownloadBottomAd::before,
   #ad-FooterGuideAd::before {
     content: '';
@@ -1411,7 +1400,6 @@
     pointer-events: none;
     z-index: 0;
   }
-  #ad-ResultSidebarAd::after,
   #ad-DownloadBottomAd::after,
   #ad-FooterGuideAd::after {
     content: 'Ad';
@@ -1428,7 +1416,6 @@
     z-index: 0;
   }
   /* 주입된 ins는 pseudo-element 위에 레이어 */
-  #ad-ResultSidebarAd ins,
   #ad-DownloadBottomAd ins,
   #ad-FooterGuideAd ins {
     position: relative;
@@ -1474,9 +1461,6 @@
   .guide-kakao { text-align: center; margin-top: 28px; }
 
   /* 반응형 */
-  @media (max-width: 900px) {
-    #ad-ResultSidebarAd { display: none; }
-  }
   @media (max-width: 600px) {
     .footer-guide-ad  { padding: 32px 12px; }
     .guide-bottom     { padding: 28px 14px 32px; }
@@ -1921,9 +1905,6 @@
         </label>
       </div>
     </div>
-
-    <!-- ResultSidebarAd: diamond-painter-right / slot 9943734977 — ads.js 주입 -->
-    <div id="ad-ResultSidebarAd" aria-label="Advertisement"></div>
 
     <!-- DMC 팔레트 관리 -->
     <div class="panel-title" style="padding: 10px 14px 0; margin-bottom:0" data-i18n="section_dmc_palette">DMC 팔레트</div>
