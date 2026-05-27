@@ -562,8 +562,70 @@
       transform: translateY(-1px);
     }
 
+    /* ── Trust Privacy Banner ── */
+    .trust-privacy-banner {
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border-light);
+      padding: 12px 0;
+      text-align: center;
+    }
+    .trust-privacy-banner p {
+      font-size: 13px;
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .trust-privacy-banner svg {
+      flex-shrink: 0;
+      color: var(--accent);
+    }
+
+    /* ── Gallery Teaser ── */
+    .gallery-teaser { background: var(--bg-alt); }
+    .gallery-teaser-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    .gallery-teaser-card {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      background: #fff;
+      text-decoration: none;
+      display: block;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .gallery-teaser-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(8,14,34,0.09);
+    }
+    .gallery-teaser-thumb {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      background: var(--bg-alt);
+    }
+    .gallery-teaser-body {
+      padding: 12px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .gallery-teaser-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text1);
+      line-height: 1.4;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 900px) {
+      .gallery-teaser-grid { grid-template-columns: repeat(2, 1fr); }
       .hero-inner { grid-template-columns: 1fr; }
       .hero-visual { display: none; }
       .features-grid { grid-template-columns: repeat(2, 1fr); }
@@ -576,6 +638,7 @@
       .features-grid { grid-template-columns: 1fr; }
       .guide-preview-grid { grid-template-columns: 1fr; }
       .trust-bar-inner { gap: 20px; }
+      .gallery-teaser-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -670,6 +733,19 @@
   </div>
 </section>
 
+<!-- ── Trust Privacy Banner ── -->
+<div class="trust-privacy-banner" aria-label="Privacy and trust">
+  <div class="container">
+    <p>
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M8 1L2 3.5v4.5c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V3.5L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M5.5 8l2 2 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span data-i18n="home_trust_privacy">Free forever · No account · No watermark · Your photo never leaves your browser.</span>
+    </p>
+  </div>
+</div>
+
 <!-- ── Trust Bar ── -->
 <div class="trust-bar" aria-label="Key statistics">
   <div class="container">
@@ -684,7 +760,7 @@
         <strong>5+</strong> <span data-i18n="home_stat_langs">languages</span>
       </div>
       <div class="trust-stat">
-        <strong>100%</strong> <span data-i18n="home_stat_browser">browser-based</span>
+        <strong data-i18n="home_stat_no_account">No account required</strong>
       </div>
       <div class="trust-stat">
         <strong data-i18n="home_stat_free">Free forever</strong>
@@ -772,6 +848,21 @@
     </div>
     <div class="text-center mt-48">
       <a href="create.html" class="btn-primary" data-i18n="home_how_btn">Start Generating Now →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Gallery Teaser ── -->
+<section class="section gallery-teaser" aria-labelledby="gallery-teaser-heading">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-label" data-i18n="nav_gallery">Gallery</p>
+      <h2 class="section-title" id="gallery-teaser-heading" data-i18n="home_gallery_teaser_title">Pattern examples</h2>
+      <p class="section-subtitle" data-i18n="home_gallery_teaser_desc">See what Diamond Painter can create from a real photo.</p>
+    </div>
+    <div class="gallery-teaser-grid" id="gallery-teaser-grid"></div>
+    <div class="text-center">
+      <a href="gallery.html" class="btn-secondary" data-i18n="home_gallery_view_all">View all examples →</a>
     </div>
   </div>
 </section>
@@ -1157,6 +1248,43 @@
       grid.appendChild(el);
     });
   }
+</script>
+<script src="gallery-data.js"></script>
+<script>
+(function () {
+  var CAT_CLASS  = { pets: 'cat-pets', portraits: 'cat-portraits', landscapes: 'cat-landscapes', anime: 'cat-anime', other: 'cat-other' };
+  var CAT_LABELS = {
+    ko: { pets: '반려동물', portraits: '인물', landscapes: '풍경', anime: '애니/일러스트', other: '기타' },
+    en: { pets: 'Pets', portraits: 'Portraits', landscapes: 'Landscapes', anime: 'Anime', other: 'Other' },
+    ja: { pets: 'ペット', portraits: 'ポートレート', landscapes: '風景', anime: 'アニメ', other: 'その他' },
+    zh: { pets: '宠物', portraits: '人像', landscapes: '风景', anime: '动漫', other: '其他' },
+  };
+
+  function renderTeaser() {
+    var grid = document.getElementById('gallery-teaser-grid');
+    if (!grid || typeof GALLERY_DATA === 'undefined') return;
+    var lang   = localStorage.getItem('dp_lang') || 'en';
+    var labels = CAT_LABELS[lang] || CAT_LABELS.en;
+    var items  = GALLERY_DATA.slice()
+      .sort(function (a, b) { return (b.featured ? 1 : 0) - (a.featured ? 1 : 0); })
+      .slice(0, 3);
+    grid.innerHTML = items.map(function (item) {
+      var title    = (lang === 'ko' && item.title_ko) ? item.title_ko : item.title;
+      var thumb    = item.preview || item.image;
+      var catClass = CAT_CLASS[item.category] || 'cat-other';
+      var catLabel = labels[item.category] || item.category;
+      return '<a href="gallery.html" class="gallery-teaser-card">'
+        + '<img class="gallery-teaser-thumb" src="' + thumb + '" alt="' + title + '" loading="lazy">'
+        + '<div class="gallery-teaser-body">'
+        + '<span class="category-badge ' + catClass + '">' + catLabel + '</span>'
+        + '<div class="gallery-teaser-title">' + title + '</div>'
+        + '</div></a>';
+    }).join('');
+  }
+
+  document.addEventListener('DOMContentLoaded', renderTeaser);
+  document.addEventListener('dp-lang-changed', renderTeaser);
+})();
 </script>
 <script src="i18n.js"></script>
 <script src="ads.js" defer></script>
