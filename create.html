@@ -3537,7 +3537,7 @@ function updateColorList() {
   toolbar.innerHTML = `
     <label class="stats-owned-toggle">
       <input type="checkbox" id="stats-owned-chk" ${_showOwnedOnly ? 'checked' : ''}>
-      <span>${t('stats_owned')}</span>
+      <span data-i18n="stats_owned">${t('stats_owned')}</span>
     </label>
   `;
   toolbar.querySelector('#stats-owned-chk').addEventListener('change', e => {
