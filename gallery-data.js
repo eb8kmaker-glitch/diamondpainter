@@ -71,4 +71,20 @@ const GALLERY_DATA = [
     attribution: "Original image by Ray Shrewsberry · Pixabay (AI-generated, free to use)",
   },
 
+
+  {
+    id: 4,
+    title: "Couple Silhouette at Sunset",
+    title_ko: "노을 속 커플 실루엣",
+    category: "landscapes",
+    image:    "gallery/images/noname_13-sunset-4025048_1920_pattern.png",
+    original: "gallery/images/noname_13-sunset-4025048_1920_original.jpg",
+    pattern:  "gallery/images/noname_13-sunset-4025048_1920_pattern.png",
+    preview:  "gallery/images/noname_13-sunset-4025048_1920_preview.jpg",
+    patternJson: "gallery/images/noname_13-sunset-4025048_1920_pattern.json",
+    colors: 8,
+    size: "80×40.8cm",
+    attribution: "Original image by NoName_13 · Pixabay (free to use)",
+  },
+
 ];
