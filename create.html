@@ -132,7 +132,7 @@
     --success: #6fe7b8;
 
     /* 레이아웃 */
-    --panel-w: 320px;
+    --panel-w: 260px;
     --header-h: 54px;
     --radius: 12px;
     --radius-sm: 8px;
@@ -476,65 +476,6 @@
     background: rgba(0,0,0,0.4);
   }
 
-  /* ── 팔레트 ── */
-  .palette-scroll {
-    flex: 1;
-    overflow-y: auto;
-    padding: 8px;
-    min-height: 280px;
-  }
-  .palette-scroll::-webkit-scrollbar { width: 3px; }
-  .palette-scroll::-webkit-scrollbar-track { background: transparent; }
-  .palette-scroll::-webkit-scrollbar-thumb {
-    background: rgba(111,231,255,0.2);
-    border-radius: 4px;
-  }
-
-  .palette-item {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 5px 7px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: all 0.25s ease;
-    border: 1px solid transparent;
-    margin-bottom: 2px;
-  }
-  .palette-item:hover {
-    background: var(--glass-hover);
-    transform: translateX(2px);
-  }
-  .palette-item.active {
-    background: var(--glass-active);
-    border-color: rgba(200,166,255,0.4);
-    box-shadow:
-      0 0 0 1px rgba(200,166,255,0.2),
-      0 0 10px rgba(200,166,255,0.15);
-    transform: scale(1.02);
-  }
-
-  .palette-swatch {
-    width: 20px; height: 20px;
-    border-radius: 5px;
-    border: 1px solid rgba(255,255,255,0.12);
-    flex-shrink: 0;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
-  }
-  .palette-symbol {
-    width: 20px; height: 20px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 4px;
-    flex-shrink: 0;
-    color: var(--text2);
-  }
-  .palette-info { flex: 1; min-width: 0; }
-  .palette-dmc  { font-size: 9.5px; color: var(--lavender); }
-  .palette-name { font-family: var(--ui); font-size: 10px; font-weight: 400; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .palette-count{ font-family: var(--mono); font-size: 8.5px; color: var(--text3); flex-shrink: 0; }
-
   /* ── 툴 버튼 ── */
   .tool-group { display: flex; gap: 5px; }
   .tool-btn {
@@ -804,7 +745,7 @@
 
   /* ════ 오른쪽 패널 ════ */
   .right-panel {
-    width: 280px;
+    width: 320px;
     background: rgba(8,14,34,0.65);
     border-left: 1px solid var(--glass-border);
     backdrop-filter: blur(20px);
@@ -1822,13 +1763,6 @@
         <span id="progress-pct">0%</span>
       </div>
     </div>
-
-    <!-- Palette -->
-    <div class="panel-title" style="padding: 10px 14px 0; margin-bottom:0">
-      <span data-i18n="section_palette">색상표</span>
-      <span id="palette-count" style="color:var(--accent);font-size:10px;margin-left:4px"></span>
-    </div>
-    <div class="palette-scroll" id="palette-list"></div>
 
     <!-- Status -->
     <div id="status">
@@ -3586,8 +3520,7 @@ function updateUI() {
 
 function updatePaletteUI() {
   const list = document.getElementById('palette-list');
-  list.innerHTML = '';
-  document.getElementById('palette-count').textContent = `(${state.palette.length})`;
+  if (!list) return;
 
   state.palette.forEach((p, i) => {
     const el = document.createElement('div');
