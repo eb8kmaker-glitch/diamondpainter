@@ -39,4 +39,19 @@ const GALLERY_DATA = [
     attribution: "Agnes F. Northrop / Tiffany Studios, 1912 · The Metropolitan Museum of Art (Public Domain)"
   },
 
+
+  {
+    id: 2,
+    title: "Orange Cat Portrait",
+    title_ko: "고양이 키키 초상화",
+    category: "pets",
+    image:    "gallery/images/kiki241025_pattern.png",
+    original: "gallery/images/kiki241025_original.jpg",
+    pattern:  "gallery/images/kiki241025_pattern.png",
+    patternJson: "gallery/images/kiki241025_pattern.json",
+    colors: 50,
+    size: "50×50cm",
+    featured: true,
+  },
+
 ];
