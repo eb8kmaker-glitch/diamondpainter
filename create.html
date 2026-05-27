@@ -3201,13 +3201,8 @@ function drawUserCell(x, y) {
     uCtx.fillText(pal.symbol, px + cs / 2, py + cs / 2);
   }
 
-  // 4. 편집된 셀 강조 테두리 (원본 셀과 구분)
-  uCtx.strokeStyle = 'rgba(111,231,255,0.4)';
-  uCtx.lineWidth = 1;
-  uCtx.strokeRect(px + 0.5, py + 0.5, cs - 1, cs - 1);
-
-  // 5. 선택 색상 하이라이트 모드
-  if (state.highlightPaletteIdx >= 0 && editVal === state.highlightPaletteIdx) {
+  // 4. 선택 색상 하이라이트 모드 (Highlight Selected Color 활성 시에만)
+  if (state.highlightEnabled && state.highlightPaletteIdx >= 0 && editVal === state.highlightPaletteIdx) {
     uCtx.strokeStyle = 'rgba(111,231,255,0.95)';
     uCtx.lineWidth = 2;
     uCtx.strokeRect(px + 1, py + 1, cs - 2, cs - 2);
@@ -4322,12 +4317,13 @@ document.getElementById('load-input').addEventListener('change', e => {
 // ═══════════════════════════════════════════════════════════════
 document.getElementById('btn-export').addEventListener('click', () => {
   if (!state.pattern) return;
+  drawPatternFull(); // state.pattern.grid 기준으로 patternCanvas 동기화
   const exp = document.createElement('canvas');
   exp.width  = patternCanvas.width;
   exp.height = patternCanvas.height;
   const ctx = exp.getContext('2d');
   ctx.drawImage(patternCanvas, 0, 0);
-  ctx.drawImage(userCanvas, 0, 0);
+  // userCanvas는 포함하지 않음 — 파란 하이라이트 테두리 제거
 
   exp.toBlob(blob => {
     const url = URL.createObjectURL(blob);
