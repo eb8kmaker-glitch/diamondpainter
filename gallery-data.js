@@ -87,4 +87,20 @@ const GALLERY_DATA = [
     attribution: "Original image by NoName_13 · Pixabay (free to use)",
   },
 
+
+  {
+    id: 5,
+    title: "Bride in Wedding Dress",
+    title_ko: "웨딩드레스 신부",
+    category: "portraits",
+    image:    "gallery/images/paulos-ai-generated-8581903_1920_pattern.png",
+    original: "gallery/images/paulos-ai-generated-8581903_1920_original.jpg",
+    pattern:  "gallery/images/paulos-ai-generated-8581903_1920_pattern.png",
+    preview:  "gallery/images/paulos-ai-generated-8581903_1920_preview.jpg",
+    patternJson: "gallery/images/paulos-ai-generated-8581903_1920_pattern.json",
+    colors: 35,
+    size: "40×50.1cm",
+    attribution: "Original image by Παῦλος · Pixabay (AI-generated, free to use) · Some colors adjusted with Replace Color",
+  },
+
 ];
