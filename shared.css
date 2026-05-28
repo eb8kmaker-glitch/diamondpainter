@@ -815,6 +815,38 @@ ins.adsbygoogle[data-ad-status="filled"] { display: block; }
   .ad-slot--banner { max-width: 100%; }
 }
 
+/* ── Native In-Article Ad Wrappers ── */
+.ad-native-label {
+  font-size: 10px;
+  color: #aaa;
+  text-align: center;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 6px;
+  pointer-events: none;
+  user-select: none;
+}
+/* Section separator ad (howto-gallery) */
+.ad-native-wrap {
+  background: transparent;
+  border: none;
+}
+.ad-native-wrap--section {
+  margin: 48px auto;
+  max-width: 800px;
+}
+.ad-native-wrap:has(.ad-unfilled) { display: none; }
+/* FAQ-native: inherits .faq-item card styling, adds inner padding */
+.ad-native-faq-item {
+  padding: 14px 22px;
+  cursor: default;
+}
+.ad-native-faq-item:hover {
+  border-color: var(--border);
+  box-shadow: none;
+}
+.ad-native-faq-item:has(.ad-unfilled) { display: none; }
+
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .article-layout { grid-template-columns: 1fr; }
