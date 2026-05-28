@@ -17,6 +17,22 @@
 
   /* ─── Slot Registry ─────────────────────────────────────────── */
   var SLOTS = [
+    /* ── index.html ───────────────────────────────────────────── */
+    {
+      name:      'diamond-painter-home-middle',
+      selector:  '#ad-HomeMiddleAd',
+      slotId:    null,            // TODO: replace with slot ID after AdSense approval
+      format:    'auto',
+      fullWidth: true,
+    },
+    {
+      name:      'diamond-painter-home-bottom',
+      selector:  '#ad-HomeBottomAd',
+      slotId:    null,            // TODO: replace with slot ID after AdSense approval
+      format:    'auto',
+      fullWidth: true,
+    },
+    /* ── create.html ───────────────────────────────────────────── */
     {
       name:      'diamond-painter-right',
       selector:  '#ad-ResultSidebarAd',
