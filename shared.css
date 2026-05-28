@@ -759,7 +759,7 @@ ul { list-style: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
+  transition: background 0.2s, border-color 0.2s, min-height 0.2s;
 }
 .ad-slot__label {
   font-size: 11px;
@@ -772,11 +772,32 @@ ul { list-style: none; }
 }
 .ad-slot .adsbygoogle ~ .ad-slot__label,
 .ad-slot[data-ad-activated] .ad-slot__label { display: none; }
+/* Filled: remove placeholder shell so only the ad shows */
+.ad-slot[data-ad-activated] {
+  background: transparent;
+  border-color: transparent;
+}
+/* Unfilled after timeout: collapse to zero so no blank gap */
+.ad-slot.ad-unfilled {
+  min-height: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+}
 .ad-slot--article-top    { min-height: 90px; }
 .ad-slot--article-middle { min-height: 250px; }
 .ad-slot--sidebar        { min-height: 250px; min-width: 0; width: 100%; }
 .ad-slot--footer         { min-height: 90px; }
+/* Centered banner — 728px on desktop, full-width on mobile */
+.ad-slot--banner {
+  max-width: 728px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .ad-slot .adsbygoogle    { display: block !important; width: 100%; }
+/* adsbygoogle global default */
+ins.adsbygoogle        { display: block; }
+ins.adsbygoogle[data-ad-status="filled"] { display: block; }
 .adsense-placeholder {
   background: var(--bg-alt);
   border: 1px dashed var(--border);
@@ -789,6 +810,9 @@ ul { list-style: none; }
   color: var(--text4);
   letter-spacing: 0.05em;
   margin: 32px 0;
+}
+@media (max-width: 768px) {
+  .ad-slot--banner { max-width: 100%; }
 }
 
 /* ── Responsive ── */
