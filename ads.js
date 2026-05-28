@@ -19,18 +19,18 @@
   var SLOTS = [
     /* ── index.html ───────────────────────────────────────────── */
     {
-      name:      'diamond-painter-home-middle',
-      selector:  '#ad-HomeMiddleAd',
-      slotId:    null,            // TODO: replace with slot ID after AdSense approval
-      format:    'auto',
-      fullWidth: true,
+      name:      'diamond-painter-howto-gallery',
+      selector:  '#ad-HowtoGalleryAd',
+      slotId:    '2420763325',
+      layout:    'in-article',
+      format:    'fluid',
     },
     {
-      name:      'diamond-painter-home-bottom',
-      selector:  '#ad-HomeBottomAd',
-      slotId:    null,            // TODO: replace with slot ID after AdSense approval
-      format:    'auto',
-      fullWidth: true,
+      name:      'diamond-painter-faq-mid',
+      selector:  '#ad-FaqMidAd',
+      slotId:    '3268986732',
+      layout:    'in-article',
+      format:    'fluid',
     },
     /* ── create.html ───────────────────────────────────────────── */
     {
@@ -64,10 +64,11 @@
     var ins = document.createElement('ins');
     ins.className = 'adsbygoogle';
     ins.style.cssText = 'display:block;width:100%;';
-    ins.setAttribute('data-ad-client',              AD_CLIENT);
-    ins.setAttribute('data-ad-slot',                slot.slotId);
-    ins.setAttribute('data-ad-format',              slot.format);
-    ins.setAttribute('data-full-width-responsive',  slot.fullWidth ? 'true' : 'false');
+    ins.setAttribute('data-ad-client', AD_CLIENT);
+    ins.setAttribute('data-ad-slot',   slot.slotId);
+    ins.setAttribute('data-ad-format', slot.format);
+    if (slot.layout)    ins.setAttribute('data-ad-layout',            slot.layout);
+    if (slot.fullWidth) ins.setAttribute('data-full-width-responsive', 'true');
 
     // Clear placeholder shell, insert real unit
     container.innerHTML = '';
