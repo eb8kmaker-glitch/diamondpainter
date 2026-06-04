@@ -959,6 +959,28 @@
     border-top: 1px solid rgba(255,255,255,0.05);
   }
 
+  /* ── 캔버스 조작 힌트 ── */
+  .nav-hint-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .nav-hint-key {
+    font-family: var(--ui);
+    font-size: 9.5px;
+    color: var(--text3);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px;
+    padding: 1px 5px;
+    white-space: nowrap;
+  }
+  .nav-hint-desc {
+    font-size: 10px;
+    color: var(--text2);
+  }
+
   /* ── 편집 상태 행 ── */
   .edit-state-row {
     display: flex;
@@ -1689,6 +1711,13 @@
       </div>
     </div>
 
+    <!-- Canvas Navigation Hints -->
+    <div class="panel-section">
+      <div class="panel-title" data-i18n="section_nav_hints">캔버스 조작</div>
+      <div class="nav-hint-row"><span class="nav-hint-key">Space + 드래그</span><span class="nav-hint-desc" data-i18n="nav_hint_pan">캔버스 이동</span></div>
+      <div class="nav-hint-row"><span class="nav-hint-key">휠 스크롤</span><span class="nav-hint-desc" data-i18n="nav_hint_zoom">확대 / 축소</span></div>
+    </div>
+
     <!-- Edit State -->
     <div class="panel-section">
       <div class="panel-title" data-i18n="section_edit_state">편집 상태</div>
@@ -1856,6 +1885,9 @@ const i18n = {
     section_upload:      '이미지 가져오기',
     section_settings:    '도안 설정',
     section_tools:       '편집 도구',
+    section_nav_hints:   '캔버스 조작',
+    nav_hint_pan:        '캔버스 이동',
+    nav_hint_zoom:       '확대 / 축소',
     section_edit_state:  '편집 현황',
     section_palette:     '색상표',
     section_pattern_info:'패턴 정보',
@@ -2001,6 +2033,9 @@ const i18n = {
     section_upload:      'Import Image',
     section_settings:    'Pattern Setup',
     section_tools:       'Edit Tools',
+    section_nav_hints:   'Canvas Controls',
+    nav_hint_pan:        'Pan canvas',
+    nav_hint_zoom:       'Zoom in / out',
     section_edit_state:  'Edit Status',
     section_palette:     'Palette',
     section_pattern_info:'Pattern Info',
@@ -2130,6 +2165,9 @@ const i18n = {
     section_upload:      '画像インポート',
     section_settings:    '図案設定',
     section_tools:       '編集ツール',
+    section_nav_hints:   'キャンバス操作',
+    nav_hint_pan:        'キャンバス移動',
+    nav_hint_zoom:       '拡大 / 縮小',
     section_edit_state:  '編集状況',
     section_palette:     'カラーパレット',
     section_pattern_info:'図案情報',
@@ -2259,6 +2297,9 @@ const i18n = {
     section_upload:      '导入图片',
     section_settings:    '图案设置',
     section_tools:       '编辑工具',
+    section_nav_hints:   '画布操作',
+    nav_hint_pan:        '移动画布',
+    nav_hint_zoom:       '放大 / 缩小',
     section_edit_state:  '编辑状态',
     section_palette:     '调色板',
     section_pattern_info:'图案信息',
