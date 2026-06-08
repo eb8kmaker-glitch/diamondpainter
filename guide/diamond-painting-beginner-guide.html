@@ -41,6 +41,16 @@
   }
   </script>
   <link rel="stylesheet" href="../shared.css">
+  <style>
+    .buy-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem;margin:1.25rem 0;}
+    .buy-card{border:1px solid #e5e7eb;border-radius:8px;padding:1.25rem;display:flex;flex-direction:column;gap:1rem;}
+    .buy-card strong{display:block;font-size:0.95rem;margin-bottom:0.25rem;}
+    .buy-card p{font-size:0.85rem;color:#6b7280;margin:0;}
+    .buy-card-widget{display:flex;justify-content:center;align-items:center;}
+    .buy-link{display:inline-block;padding:0.4rem 0.9rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.85rem;text-decoration:none;color:#374151;white-space:nowrap;}
+    .buy-link:hover{background:#f9fafb;}
+    .affiliate-notice{font-size:0.72rem;color:#9ca3af;margin-top:0.75rem;}
+  </style>
 </head>
 <body>
 
@@ -109,6 +119,7 @@
           <ul class="toc-list">
             <li><a href="#what-is">What is diamond painting?</a></li>
             <li><a href="#materials">The materials you need</a></li>
+            <li><a href="#where-to-buy" data-i18n="bg_toc_where_to_buy">Where to buy supplies</a></li>
             <li><a href="#reading-canvas">How to read a diamond painting canvas</a></li>
             <li><a href="#round-vs-square">Round vs square drills</a></li>
             <li><a href="#technique">Basic placement technique</a></li>
@@ -142,6 +153,35 @@
 
           <h3 data-i18n="bg_h3_tray">The Tray</h3>
           <p data-i18n="bg_p_tray">The grooved plastic tray lets you pour out a small quantity of drills, then tilt the tray so they self-orient facet-side up — ready to pick up. This little detail makes the process much faster than picking from a flat surface.</p>
+
+          <!-- Where to Buy section -->
+          <section id="where-to-buy" style="margin:2.5rem 0;">
+            <h2 data-i18n="bg_h2_where_to_buy">Where to Buy</h2>
+            <p data-i18n="bg_p_where_intro">Most tools ship fast via Amazon. The two items below cover everything in the materials list above — pen, tray, wax, and storage.</p>
+            <div class="buy-cards">
+              <!-- Card 1: Applicator Pen + Tray + Wax Set -->
+              <div class="buy-card">
+                <div class="buy-card-info">
+                  <strong data-i18n="bg_buy_card1_name">Applicator Pen, Tray &amp; Wax Set</strong>
+                  <p data-i18n="bg_buy_card1_desc">Everything you need to pick up and place drills — pen, grooved tray, and wax pad in one kit.</p>
+                </div>
+                <div class="buy-card-widget" data-i18n-html="bg_buy_card1_widget">
+                  <a class="buy-link" href="https://www.amazon.com/s?k=diamond+painting+applicator+pen+tray+wax+kit" rel="nofollow sponsored" target="_blank">View on Amazon →</a>
+                </div>
+              </div>
+              <!-- Card 2: Drill Storage Case -->
+              <div class="buy-card">
+                <div class="buy-card-info">
+                  <strong data-i18n="bg_buy_card2_name">Diamond Drill Storage Case</strong>
+                  <p data-i18n="bg_buy_card2_desc">Keeps drills sorted by DMC color. Saves time when switching colors mid-project.</p>
+                </div>
+                <div class="buy-card-widget" data-i18n-html="bg_buy_card2_widget">
+                  <a class="buy-link" href="https://www.amazon.com/s?k=diamond+painting+drill+storage+case" rel="nofollow sponsored" target="_blank">View on Amazon →</a>
+                </div>
+              </div>
+            </div>
+            <p class="affiliate-notice" data-i18n="bg_affiliate_notice">These are affiliate links (Amazon Associates). I may earn a small commission at no extra cost to you.</p>
+          </section>
 
           <h2 id="reading-canvas" data-i18n="bg_h2_reading">How to Read a Diamond Painting Canvas</h2>
           <p data-i18n="bg_p_reading_intro">The canvas looks overwhelming at first, but the system is straightforward once you understand the basics. Each cell in the grid is printed with a symbol — a circle, square, triangle, asterisk, or one of dozens of other shapes — that corresponds to one DMC color. Your kit will include a legend (sometimes called a color key) that maps each symbol to its DMC number and usually to the color bag it corresponds to.</p>

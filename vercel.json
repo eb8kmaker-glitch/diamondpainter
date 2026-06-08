@@ -71,6 +71,15 @@
       ]
     },
     {
+      "source": "/guide/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-src 'self' https://coupa.ng;"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
