@@ -80,6 +80,18 @@
       bg_p_sealing: 'Sealing prevents drills from falling off over time and protects the finished piece from dust. The most popular method is applying a thin, even coat of diamond painting sealer (a diluted PVA or acrylic medium) using a foam brush. Work across the canvas in one direction and allow it to dry completely before applying a second coat. Avoid sealing near an open window — dust particles will settle into the wet sealer and create a cloudy finish.',
       bg_p_framing: 'Standard frame sizes from craft stores often fit common canvas sizes. Alternatively, many canvas sizes match standard photo frame dimensions. Stretch the finished canvas over a wooden frame (like an artist canvas) for a professional, gallery-ready display. Some crafters have their sealed work mounted on foam board and custom framed.',
 
+      /* ── Where to Buy ── */
+      bg_toc_where_to_buy: 'Where to buy supplies',
+      bg_h2_where_to_buy: 'Where to Buy',
+      bg_p_where_intro: 'Most tools ship fast via Amazon. The two items below cover everything in the materials list above — pen, tray, wax, and storage.',
+      bg_buy_card1_name: 'Applicator Pen, Tray & Wax Set',
+      bg_buy_card1_desc: 'Everything you need to pick up and place drills — pen, grooved tray, and wax pad in one kit.',
+      bg_buy_card1_widget: '<!-- TODO: Amazon Associates link replacement needed (pen+tray+wax set) --><a class="buy-link" href="https://www.amazon.com/s?k=diamond+painting+applicator+pen+tray+wax+kit" rel="nofollow sponsored" target="_blank">View on Amazon →</a>',
+      bg_buy_card2_name: 'Diamond Drill Storage Case',
+      bg_buy_card2_desc: 'Keeps drills sorted by DMC color. Saves time when switching colors mid-project.',
+      bg_buy_card2_widget: '<!-- TODO: Amazon Associates link replacement needed (drill storage case) --><a class="buy-link" href="https://www.amazon.com/s?k=diamond+painting+drill+storage+case" rel="nofollow sponsored" target="_blank">View on Amazon →</a>',
+      bg_affiliate_notice: 'These are affiliate links (Amazon Associates). I may earn a small commission at no extra cost to you.',
+
       /* ── Custom Tutorial ── */
       ct_title: 'How to Create a Custom Diamond Painting Pattern from Your Own Photo',
       ct_intro: 'There is something special about working on a diamond painting that means something to you personally — your dog, a family photo, a landscape you photographed on holiday. Creating a custom pattern used to require specialized software or paying a supplier to do it for you. Now you can generate a professional-quality, DMC-coded pattern from any photo for free, directly in your browser.',
@@ -499,6 +511,18 @@
       bg_p_rolling: '봉인하기 전에 깨끗한 천이나 파라핀지를 캔버스 위에 놓고 롤링핀이나 브레이어로 굴려주세요. 이렇게 하면 모든 드릴에 고른 압력이 가해져 완전히 고정되고 정렬됩니다. 또한 스퀘어 드릴이 틈새 없이 촘촘하게 맞아 들어가도록 도와줍니다.',
       bg_p_sealing: '봉인은 시간이 지남에 따라 드릴이 떨어지는 것을 방지하고 완성된 작품을 먼지로부터 보호합니다. 가장 인기 있는 방법은 폼 브러시를 사용하여 다이아몬드 페인팅 봉인제(희석된 PVA 또는 아크릴 매체)를 얇고 고르게 한 겹 바르는 것입니다. 한 방향으로 캔버스를 가로질러 작업하고 두 번째 겹을 바르기 전에 완전히 건조시키세요. 열린 창 근처에서 봉인하는 것은 피하세요 — 먼지 입자가 젖은 봉인제에 달라붙어 불투명한 마감을 만들 수 있습니다.',
       bg_p_framing: '공예점의 표준 액자 크기는 일반적인 캔버스 크기에 맞는 경우가 많습니다. 또는 많은 캔버스 크기가 표준 사진 액자 크기와 일치합니다. 완성된 캔버스를 나무 프레임(아티스트 캔버스처럼) 위에 펼쳐 전문적이고 갤러리 준비가 된 전시를 만드세요. 일부 공예가들은 봉인된 작품을 폼 보드에 마운트하여 맞춤 액자에 넣습니다.',
+
+      /* ── Where to Buy ── */
+      bg_toc_where_to_buy: '재료 구매 가이드',
+      bg_h2_where_to_buy: '재료 구매 가이드',
+      bg_p_where_intro: '아래 상품으로 위에서 소개한 재료(펜·트레이·왁스·수납함)를 한 번에 준비할 수 있습니다.',
+      bg_buy_card1_name: '어플리케이터 펜 + 트레이 + 왁스 세트',
+      bg_buy_card1_desc: '드릴을 집어 붙이는 데 필요한 도구 3종이 한 세트로 구성되어 있습니다.',
+      bg_buy_card1_widget: '<iframe src="https://coupa.ng/cniufH" width="120" height="240" frameborder="0" scrolling="no" referrerpolicy="unsafe-url" browsingtopics></iframe>',
+      bg_buy_card2_name: '보석십자수 드릴 수납 케이스',
+      bg_buy_card2_desc: 'DMC 색상별로 드릴을 분류 보관하면 작업 중 색상 교체 시간을 크게 줄일 수 있습니다.',
+      bg_buy_card2_widget: '<iframe src="https://coupa.ng/cniujW" width="120" height="240" frameborder="0" scrolling="no" referrerpolicy="unsafe-url" browsingtopics></iframe>',
+      bg_affiliate_notice: '이 링크는 쿠팡 파트너스 활동의 일환으로, 구매 시 소정의 수수료를 제공받습니다.',
 
       /* ── Custom Tutorial ── */
       ct_title: '내 사진으로 커스텀 다이아몬드 페인팅 패턴 만드는 법',
@@ -1166,6 +1190,18 @@
       bg_p_sealing: 'シーリングはドリルが時間とともに落ちるのを防ぎ、完成した作品をほこりから保護します。最も人気のある方法は、フォームブラシを使用してダイヤモンドペインティングシーラー（希釈したPVAまたはアクリルメディウム）の薄く均一なコーティングを施すことです。キャンバスを一方向に横切って作業し、2回目のコートを施す前に完全に乾燥させてください。開いた窓の近くでシールするのは避けてください — ほこりの粒子が濡れたシーラーに付着して曇った仕上がりになります。',
       bg_p_framing: '工芸店の標準フレームサイズは一般的なキャンバスサイズに合うことが多いです。または多くのキャンバスサイズが標準写真フレームのサイズと一致します。完成したキャンバスを木製フレーム（アーティストキャンバスのように）に伸ばして専門的なギャラリー準備の展示を作ってください。一部のクラフターは封じた作品をフォームボードにマウントしてカスタムフレームに入れています。',
 
+      /* ── Where to Buy ── */
+      bg_toc_where_to_buy: '材料の購入',
+      bg_h2_where_to_buy: '材料の購入',
+      bg_p_where_intro: '上で紹介した道具（ペン・トレイ・ワックス・収納ケース）をまとめて揃えられます。',
+      bg_buy_card1_name: 'アプリケーターペン＋トレイ＋ワックスセット',
+      bg_buy_card1_desc: 'ドリルを貼り付けるために必要な3点セットです。',
+      bg_buy_card1_widget: '<!-- TODO: Amazon Associates link replacement needed (pen+tray+wax set) --><a class="buy-link" href="https://www.amazon.com/s?k=diamond+painting+applicator+pen+tray+wax+kit" rel="nofollow sponsored" target="_blank">View on Amazon →</a>',
+      bg_buy_card2_name: 'ダイヤモンドドリル収納ケース',
+      bg_buy_card2_desc: 'DMCカラーごとに仕分けて保管。作業効率が大幅にアップします。',
+      bg_buy_card2_widget: '<!-- TODO: Amazon Associates link replacement needed (drill storage case) --><a class="buy-link" href="https://www.amazon.com/s?k=diamond+painting+drill+storage+case" rel="nofollow sponsored" target="_blank">View on Amazon →</a>',
+      bg_affiliate_notice: 'これはAmazonアソシエイトの提携リンクです。購入時に少額の手数料が発生する場合があります。',
+
       /* ── Custom Tutorial ── */
       ct_title: '自分の写真からカスタムダイヤモンドペインティングパターンを作る方法',
       ct_intro: '自分のペット、家族写真、旅行中に撮った風景でダイヤモンドペインティングをするのは特別な意味があります。今では専門ソフトウェアなしで、ブラウザから直接、無料でプロ品質のDMCコードパターンを作成できます。',
@@ -1831,6 +1867,18 @@
       bg_p_rolling: '密封前，在画布上放一块干净的布或羊皮纸，用擀面杖或滚轮滚过。这对所有钻施加均匀压力，确保它们完全粘合并对齐。它还有助于方形钻卡入紧密、无间隙的行中。',
       bg_p_sealing: '密封可防止钻随时间脱落，并保护完成作品免受灰尘侵害。最流行的方法是使用泡沫刷涂上薄薄一层钻石画密封剂（稀释的PVA或丙烯酸介质）。沿一个方向横穿画布工作，在涂第二层之前完全干燥。避免在开窗附近密封——灰尘颗粒会沉积在湿密封剂中形成浑浊的完成效果。',
       bg_p_framing: '工艺店的标准框架尺寸通常适合常见的画布尺寸。或者，许多画布尺寸与标准照片框尺寸相匹配。将完成的画布拉伸在木框（如艺术家画布）上，展示专业的画廊风格。一些手工艺者将他们密封的作品安装在泡沫板上并定制裱框。',
+
+      /* ── Where to Buy ── */
+      bg_toc_where_to_buy: '购买材料',
+      bg_h2_where_to_buy: '购买材料',
+      bg_p_where_intro: '以下商品涵盖上述所有工具（笔、托盘、蜡、收纳盒），一次备齐。',
+      bg_buy_card1_name: '点钻笔+托盘+蜡套装',
+      bg_buy_card1_desc: '包含拾取和放置钻石所需的全部工具。',
+      bg_buy_card1_widget: '<!-- TODO: Amazon Associates link replacement needed (pen+tray+wax set) --><a class="buy-link" href="https://www.amazon.com/s?k=diamond+painting+applicator+pen+tray+wax+kit" rel="nofollow sponsored" target="_blank">View on Amazon →</a>',
+      bg_buy_card2_name: '钻石收纳盒',
+      bg_buy_card2_desc: '按DMC颜色分类存放，大幅节省换色时间。',
+      bg_buy_card2_widget: '<!-- TODO: Amazon Associates link replacement needed (drill storage case) --><a class="buy-link" href="https://www.amazon.com/s?k=diamond+painting+drill+storage+case" rel="nofollow sponsored" target="_blank">View on Amazon →</a>',
+      bg_affiliate_notice: '这是亚马逊联盟链接，您购买时我可能获得少量佣金。',
 
       /* ── Custom Tutorial ── */
       ct_title: '如何用自己的照片制作自定义钻石画图案',
