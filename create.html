@@ -4374,6 +4374,7 @@ document.getElementById('btn-export').addEventListener('click', () => {
     a.click();
     URL.revokeObjectURL(url);
     showNotif(t('notif_exported'), 'success');
+    if (window.showCafeToast) showCafeToast(); // KO-only post-export community invite
   });
 });
 
@@ -4501,6 +4502,7 @@ document.getElementById('btn-preview').addEventListener('click', async () => {
       a.href = dataUrl;
       a.download = 'diamond-preview.jpg';
       a.click();
+      if (window.showCafeToast) showCafeToast(); // KO-only post-export community invite
     };
   } catch (e) {
     imgWrap.innerHTML = `<div class="preview-spinner-wrap"><span>⚠ Render failed</span></div>`;
@@ -4834,6 +4836,7 @@ function generatePDF() {
   const filename = `diamondpainter_${gridW}x${gridH}_${state.palette.length}colors_${dateStr}.pdf`;
   doc.save(filename);
   showNotif(t('notif_pdf_done'), 'success');
+  if (window.showCafeToast) showCafeToast(); // KO-only post-export community invite
 }
 
 document.getElementById('btn-pdf').addEventListener('click', generatePDF);
@@ -4850,6 +4853,7 @@ document.documentElement.lang = currentLang; // html[lang] 초기 설정
 applyTranslations();
 </script>
 <script src="/js/renderFinishedPreview.js"></script>
+<script src="cafe-toast.js" defer></script>
 <script src="ads.js" defer></script>
 <script type="module" src="/analytics.js"></script>
 </body>
