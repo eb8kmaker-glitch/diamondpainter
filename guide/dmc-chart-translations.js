@@ -4,7 +4,7 @@
   window.dpI18n.extend({
     en: {
       dcc_title: 'DMC Color Chart',
-      dcc_intro: 'Browse, search, and compare all 457 DMC diamond painting colors. Filter by color family and tone, find similar colors, and compare ΔE color difference side by side.',
+      dcc_intro: 'Browse, search, and compare the full DMC diamond painting color palette. Filter by color family and tone, find similar colors, and compare ΔE color difference side by side.',
       dcc_cta: 'Generate a Pattern Free →',
       dcc_search_ph: 'Search DMC code or color name…',
       dcc_family_all: 'All',
@@ -45,7 +45,7 @@
 
     ko: {
       dcc_title: 'DMC 컬러 차트',
-      dcc_intro: '457개 전체 DMC 색상을 탐색·검색·비교하세요. 색상 계열과 톤으로 필터링하고, 유사 색상을 찾고, ΔE 색차로 나란히 비교할 수 있습니다.',
+      dcc_intro: '전체 DMC 색상을 탐색·검색·비교하세요. 색상 계열과 톤으로 필터링하고, 유사 색상을 찾고, ΔE 색차로 나란히 비교할 수 있습니다.',
       dcc_cta: '도안 무료 만들기 →',
       dcc_search_ph: 'DMC 코드 또는 색상명 검색…',
       dcc_family_all: '전체',
@@ -86,7 +86,7 @@
 
     ja: {
       dcc_title: 'DMCカラーチャート',
-      dcc_intro: '457色のDMCカラーをすべて検索・フィルター・比較できます。色系統やトーンで絞り込み、類似色を探し、ΔE色差で並べて比較しましょう。',
+      dcc_intro: 'DMCカラーをすべて検索・フィルター・比較できます。色系統やトーンで絞り込み、類似色を探し、ΔE色差で並べて比較しましょう。',
       dcc_cta: '無料でパターン生成 →',
       dcc_search_ph: 'DMCコードまたは色名で検索…',
       dcc_family_all: 'すべて',
@@ -127,7 +127,7 @@
 
     zh: {
       dcc_title: 'DMC颜色图表',
-      dcc_intro: '浏览、搜索并比较全部457种DMC钻石画颜色。按色系和色调筛选，查找相似色，并通过ΔE色差进行对比。',
+      dcc_intro: '浏览、搜索并比较全部DMC钻石画颜色。按色系和色调筛选，查找相似色，并通过ΔE色差进行对比。',
       dcc_cta: '免费生成图案 →',
       dcc_search_ph: '搜索DMC编号或颜色名称…',
       dcc_family_all: '全部',

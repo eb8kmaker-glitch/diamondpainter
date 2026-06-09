@@ -431,7 +431,13 @@
       lp_faq_3_q: 'Can I use a tablet instead of printing my diamond painting pattern?',
       lp_faq_3_a: 'Yes, and many experienced crafters prefer this. A tablet lets you zoom into specific sections, use digital highlighting to mark completed areas, and view the full pattern at any time without paper management. A 10-inch tablet propped beside your workspace works very well.',
       lp_faq_4_q: 'How large should I print each cell for comfortable reading?',
-      lp_faq_4_a: 'Approximately 1.5–2mm per cell is comfortable for most people with normal vision. Smaller (1–1.3mm) is possible with good eyesight but becomes fatiguing over long sessions. Larger (2.5–3mm) is easier but requires more pages.'
+      lp_faq_4_a: 'Approximately 1.5–2mm per cell is comfortable for most people with normal vision. Smaller (1–1.3mm) is possible with good eyesight but becomes fatiguing over long sessions. Larger (2.5–3mm) is easier but requires more pages.',
+
+      /* ── Guide Index: DMC Color Chart card ── */
+      gi_tag_dcc: 'Interactive Chart • Tool',
+      gi_h3_dcc: 'DMC Color Chart — Browse & Compare Every Color',
+      gi_p_dcc: 'Search, filter by color family and tone, and compare colors side by side with ΔE color difference values. The fastest way to find and choose DMC colors.',
+      gi_link_chart: 'Open chart →'
     },
 
     ko: {
@@ -1109,7 +1115,13 @@
       lp_p_paper_weight_2: '패턴 인쇄에 광택 사진 용지는 피하세요. 광택은 대부분의 공예가가 사용하는 데스크 램프와 라이트 패드 아래에서 상당한 눈부심을 만들어 기호를 읽기 어렵게 합니다. 매트 사진 용지나 매트 잉크젯 용지는 복사 용지보다 약간 더 나은 잉크 품질을 원한다면 괜찮지만, 표준 용지는 대부분의 사람들에게 잘 작동합니다.',
       lp_p_color_bw: '패턴에는 색상 셀(드릴 색상을 보여줌)과 기호(어떤 색상이 어디에 가는지 식별용) 모두가 포함됩니다. 색상 인쇄는 패턴의 색상 레이아웃을 배울 때 더 유용합니다. 흑백 인쇄는 더 어둡고 선명한 기호를 생성해 작은 크기에서 읽기 더 쉬운 경우가 있습니다. 많은 공예가들은 첫 번째 통과를 위해 색상으로 인쇄하고 복잡한 영역의 섹션별 출력에는 흑백으로 전환합니다.',
       lp_p_assembling_intro: '대형 타일 패턴의 경우 정확한 조립이 중요합니다. 잘못된 이음새는 격자를 한 행 또는 열만큼 이동시켜 그 영역에서 배치 오류를 유발할 수 있습니다.',
-      lp_p_tips_intro: '작업대의 인쇄된 패턴은 수개월이 걸릴 수 있는 프로젝트 내내 끊임없이 다루어집니다. 몇 가지 습관이 일반적인 불편함을 방지합니다:'
+      lp_p_tips_intro: '작업대의 인쇄된 패턴은 수개월이 걸릴 수 있는 프로젝트 내내 끊임없이 다루어집니다. 몇 가지 습관이 일반적인 불편함을 방지합니다:',
+
+      /* ── Guide Index: DMC Color Chart card ── */
+      gi_tag_dcc: '인터랙티브 차트 • 도구',
+      gi_h3_dcc: 'DMC 컬러 차트 — 전체 색상 탐색 & 비교',
+      gi_p_dcc: '색상 계열과 톤으로 필터링하고 ΔE 색차로 색상을 나란히 비교하세요. DMC 색상을 빠르게 찾고 선택하는 가장 효율적인 방법입니다.',
+      gi_link_chart: '차트 열기 →'
     },
 
     ja: {
@@ -1787,7 +1799,13 @@
       lp_p_paper_weight_2: 'パターン印刷には光沢フォト用紙は避けてください。光沢はほとんどのクラフターが使用するデスクランプとライトパッドの下で大きなグレアを作り、シンボルを読みにくくします。マットフォト用紙やマットインクジェット用紙は複写用紙よりわずかに良いインク品質を望む場合には問題ありませんが、標準的な用紙はほとんどの人によく機能します。',
       lp_p_color_bw: 'パターンには色のセル（ドリルの色を示す）とシンボル（どの色がどこに行くかを識別する）の両方が含まれています。カラー印刷はパターンの色レイアウトを学習する際により役立ちます。白黒印刷はより暗くくっきりしたシンボルを生成し、小さなサイズで読みやすい場合があります。多くのクラフターは最初の通過にはカラーで印刷し、複雑なエリアのセクションごとのプリントアウトには白黒に切り替えます。',
       lp_p_assembling_intro: '大きなタイルパターンの場合、正確な組み立てが重要です。アライメントがずれた接合部はグリッドを1行または1列ずらし、そのエリアで配置ミスを引き起こす可能性があります。',
-      lp_p_tips_intro: '作業台の上の印刷されたパターンは数ヶ月続くプロジェクト全体で絶えず扱われます。いくつかの習慣が一般的なフラストレーションを防ぎます：'
+      lp_p_tips_intro: '作業台の上の印刷されたパターンは数ヶ月続くプロジェクト全体で絶えず扱われます。いくつかの習慣が一般的なフラストレーションを防ぎます：',
+
+      /* ── Guide Index: DMC Color Chart card ── */
+      gi_tag_dcc: 'インタラクティブチャート • ツール',
+      gi_h3_dcc: 'DMCカラーチャート — 全色を閲覧・比較',
+      gi_p_dcc: '色系統やトーンでフィルタリングし、ΔE色差で色を並べて比較できます。DMCカラーを素早く見つけて選ぶ最速の方法です。',
+      gi_link_chart: 'チャートを開く →'
     },
 
     zh: {
@@ -2465,7 +2483,13 @@
       lp_p_paper_weight_2: '避免在图案打印中使用光面照片纸。光泽在大多数工艺人使用的台灯和灯光垫下会产生明显眩光，使符号难以阅读。哑光照片纸或哑光喷墨纸如果您想要比复印纸稍好的墨水质量是可以的，但标准纸对大多数人来说效果很好。',
       lp_p_color_bw: '图案包括颜色格子（显示钻石颜色）和符号（用于识别哪种颜色放在哪里）。当您学习图案的颜色布局时，彩色打印更有用；黑白打印产生更深、更清晰的符号，有时在小尺寸下更容易阅读。许多工艺人第一遍用彩色打印，在复杂区域的逐区域打印时切换到黑白。',
       lp_p_assembling_intro: '对于大型平铺图案，精确组装很重要。错位的接缝可能使网格偏移一行或一列，在该区域导致放置错误。',
-      lp_p_tips_intro: '工作台上的打印图案在可能持续数月的项目中会被不断处理。几个习惯能防止常见的困扰：'
+      lp_p_tips_intro: '工作台上的打印图案在可能持续数月的项目中会被不断处理。几个习惯能防止常见的困扰：',
+
+      /* ── Guide Index: DMC Color Chart card ── */
+      gi_tag_dcc: '交互式图表 • 工具',
+      gi_h3_dcc: 'DMC颜色图表 — 浏览并比较全部颜色',
+      gi_p_dcc: '按色系和色调筛选，通过ΔE色差并排比较颜色。是查找和选择DMC颜色最快捷的方式。',
+      gi_link_chart: '打开图表 →'
     }
   });
 })();
