@@ -1,0 +1,15 @@
+{
+  "name": "Diamond Painter",
+  "short_name": "Diamond Painter",
+  "description": "Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#080e22",
+  "theme_color": "#080e22",
+  "icons": [
+    { "src": "/icon.png", "type": "image/png", "sizes": "170x170", "purpose": "any" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "170x170", "purpose": "any" },
+    { "src": "/favicon.ico", "sizes": "170x170" }
+  ]
+}
