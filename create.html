@@ -1581,6 +1581,38 @@
       font-size: 13px;
     }
   }
+
+  /* ════════ Phase 4: 캔버스 터치 인터랙션 ════════
+     브라우저 기본 제스처와 페인트/핀치 충돌 방지 + 모바일 줌 컨트롤 노출. */
+  .canvas-area { touch-action: none; }
+  .canvas-zoom-controls { display: none; }
+  @media (max-width: 600px) {
+    .canvas-zoom-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      z-index: 30;
+    }
+    .canvas-zoom-controls button {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--glass-border);
+      background: rgba(8,14,34,0.82);
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+  }
 </style>
 <!-- jsPDF 2.x — PDF 저장 기능용 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1961,6 +1993,12 @@
     <div id="zoom-indicator">100%</div>
     <div id="coords">— , —</div>
 
+    <!-- Phase 4: 모바일 줌 컨트롤 (핀치 보조, 데스크톱 숨김) -->
+    <div class="canvas-zoom-controls" aria-label="Zoom controls">
+      <button type="button" id="zoom-in-btn" aria-label="Zoom in">＋</button>
+      <button type="button" id="zoom-out-btn" aria-label="Zoom out">－</button>
+    </div>
+
     <!-- Processing Overlay -->
     <div id="processing-overlay">
       <div class="spinner"></div>
@@ -2071,6 +2109,7 @@
 // ═══════════════════════════════════════════════════════════════
 const i18n = {
   ko: {
+    mobile_paint_hint: '확대하면 칸을 더 정확하게 칠할 수 있어요.',
     // 헤더 버튼
     btn_generate:      '⚡ 도안 생성',
     btn_autofill:      '🎨 색상 일괄 적용',
@@ -2221,6 +2260,7 @@ const i18n = {
     owned_unmark:          '보유 색상 해제',
   },
   en: {
+    mobile_paint_hint: 'Pinch to zoom in for more precise painting.',
     btn_generate:      '⚡ Generate Pattern',
     btn_autofill:      '🎨 Apply All Colors',
     btn_replace_color: '🔄 Replace Color',
@@ -2353,6 +2393,7 @@ const i18n = {
     owned_unmark:          'Unmark as owned',
   },
   ja: {
+    mobile_paint_hint: 'ピンチで拡大すると、より正確に塗れます。',
     btn_generate:      '⚡ 図案生成',
     btn_autofill:      '🎨 一括色適用',
     btn_replace_color: '🔄 色置換',
@@ -2485,6 +2526,7 @@ const i18n = {
     owned_unmark:          '保有色を解除',
   },
   zh: {
+    mobile_paint_hint: '双指放大可更精确地绘制。',
     btn_generate:      '⚡ 生成图案',
     btn_autofill:      '🎨 批量应用颜色',
     btn_replace_color: '🔄 替换颜色',
@@ -4026,10 +4068,63 @@ document.addEventListener('keyup', e => {
   }
 });
 
-canvasArea.addEventListener('mousedown', e => {
+// ─── Pointer 입력 통합 (mouse · pen · touch) ───
+// 단일 포인터 = 기존 마우스 페인트/팬 로직 그대로. 두 손가락(터치) = 핀치 줌 + 팬.
+// 좌표 변환(canvasToCell)·도구 로직(placeBead)·변환 적용(applyTransform)은 변경하지 않고 재사용.
+const activePointers = new Map(); // pointerId -> {x, y}
+let pinchState = null;
+const PINCH_MIN_ZOOM = 0.1, PINCH_MAX_ZOOM = 12; // 기존 휠 줌 범위와 동일
+const pointerDist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+function startPinch() {
+  const [a, b] = [...activePointers.values()];
+  pinchState = {
+    startDist: pointerDist(a, b) || 1,
+    startZoom: state.zoom,
+    startMidX: (a.x + b.x) / 2,
+    startMidY: (a.y + b.y) / 2,
+    startViewX: state.viewX,
+    startViewY: state.viewY,
+  };
+}
+
+function updatePinch() {
+  const [a, b] = [...activePointers.values()];
+  const rect = canvasArea.getBoundingClientRect();
+  const ratio = (pointerDist(a, b) || 1) / pinchState.startDist;
+  const newZoom = Math.min(Math.max(pinchState.startZoom * ratio, PINCH_MIN_ZOOM), PINCH_MAX_ZOOM);
+  const z = newZoom / pinchState.startZoom;
+  const midX = (a.x + b.x) / 2 - rect.left;
+  const midY = (a.y + b.y) / 2 - rect.top;
+  const startMidLocalX = pinchState.startMidX - rect.left;
+  const startMidLocalY = pinchState.startMidY - rect.top;
+  state.viewX = midX - (startMidLocalX - pinchState.startViewX) * z;
+  state.viewY = midY - (startMidLocalY - pinchState.startViewY) * z;
+  state.zoom = newZoom;
+  applyTransform();
+}
+
+canvasArea.addEventListener('pointerdown', e => {
   if (!state.pattern) return;
   e.preventDefault();
+  activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (e.pointerType !== 'mouse') {
+    try { canvasArea.setPointerCapture(e.pointerId); } catch (_) {}
+  }
 
+  // 두 번째 포인터(터치) → 진행 중이던 페인트 획을 되돌려 취소하고 핀치 시작
+  if (activePointers.size >= 2) {
+    if (state.isPainting) {
+      // 첫 손가락이 찍은 비드를 스냅샷으로 되돌림 (핀치 시 의도치 않은 페인트 방지)
+      if (state.undoStack.length) { _restoreState(state.undoStack.pop()); updateUI(); }
+      state.isPainting = false;
+    }
+    if (isPanning) { isPanning = false; state.isDragging = false; }
+    startPinch();
+    return;
+  }
+
+  // ── 단일 포인터: 기존 mousedown 로직 ──
   if (isSpacePressed || e.button === 1) {
     isPanning = true;
     state.isDragging = true;
@@ -4051,9 +4146,19 @@ canvasArea.addEventListener('mousedown', e => {
   }
 });
 
-canvasArea.addEventListener('mousemove', e => {
+canvasArea.addEventListener('pointermove', e => {
   if (!state.pattern) return;
+  if (activePointers.has(e.pointerId)) {
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  }
 
+  // 두 손가락: 핀치 줌/팬 (페인트 안 함)
+  if (activePointers.size >= 2) {
+    if (pinchState) updatePinch();
+    return;
+  }
+
+  // ── 단일 포인터: 기존 mousemove 로직 ──
   const {cx, cy} = canvasToCell(e.clientX, e.clientY);
   document.getElementById('coords').textContent = `${cx}, ${cy}`;
   drawHoverCell(cx, cy);
@@ -4075,19 +4180,31 @@ canvasArea.addEventListener('mousemove', e => {
   }
 });
 
-canvasArea.addEventListener('mouseup', e => {
+function onPointerEnd(e) {
+  activePointers.delete(e.pointerId);
+  if (canvasArea.hasPointerCapture && canvasArea.hasPointerCapture(e.pointerId)) {
+    try { canvasArea.releasePointerCapture(e.pointerId); } catch (_) {}
+  }
+  if (activePointers.size < 2) pinchState = null;
+
+  // ── 기존 mouseup 로직 ──
   if (isPanning) {
     isPanning = false;
     state.isDragging = false;
     canvasArea.style.cursor = isSpacePressed ? 'grab' : (state.pattern ? 'crosshair' : 'default');
   }
-  if (state.isPainting) {
+  if (activePointers.size === 0 && state.isPainting) {
     state.isPainting = false;
     updateUI();
   }
-});
+}
+canvasArea.addEventListener('pointerup', onPointerEnd);
+canvasArea.addEventListener('pointercancel', onPointerEnd);
 
-canvasArea.addEventListener('mouseleave', () => {
+// 마우스가 캔버스를 벗어나면 기존 mouseleave와 동일하게 호버/획 종료 (터치는 캡처로 처리)
+canvasArea.addEventListener('pointerleave', e => {
+  if (e.pointerType !== 'mouse') return;
+  activePointers.delete(e.pointerId);
   state.isPainting = false;
   if (isPanning) {
     isPanning = false;
@@ -5100,6 +5217,37 @@ applyTranslations();
       head.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
       });
+    });
+  }
+
+  // 4) 모바일 줌 컨트롤(+/-) — 기존 변환 경로(state.zoom + applyTransform) 재사용, 중심 기준 줌
+  function zoomByFactor(factor) {
+    if (!state.pattern) return;
+    var rect = canvasArea.getBoundingClientRect();
+    var mx = rect.width / 2, my = rect.height / 2;
+    var newZoom = Math.min(Math.max(state.zoom * factor, 0.1), 12);
+    state.viewX = mx - (mx - state.viewX) * (newZoom / state.zoom);
+    state.viewY = my - (my - state.viewY) * (newZoom / state.zoom);
+    state.zoom = newZoom;
+    applyTransform();
+  }
+  var zin = document.getElementById('zoom-in-btn');
+  var zout = document.getElementById('zoom-out-btn');
+  if (zin) zin.addEventListener('click', function () { zoomByFactor(1.25); });
+  if (zout) zout.addEventListener('click', function () { zoomByFactor(0.8); });
+
+  // 5) 첫 생성 직후 모바일 안내 토스트 (세션 1회) — 기존 showNotif/t 재사용
+  var genBtnReal = document.getElementById('btn-generate');
+  if (genBtnReal) {
+    var hintShown = false;
+    genBtnReal.addEventListener('click', function () {
+      if (hintShown || !window.matchMedia('(max-width: 600px)').matches) return;
+      hintShown = true;
+      setTimeout(function () {
+        if (typeof showNotif === 'function' && typeof t === 'function') {
+          showNotif(t('mobile_paint_hint'));
+        }
+      }, 1200);
     });
   }
 })();
