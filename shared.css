@@ -5,6 +5,15 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
 
+/* ===== Responsive Breakpoints (project standard) =====
+   Mobile  : max-width 600px
+   Tablet  : 601px ~ 1024px
+   Desktop : min-width 1025px
+   All media queries from here on follow this scale.
+   (CSS custom properties can't be used inside media conditions,
+    so this is documented as a team convention rather than a token.)
+================================================================ */
+
 /* ── Design Tokens ── */
 :root {
   /* Backgrounds — cool blue-white tint */
