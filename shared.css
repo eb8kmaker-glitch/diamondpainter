@@ -796,6 +796,16 @@ ul { list-style: none; }
 @media (max-width: 600px) {
   .kakao_ad_area { overflow: hidden; }
 }
+
+/* ── Mobile table scroll (Phase 7) ──
+   utils.js wraps each <table> in .table-wrap at load. On mobile a wide table
+   keeps its natural width and the wrapper scrolls, instead of cramping the
+   columns. Desktop is unchanged (table stays width:100% within the wrapper). */
+.table-wrap { max-width: 100%; }
+@media (max-width: 600px) {
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-wrap > table { width: auto; min-width: 100%; }
+}
 .adsense-placeholder {
   background: var(--bg-alt);
   border: 1px dashed var(--border);
