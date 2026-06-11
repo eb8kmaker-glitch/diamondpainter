@@ -1882,6 +1882,16 @@
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+
+  /* ── 광고 반응형 가드 (Phase 6): 모바일 가로 넘침 방지 ──
+     AdFit(Kakao) 고정 사이즈가 좁은 화면을 넘치지 않도록 제한.
+     AdSense(.adsbygoogle)는 이미 반응형이라 추가 영향 없음. 데스크톱 회귀 없음. */
+  .kakao_ad_area { max-width: 100%; }
+  .kakao_ad_area iframe { max-width: 100%; }
+  .adsbygoogle { max-width: 100%; }
+  @media (max-width: 600px) {
+    .kakao_ad_area { overflow: hidden; }
+  }
 </style>
 </head>
 <body>

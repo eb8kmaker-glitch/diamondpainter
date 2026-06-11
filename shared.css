@@ -786,6 +786,16 @@ ul { list-style: none; }
 .ad-slot--sidebar        { min-height: 250px; min-width: 0; width: 100%; }
 .ad-slot--footer         { min-height: 90px; }
 .ad-slot .adsbygoogle    { display: block !important; width: 100%; }
+
+/* ── Kakao AdFit responsive guard — 모바일 가로 넘침 방지 (Phase 6) ──
+   AdFit 단위는 고정 사이즈(728×90 등)라 좁은 모바일에서 넘칠 수 있어,
+   요소 폭을 뷰포트로 제한하고 ≤600px에서 넘치는 부분을 클리핑한다.
+   데스크톱(컨테이너 폭 > 광고 폭)에서는 영향 없음. */
+.kakao_ad_area { max-width: 100%; }
+.kakao_ad_area iframe { max-width: 100%; }
+@media (max-width: 600px) {
+  .kakao_ad_area { overflow: hidden; }
+}
 .adsense-placeholder {
   background: var(--bg-alt);
   border: 1px dashed var(--border);
