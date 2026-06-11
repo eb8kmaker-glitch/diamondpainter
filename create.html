@@ -1496,6 +1496,91 @@
       justify-content: center;
     }
   }
+
+  /* ════════ Phase 3: 모바일 설정 패널 UX ════════
+     설정 패널(.left-panel)을 아코디언화 + 터치 타겟 확대.
+     데스크톱·태블릿(>600px)은 모든 섹션 항상 펼침(현행 유지). 설정 로직 불변. */
+  @media (max-width: 600px) {
+    /* ── 섹션 제목을 아코디언 토글 헤더로 ── */
+    .left-panel .panel-title {
+      min-height: 44px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+    /* 기존 구분선 ::after를 오른쪽 셰브론으로 대체 */
+    .left-panel .panel-title::after {
+      content: '⌄';
+      flex: 0 0 auto;
+      height: auto;
+      margin-left: auto;
+      background: none;
+      color: var(--text3);
+      font-size: 14px;
+      line-height: 1;
+      transition: transform 0.2s ease;
+    }
+    .left-panel .panel-section.is-collapsed > .panel-title::after {
+      transform: rotate(-90deg);
+    }
+    /* 접힌 섹션: 제목만 남기고 콘텐츠 숨김 */
+    .left-panel .panel-section.is-collapsed > :not(.panel-title) {
+      display: none;
+    }
+
+    /* ── 슬라이더 터치 영역/썸 확대 ── */
+    .left-panel input[type=range] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 36px;
+      background: transparent;
+      cursor: pointer;
+    }
+    .left-panel input[type=range]::-webkit-slider-runnable-track {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--glass-border);
+    }
+    .left-panel input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 28px;
+      height: 28px;
+      margin-top: -12px;
+      border-radius: 50%;
+      background: var(--cyan);
+      border: none;
+      box-shadow: 0 0 6px rgba(111,231,255,0.4);
+    }
+    .left-panel input[type=range]::-moz-range-track {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--glass-border);
+    }
+    .left-panel input[type=range]::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      border: none;
+      border-radius: 50%;
+      background: var(--cyan);
+    }
+
+    /* ── 칩·버튼 터치 타겟 ≥44px ── */
+    .left-panel .bead-radio {
+      min-height: 44px;
+      padding: 10px 12px;
+    }
+    .left-panel .bead-radio .bead-label { font-size: 11px; }
+    .left-panel .tool-btn {
+      height: 44px;
+      font-size: 16px;
+    }
+    .left-panel .field input[type=number] {
+      height: 40px;
+      font-size: 13px;
+    }
+  }
 </style>
 <!-- jsPDF 2.x — PDF 저장 기능용 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -4993,6 +5078,29 @@ applyTranslations();
     syncDisabled();
     new MutationObserver(syncDisabled)
       .observe(genReal, { attributes: true, attributeFilter: ['disabled'] });
+  }
+
+  // 3) 설정 패널 아코디언 — CSS와 동일한 ≤600px에서만 활성 (설정 로직 불변, 표현만)
+  if (window.matchMedia('(max-width: 600px)').matches) {
+    var collapsedDefault = { section_tools: 1, section_nav_hints: 1, section_edit_state: 1 };
+    document.querySelectorAll('.left-panel .panel-section').forEach(function (sec) {
+      var head = sec.querySelector(':scope > .panel-title');
+      if (!head) return;
+      var key = head.getAttribute('data-i18n');
+      var collapsed = !!(key && collapsedDefault[key]);
+      head.setAttribute('role', 'button');
+      head.setAttribute('tabindex', '0');
+      head.setAttribute('aria-expanded', String(!collapsed));
+      if (collapsed) sec.classList.add('is-collapsed');
+      var toggle = function () {
+        var isCol = sec.classList.toggle('is-collapsed');
+        head.setAttribute('aria-expanded', String(!isCol));
+      };
+      head.addEventListener('click', toggle);
+      head.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
   }
 })();
 </script>
