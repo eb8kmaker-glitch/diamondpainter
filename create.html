@@ -1895,6 +1895,110 @@
   @media (max-width: 600px) {
     .kakao_ad_area { overflow: hidden; }
   }
+
+  /* ════════ 팔레트 색상 검색·추가 ════════ */
+  .palette-add-wrap { padding: 8px 14px 0; }
+  .palette-add-btn {
+    width: 100%;
+    height: 34px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    color: var(--text2);
+    font-family: var(--ui);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .palette-add-btn:not(:disabled):hover { border-color: rgba(111,231,255,0.4); color: var(--cyan); }
+  .palette-add-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .palette-add-btn.is-open { border-color: rgba(111,231,255,0.4); color: var(--cyan); background: rgba(111,231,255,0.08); }
+
+  .palette-search {
+    margin-top: 8px;
+    padding: 10px;
+    background: rgba(8,14,34,0.6);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+  }
+  .palette-search[hidden] { display: none; }
+  .palette-search__input,
+  #palette-hex-input {
+    width: 100%;
+    padding: 9px 10px;
+    font-size: 16px;            /* iOS 자동 확대 방지 */
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--ui);
+  }
+  .palette-search__input:focus,
+  #palette-hex-input:focus { outline: none; border-color: rgba(111,231,255,0.45); }
+  .palette-search__results { max-height: 280px; overflow-y: auto; margin-top: 8px; }
+  .dmc-result {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 4px;
+    border-radius: var(--radius-sm);
+    min-height: 44px;
+  }
+  .dmc-result + .dmc-result { border-top: 1px solid rgba(255,255,255,0.04); }
+  .dmc-result__swatch {
+    width: 24px; height: 24px; border-radius: 4px; flex: 0 0 auto;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .dmc-result__code { font-weight: 600; font-size: 11px; color: var(--text); white-space: nowrap; }
+  .dmc-result__name { font-size: 10.5px; color: var(--text3); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dmc-result__add {
+    flex: 0 0 auto;
+    min-height: 32px;
+    padding: 4px 10px;
+    border-radius: 14px;
+    border: 1px solid rgba(111,231,255,0.4);
+    background: rgba(111,231,255,0.1);
+    color: var(--cyan);
+    font-size: 10.5px;
+    cursor: pointer;
+  }
+  .dmc-result--exists .dmc-result__add {
+    opacity: 0.6;
+    border-color: var(--glass-border);
+    background: var(--glass);
+    color: var(--text3);
+  }
+  .palette-search__no-results { padding: 10px 4px; font-size: 11px; color: var(--text3); }
+  .palette-search__hex { margin-top: 10px; }
+  .palette-search__hex label { display: block; font-size: 10px; color: var(--text3); margin-bottom: 5px; }
+  .palette-hex-suggest { margin-top: 8px; }
+
+  /* 팔레트 행의 제거(×) 버튼 (사용자 추가·미사용 색) */
+  .stats-row--added-unused .stats-ratio { opacity: 0; }
+  .stats-remove-btn {
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    transform: translateY(-50%);
+    width: 18px; height: 18px;
+    line-height: 1;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,90,90,0.16);
+    color: #ff8a8a;
+    font-size: 13px;
+    cursor: pointer;
+    z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stats-remove-btn:hover { background: rgba(255,90,90,0.32); }
+
+  @media (max-width: 600px) {
+    .palette-search__results { max-height: 50vh; }
+    .dmc-result__add { min-height: 44px; }
+    .palette-add-btn { height: 40px; }
+  }
 </style>
 </head>
 <body>
@@ -2193,6 +2297,19 @@
 
     <!-- DMC 팔레트 관리 -->
     <div class="panel-title" style="padding: 10px 14px 0; margin-bottom:0" data-i18n="section_dmc_palette">DMC 팔레트</div>
+    <div class="palette-add-wrap">
+      <button id="palette-add-btn" class="palette-add-btn" type="button" disabled data-i18n="palette_add_color">+ Add Color</button>
+      <div id="palette-search" class="palette-search" hidden>
+        <input type="text" id="palette-search-input" class="palette-search__input"
+               data-i18n-placeholder="palette_search_placeholder" placeholder="Search DMC code or name…">
+        <div id="palette-search-results" class="palette-search__results"></div>
+        <div class="palette-search__hex">
+          <label data-i18n="palette_or_hex">Or enter a hex color</label>
+          <input type="text" id="palette-hex-input" placeholder="#RRGGBB" maxlength="7">
+          <div id="palette-hex-suggest" class="palette-hex-suggest"></div>
+        </div>
+      </div>
+    </div>
     <div class="color-list" id="color-list"></div>
 
     <!-- Download Pattern 버튼 -->
@@ -2300,6 +2417,13 @@ const i18n = {
     section_pattern_info:'패턴 정보',
     section_view_options:'표시 옵션',
     section_dmc_palette: 'DMC 팔레트',
+    palette_add_color: '+ 색상 추가',
+    palette_search_placeholder: 'DMC 코드나 이름 검색…',
+    palette_or_hex: '또는 hex 색상 입력',
+    palette_add: '추가',
+    palette_already_added: '이미 있음',
+    palette_nearest_dmc: '가장 가까운 DMC: {code} (ΔE {de})',
+    palette_remove_color: '제거',
     section_color_list:  'DMC 팔레트',
     section_stats:       '패턴 정보',
     section_progress:    '편집 현황',
@@ -2454,6 +2578,13 @@ const i18n = {
     section_pattern_info:'Pattern Info',
     section_view_options:'View Options',
     section_dmc_palette: 'DMC Palette',
+    palette_add_color: '+ Add Color',
+    palette_search_placeholder: 'Search DMC code or name…',
+    palette_or_hex: 'Or enter a hex color',
+    palette_add: 'Add',
+    palette_already_added: 'In palette',
+    palette_nearest_dmc: 'Nearest DMC: {code} (ΔE {de})',
+    palette_remove_color: 'Remove',
     section_color_list:  'DMC Palette',
     section_stats:       'Pattern Info',
     section_progress:    'Edit Status',
@@ -2592,6 +2723,13 @@ const i18n = {
     section_pattern_info:'図案情報',
     section_view_options:'表示オプション',
     section_dmc_palette: 'DMCパレット',
+    palette_add_color: '+ 色を追加',
+    palette_search_placeholder: 'DMCコードまたは名前で検索…',
+    palette_or_hex: 'またはhexカラーを入力',
+    palette_add: '追加',
+    palette_already_added: '追加済み',
+    palette_nearest_dmc: '最も近いDMC: {code} (ΔE {de})',
+    palette_remove_color: '削除',
     section_color_list:  'DMCパレット',
     section_stats:       '図案情報',
     section_progress:    '編集状況',
@@ -2730,6 +2868,13 @@ const i18n = {
     section_pattern_info:'图案信息',
     section_view_options:'显示选项',
     section_dmc_palette: 'DMC调色板',
+    palette_add_color: '+ 添加颜色',
+    palette_search_placeholder: '搜索DMC编号或名称…',
+    palette_or_hex: '或输入hex颜色',
+    palette_add: '添加',
+    palette_already_added: '已在调色板',
+    palette_nearest_dmc: '最接近的DMC：{code}（ΔE {de}）',
+    palette_remove_color: '移除',
     section_color_list:  'DMC调色板',
     section_stats:       '图案信息',
     section_progress:    '编辑状态',
@@ -2855,6 +3000,10 @@ function applyTranslations() {
   // data-i18n-title → title 속성
   document.querySelectorAll('[data-i18n-title]').forEach(el => {
     el.title = t(el.dataset.i18nTitle);
+  });
+  // data-i18n-placeholder → placeholder 속성
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
   });
   // 언어 셀렉트 동기화
   const sel = document.getElementById('lang-select');
@@ -3972,6 +4121,7 @@ function calcBeadStats() {
     symbol: p.symbol,
     count:  counts[i],
     ratio:  total > 0 ? counts[i] / total * 100 : 0,
+    userAdded: !!p.userAdded,
   }));
 }
 
@@ -4105,6 +4255,21 @@ function updateColorList() {
       updateOwnedOnlyStatus();
     });
 
+    // 사용자 추가 색이 아직 안 칠해졌으면 제거(×) 버튼 노출
+    if (s.userAdded && s.count === 0) {
+      row.classList.add('stats-row--added-unused');
+      const rm = document.createElement('button');
+      rm.type = 'button';
+      rm.className = 'stats-remove-btn';
+      rm.textContent = '×';
+      rm.title = t('palette_remove_color');
+      rm.addEventListener('click', ev => {
+        ev.stopPropagation();
+        if (window.removePaletteColor) window.removePaletteColor(s.idx);
+      });
+      row.appendChild(rm);
+    }
+
     container.appendChild(row);
   });
 }
@@ -4119,7 +4284,11 @@ function updateStats() {
     }
   }
   document.getElementById('stat-total').textContent    = total.toLocaleString();
-  const actual = state.palette.length;
+  let actual = state.palette.length;
+  if (state.palette.some(p => p.userAdded)) {
+    // 아직 안 칠해진 사용자 추가 색은 색상 수에서 제외
+    actual = calcBeadStats().filter(s => !(s.userAdded && s.count === 0)).length;
+  }
   const requested = state.requestedColors;
   document.getElementById('stat-colors').textContent =
     (requested && actual < requested) ? `${actual} / ${requested}` : actual;
@@ -5013,7 +5182,7 @@ document.getElementById('btn-preview').addEventListener('click', async () => {
 });
 
 function enableButtons() {
-  ['btn-generate','btn-autofill','btn-replace-color','btn-clear-progress','btn-save','btn-export','btn-preview','btn-download-pattern','btn-pdf'].forEach(id => {
+  ['btn-generate','btn-autofill','btn-replace-color','btn-clear-progress','btn-save','btn-export','btn-preview','btn-download-pattern','btn-pdf','palette-add-btn'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = false;
   });
@@ -5226,7 +5395,11 @@ function generatePDF() {
   const beadMM = parseFloat(document.querySelector('input[name="bead-type"]:checked')?.value || '2.8');
   const realW = (gridW * beadMM / 10).toFixed(1);
   const realH = (gridH * beadMM / 10).toFixed(1);
-  const totalBeads = state.palette.reduce((s, e) => s + e.count, 0);
+  // 사용자 추가 색은 실제 칠해진 라이브 카운트를 사용 (미사용 추가색은 범례 제외).
+  // 일반 색은 기존 동작 그대로(저장된 count) — 출력 변화 없음.
+  const _liveCounts = calcBeadStats().map(s => s.count);
+  const effCount = (e, i) => e.userAdded ? (_liveCounts[i] || 0) : e.count;
+  const totalBeads = state.palette.reduce((s, e, i) => s + effCount(e, i), 0);
 
   // ── 요약 카드 ──
   let cy = CONTENT_Y + 2;
@@ -5236,7 +5409,7 @@ function generatePDF() {
   const summaryItems = [
     [t('pdf_sum_grid'),   `${gridW} \xD7 ${gridH}`],
     [t('pdf_sum_total'),  totalBeads.toLocaleString()],
-    [t('pdf_sum_colors'), `${state.palette.length}`],
+    [t('pdf_sum_colors'), `${state.palette.filter((e, i) => !(e.userAdded && (_liveCounts[i] || 0) === 0)).length}`],
     [t('pdf_sum_size'),   `${realW} \xD7 ${realH} cm`],
   ];
   summaryItems.forEach(([label, val], i) => {
@@ -5286,6 +5459,8 @@ function generatePDF() {
 
   // ── 색상 행 ──
   state.palette.forEach((entry, pi) => {
+    // 미사용(칠해지지 않은) 사용자 추가 색은 범례에서 자동 제외
+    if (entry.userAdded && (_liveCounts[pi] || 0) === 0) return;
     // 페이지 넘침 처리
     if (cy + ROW_H > PAGE_H - MARGIN) {
       doc.addPage();
@@ -5302,7 +5477,7 @@ function generatePDF() {
     }
 
     const [r, g, b] = entry.color;
-    const ratio = totalBeads > 0 ? (entry.count / totalBeads * 100).toFixed(1) : '0.0';
+    const ratio = totalBeads > 0 ? (effCount(entry, pi) / totalBeads * 100).toFixed(1) : '0.0';
 
     // 색상 견본 (Swatch — 첫 번째 컬럼)
     doc.setFillColor(r, g, b);
@@ -5322,11 +5497,11 @@ function generatePDF() {
     // 색상명 (32자 제한)
     doc.text(entry.name.length > 32 ? entry.name.slice(0, 31) + '…' : entry.name, COL.name.x + 1, cy + 3.8);
     // 비즈 수
-    doc.text(entry.count.toLocaleString(), COL.count.x + 1, cy + 3.8);
+    doc.text(effCount(entry, pi).toLocaleString(), COL.count.x + 1, cy + 3.8);
     // 비율
     doc.text(`${ratio}%`, COL.ratio.x + 1, cy + 3.8);
     // 가로 막대 차트
-    const barW = Math.max(0.3, (entry.count / maxCount) * COL.bar.w);
+    const barW = Math.max(0.3, (effCount(entry, pi) / maxCount) * COL.bar.w);
     doc.setFillColor(r, g, b);
     doc.rect(COL.bar.x, cy + 1, barW, ROW_H - 2, 'F');
 
@@ -5615,6 +5790,185 @@ applyTranslations();
       }, 1200);
     });
   }
+})();
+</script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// 팔레트 색상 검색·추가 — DMC 검색 / hex→최근접 DMC 추천 / 추가·제거
+// 페인트·생성 로직은 변경하지 않고, 새 항목을 활성 색으로 설정만 한다.
+// 색 거리/최근접 매칭은 앱의 기존 유틸(nearestDMCfromLab, deltaE)을 재사용.
+// ═══════════════════════════════════════════════════════════════
+(function () {
+  const addBtn     = document.getElementById('palette-add-btn');
+  const panel      = document.getElementById('palette-search');
+  const input      = document.getElementById('palette-search-input');
+  const resultsEl  = document.getElementById('palette-search-results');
+  const hexInput   = document.getElementById('palette-hex-input');
+  const hexSuggest = document.getElementById('palette-hex-suggest');
+  if (!addBtn || !panel || !input || !resultsEl) return;
+
+  const EXTRA_SYMBOLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.split('');
+  const codeStr = c => String(c).toLowerCase();
+  const rgbStr  = rgb => 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+  const isInPalette   = code => state.palette.some(p => codeStr(p.dmc) === codeStr(code));
+  const paletteIdxOf  = code => state.palette.findIndex(p => codeStr(p.dmc) === codeStr(code));
+
+  // 기존 색과 겹치지 않는 유일 심볼 보장
+  function assignFreeSymbol() {
+    const used = new Set(state.palette.map(p => p.symbol));
+    for (const s of SYMBOLS)       if (!used.has(s)) return s;
+    for (const s of EXTRA_SYMBOLS) if (!used.has(s)) return s;
+    let i = 0, s;
+    do { s = '※' + (i++); } while (used.has(s));
+    return s;
+  }
+
+  function setActive(idx) {
+    state.activePaletteIdx = idx;
+    state.tool = 'paint';
+    if (typeof setActiveTool === 'function') setActiveTool('paint');
+    updateUI();
+    const active = document.querySelector('#color-list .stats-active-pal');
+    if (active) active.scrollIntoView({ block: 'nearest' });
+  }
+
+  function highlightExisting(code) {
+    const idx = paletteIdxOf(code);
+    if (idx < 0) return;
+    state.activePaletteIdx = idx;
+    state.highlightPaletteIdx = idx;
+    updateColorList();
+    const hl = document.querySelector('#color-list .stats-highlighted');
+    if (hl) hl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  function addColor(code) {
+    if (!state.pattern) return;
+    if (isInPalette(code)) { highlightExisting(code); return; }
+    const dmc = DMC_COLORS.find(c => codeStr(c.code) === codeStr(code));
+    if (!dmc) return;
+    state.palette.push({
+      dmc: dmc.code,
+      name: dmc.name,
+      color: dmc.rgb.slice(),
+      symbol: assignFreeSymbol(),
+      count: 0,
+      userAdded: true,
+    });
+    setActive(state.palette.length - 1);
+    closeSearch();
+    if (typeof showNotif === 'function') showNotif('DMC ' + dmc.code + ' · ' + dmc.name, 'success');
+  }
+
+  // DMC 검색: 코드 접두 매치 우선, 그다음 이름 부분 매치
+  function searchDmc(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    const starts = [], rest = [];
+    for (const c of DMC_COLORS) {
+      const code = codeStr(c.code), name = c.name.toLowerCase();
+      if (code.startsWith(q)) starts.push(c);
+      else if (name.includes(q) || code.includes(q)) rest.push(c);
+    }
+    return starts.concat(rest).slice(0, 30);
+  }
+
+  function resultRow(c) {
+    const exists = isInPalette(c.code);
+    const row = document.createElement('div');
+    row.className = 'dmc-result' + (exists ? ' dmc-result--exists' : '');
+    row.innerHTML =
+      '<span class="dmc-result__swatch" style="background:' + rgbStr(c.rgb) + '"></span>' +
+      '<span class="dmc-result__code">DMC ' + esc(c.code) + '</span>' +
+      '<span class="dmc-result__name">' + esc(c.name) + '</span>' +
+      '<button type="button" class="dmc-result__add" data-i18n="' + (exists ? 'palette_already_added' : 'palette_add') + '">' +
+        (exists ? t('palette_already_added') : t('palette_add')) + '</button>';
+    row.querySelector('.dmc-result__add').addEventListener('click', () => {
+      if (isInPalette(c.code)) highlightExisting(c.code);
+      else addColor(c.code);
+    });
+    return row;
+  }
+
+  function renderResults(list) {
+    resultsEl.innerHTML = '';
+    list.forEach(c => resultsEl.appendChild(resultRow(c)));
+    if (typeof applyTranslations === 'function') applyTranslations();
+  }
+
+  // 임의 hex → 가장 가까운 DMC 추천 (임의색을 그대로 넣지 않음)
+  function hexToRgb(hex) {
+    const m = /^#?([0-9a-fA-F]{6})$/.exec((hex || '').trim());
+    if (!m) return null;
+    const n = parseInt(m[1], 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function suggestFromHex(hex) {
+    hexSuggest.innerHTML = '';
+    const rgb = hexToRgb(hex);
+    if (!rgb) return;
+    const lab = rgbToLab(rgb[0], rgb[1], rgb[2]);
+    const idx = nearestDMCfromLab(lab);           // 앱의 기존 최근접 매처
+    const dmc = DMC_COLORS[idx];
+    const de  = deltaE(lab, DMC_LAB[idx]);         // 표시용 ΔE
+    const label = document.createElement('div');
+    label.style.cssText = 'font-size:10.5px;color:var(--text3);margin-bottom:6px;';
+    label.textContent = t('palette_nearest_dmc')
+      .replace('{code}', dmc.code).replace('{de}', de.toFixed(1));
+    hexSuggest.appendChild(label);
+    hexSuggest.appendChild(resultRow(dmc));
+    if (typeof applyTranslations === 'function') applyTranslations();
+  }
+
+  function openSearch() {
+    panel.hidden = false;
+    addBtn.classList.add('is-open');
+    input.value = ''; resultsEl.innerHTML = '';
+    hexInput.value = ''; hexSuggest.innerHTML = '';
+    input.focus();
+  }
+  function closeSearch() {
+    panel.hidden = true;
+    addBtn.classList.remove('is-open');
+  }
+  window.closePaletteSearch = closeSearch;
+
+  addBtn.addEventListener('click', () => { panel.hidden ? openSearch() : closeSearch(); });
+
+  let sTimer = null;
+  input.addEventListener('input', () => {
+    clearTimeout(sTimer);
+    sTimer = setTimeout(() => renderResults(searchDmc(input.value)), 110);
+  });
+  let hTimer = null;
+  hexInput.addEventListener('input', () => {
+    clearTimeout(hTimer);
+    hTimer = setTimeout(() => suggestFromHex(hexInput.value), 200);
+  });
+
+  // 미사용 사용자 추가 색 제거 (updateColorList의 × 버튼에서 호출).
+  // 라이브 카운트 0(참조 없음)일 때만 splice + 인덱스 재매핑 → 패턴 데이터 안전.
+  window.removePaletteColor = function (idx) {
+    if (!state.pattern || idx < 0 || idx >= state.palette.length) return;
+    const p = state.palette[idx];
+    if (!p || !p.userAdded) return;
+    const live = calcBeadStats()[idx];
+    if (live && live.count > 0) return;
+    state.palette.splice(idx, 1);
+    const grid = state.pattern.grid;
+    for (let i = 0; i < grid.length; i++) if (grid[i].palIdx > idx) grid[i].palIdx--;
+    const ug = state.userGrid;
+    for (let i = 0; i < ug.length; i++) if (ug[i] > idx) ug[i]--;
+    if (state.activePaletteIdx > idx) state.activePaletteIdx--;
+    else if (state.activePaletteIdx === idx) state.activePaletteIdx = 0;
+    if (state.highlightPaletteIdx > idx) state.highlightPaletteIdx--;
+    else if (state.highlightPaletteIdx === idx) state.highlightPaletteIdx = -1;
+    if (typeof drawPatternFull === 'function') drawPatternFull();
+    if (typeof redrawAllUserCells === 'function') redrawAllUserCells();
+    updateUI();
+  };
 })();
 </script>
 <script src="/js/renderFinishedPreview.js"></script>
