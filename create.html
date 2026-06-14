@@ -1192,6 +1192,21 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(111,231,255,0.15); border-radius: 4px; }
 
+  /* ── 저장 3종 그룹 + 예상도 구분선 ── */
+  .save-group { display: inline-flex; align-items: center; gap: 6px; }
+  .header-divider {
+    display: inline-block;
+    width: 1px;
+    align-self: stretch;
+    min-height: 22px;
+    margin: 0 4px;
+    background: rgba(255,255,255,0.18);
+  }
+  @media (max-width: 720px) {
+    .save-group { flex-wrap: wrap; }
+    .header-divider { display: none; }
+  }
+
   /* ── btn-preview ── */
   .btn-preview { background: linear-gradient(135deg, #7c5ce7, #0eb4d4); color: #fff; border-color: transparent; }
   .btn-preview:hover:not(:disabled) { opacity: 0.88; }
@@ -2097,10 +2112,15 @@
     <button class="btn btn-replace-color" id="btn-replace-color" disabled data-i18n="btn_replace_color">🔄 색상 교체</button>
     <button class="btn" id="btn-clear-progress" disabled data-i18n="btn_clear">🗑 편집 초기화</button>
     <button class="btn" id="btn-load" data-i18n="btn_load">📂 불러오기</button>
-    <button class="btn" id="btn-save" disabled data-i18n="btn_save">💾 저장</button>
-    <button class="btn primary" id="btn-export" disabled data-i18n="btn_export">📤 이미지 저장</button>
-    <button class="btn" id="btn-pdf" disabled data-i18n="btn_pdf">📄 PDF 저장</button>
-    <button class="btn btn-preview" id="btn-preview" disabled data-i18n="btn_preview">✨ 예상도</button>
+    <!-- 저장 3종 (프로젝트 / PDF / 이미지) — 포맷을 라벨로 명시 -->
+    <span class="save-group">
+      <button class="btn" id="btn-save" disabled data-i18n="save_project">💾 프로젝트 저장 (.json)</button>
+      <button class="btn" id="btn-pdf" disabled data-i18n="save_pdf">📄 PDF 저장</button>
+      <button class="btn primary" id="btn-export" disabled data-i18n="save_image">📤 이미지 저장 (PNG)</button>
+    </span>
+    <span class="header-divider" aria-hidden="true"></span>
+    <!-- 예상도는 저장이 아니라 보기 기능이므로 시각적으로 분리 -->
+    <button class="btn btn-preview" id="btn-preview" disabled data-i18n="preview_open">✨ 예상도</button>
     <select id="lang-select" class="lang-select">
       <option value="ko">한국어</option>
       <option value="en">English</option>
@@ -2387,9 +2407,9 @@
     <div class="tiny-color-warning" id="tiny-color-warning" style="display:none"></div>
     <div class="color-list" id="color-list"></div>
 
-    <!-- Download Pattern 버튼 -->
+    <!-- 완성 예상도 모달 열기 (상단 "예상도"와 동일 모달 재사용) -->
     <div class="panel-download">
-      <button class="btn-download-pattern" id="btn-download-pattern" disabled>📥 Download Pattern</button>
+      <button class="btn-download-pattern" id="btn-download-pattern" disabled data-i18n="preview_open">✨ 예상도</button>
     </div>
     <!-- DownloadBottomAd: diamond-painter-download / slot 9109999600 — ads.js 주입 -->
     <div id="ad-DownloadBottomAd" aria-label="Advertisement"></div>
@@ -2479,6 +2499,12 @@ const i18n = {
     preview_title:     '완성 예상도',
     preview_rendering: '렌더링 중…',
     preview_download:  'JPEG 저장',
+    save_project:      '💾 프로젝트 저장 (.json)',
+    save_pdf:          '📄 PDF 저장',
+    save_image:        '📤 이미지 저장 (PNG)',
+    preview_open:      '✨ 예상도',
+    preview_save_jpeg: 'JPEG 저장',
+    preview_save_pdf:  'PDF 저장',
     preview_close:     '닫기',
     // 패널 제목
     section_upload:      '이미지 가져오기',
@@ -2648,6 +2674,12 @@ const i18n = {
     preview_title:     'Finished Preview',
     preview_rendering: 'Rendering…',
     preview_download:  'Save JPEG',
+    save_project:      '💾 Save Project (.json)',
+    save_pdf:          '📄 Save PDF',
+    save_image:        '📤 Save Image (PNG)',
+    preview_open:      '✨ Preview',
+    preview_save_jpeg: 'Save JPEG',
+    preview_save_pdf:  'Save PDF',
     preview_close:     'Close',
     section_upload:      'Import Image',
     section_settings:    'Pattern Setup',
@@ -2800,6 +2832,12 @@ const i18n = {
     preview_title:     '完成予想図',
     preview_rendering: 'レンダリング中…',
     preview_download:  'JPEG保存',
+    save_project:      '💾 プロジェクト保存 (.json)',
+    save_pdf:          '📄 PDF保存',
+    save_image:        '📤 画像保存 (PNG)',
+    preview_open:      '✨ 完成イメージ',
+    preview_save_jpeg: 'JPEG保存',
+    preview_save_pdf:  'PDF保存',
     preview_close:     '閉じる',
     section_upload:      '画像インポート',
     section_settings:    '図案設定',
@@ -2952,6 +2990,12 @@ const i18n = {
     preview_title:     '完成预览图',
     preview_rendering: '渲染中…',
     preview_download:  '保存JPEG',
+    save_project:      '💾 保存项目 (.json)',
+    save_pdf:          '📄 保存PDF',
+    save_image:        '📤 保存图片 (PNG)',
+    preview_open:      '✨ 效果图',
+    preview_save_jpeg: '保存JPEG',
+    preview_save_pdf:  '保存PDF',
     preview_close:     '关闭',
     section_upload:      '导入图片',
     section_settings:    '图案设置',
@@ -5297,6 +5341,7 @@ previewOverlay.innerHTML = `
       <h3 id="preview-modal-title"></h3>
       <div class="preview-header-actions">
         <button class="btn" id="btn-preview-download" style="display:none"></button>
+        <button class="btn" id="btn-preview-pdf" style="display:none"></button>
         <button class="preview-close-btn" id="preview-close">✕</button>
       </div>
     </div>
@@ -5323,9 +5368,11 @@ document.getElementById('btn-preview').addEventListener('click', async () => {
   const titleEl    = document.getElementById('preview-modal-title');
   const imgWrap    = document.getElementById('preview-img-wrap');
   const dlBtn      = document.getElementById('btn-preview-download');
+  const pdfBtn     = document.getElementById('btn-preview-pdf');
 
   titleEl.textContent = t('preview_title');
   dlBtn.style.display = 'none';
+  pdfBtn.style.display = 'none';
   imgWrap.innerHTML = `
     <div class="preview-spinner-wrap">
       <div class="preview-spinner"></div>
@@ -5340,7 +5387,7 @@ document.getElementById('btn-preview').addEventListener('click', async () => {
     if (!previewOverlay.classList.contains('open')) return; // 닫힌 경우 무시
     imgWrap.innerHTML = `<img src="${dataUrl}" alt="${t('preview_title')}">`;
 
-    dlBtn.textContent = t('preview_download');
+    dlBtn.textContent = t('preview_save_jpeg');
     dlBtn.style.display = '';
     dlBtn.onclick = () => {
       const a = document.createElement('a');
@@ -5349,6 +5396,11 @@ document.getElementById('btn-preview').addEventListener('click', async () => {
       a.click();
       if (window.showCafeToast) showCafeToast(); // KO-only post-export community invite
     };
+
+    // 모달 내 PDF 저장 — 상단 PDF 저장과 동일한 generatePDF() 재사용 (중복 구현 없음)
+    pdfBtn.textContent = t('preview_save_pdf');
+    pdfBtn.style.display = '';
+    pdfBtn.onclick = () => generatePDF();
   } catch (e) {
     imgWrap.innerHTML = `<div class="preview-spinner-wrap"><span>⚠ Render failed</span></div>`;
   }
@@ -5361,8 +5413,9 @@ function enableButtons() {
   });
 }
 
+// 팔레트 아래 버튼: 저장이 아니라 예상도 모달 열기 (상단 "예상도"와 동일 모달 재사용)
 document.getElementById('btn-download-pattern').addEventListener('click', () => {
-  document.getElementById('btn-export').click();
+  document.getElementById('btn-preview').click();
 });
 
 // ═══════════════════════════════════════════════════════════════
