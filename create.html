@@ -1954,6 +1954,69 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  /* ── 디테일 향상 팁 팝업 (기존 compare-modal 패턴 재사용) ── */
+  .detail-tip-modal { position: fixed; inset: 0; z-index: 1100; display: flex; align-items: center; justify-content: center; }
+  .detail-tip-modal[hidden] { display: none; }
+  .detail-tip-modal__overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.7); }
+  .detail-tip-modal__container {
+    position: relative;
+    background: var(--bg-surface, #0d1638);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius, 14px);
+    padding: 24px;
+    width: 560px;
+    max-width: 92vw;
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+  .detail-tip-modal__close {
+    position: absolute; top: 10px; right: 14px;
+    font-size: 22px; line-height: 1;
+    background: none; border: none; color: var(--text2); cursor: pointer;
+  }
+  .detail-tip-modal__title { font-size: 16px; font-weight: 700; color: var(--text); margin: 0 6px 8px 0; }
+  .detail-tip-modal__intro { font-size: 13px; color: var(--text2); margin: 0 0 16px; line-height: 1.6; }
+  .detail-tip { margin: 0 0 18px; }
+  .detail-tip__head { font-size: 13.5px; font-weight: 700; color: var(--cyan, #6fe7ff); margin: 0 0 5px; line-height: 1.45; }
+  .detail-tip__body { font-size: 12.5px; color: var(--text2); margin: 0; line-height: 1.6; }
+  .detail-tip__figure {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    margin: 10px 0 0;
+    background: #0b1430;
+    border: 1px dashed var(--glass-border);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .detail-tip__caption {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 12px;
+    font-size: 12px; color: var(--text3);
+  }
+  .detail-tip__img {
+    position: relative; z-index: 1;
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .detail-tip__img.is-missing { display: none; }  /* 파일 없으면 placeholder 캡션만 표시 */
+  .detail-tip-modal__footer {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+    margin-top: 6px; padding-top: 14px;
+    border-top: 1px solid var(--glass-border);
+  }
+  .detail-tip-modal__dont {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text2); cursor: pointer;
+  }
+  @media (max-width: 600px) {
+    .detail-tip-modal__container { padding: 18px 16px; max-height: 90vh; }
+    .detail-tip-modal__footer { flex-direction: column-reverse; align-items: stretch; }
+    .detail-tip-modal__footer .btn { width: 100%; }
+    .detail-tip-modal__dont { justify-content: center; }
+  }
+
   /* ── 광고 반응형 가드 (Phase 6): 모바일 가로 넘침 방지 ──
      AdFit(Kakao) 고정 사이즈가 좁은 화면을 넘치지 않도록 제한.
      AdSense(.adsbygoogle)는 이미 반응형이라 추가 영향 없음. 데스크톱 회귀 없음. */
@@ -2461,6 +2524,53 @@
   </div>
 </div>
 
+<!-- ─── 디테일 향상 팁 팝업 (첫 도안 생성 1회) — 비차단 안내 ─── -->
+<div id="detail-tip-modal" class="detail-tip-modal" hidden>
+  <div class="detail-tip-modal__overlay"></div>
+  <div class="detail-tip-modal__container" role="dialog" aria-modal="true" aria-labelledby="detail-tip-title">
+    <button class="detail-tip-modal__close" aria-label="Close" type="button">×</button>
+    <h2 id="detail-tip-title" class="detail-tip-modal__title" data-i18n="detail_tip_title">더 완성도 높은 도안으로 만들려면?</h2>
+    <p class="detail-tip-modal__intro" data-i18n="detail_tip_intro">도안이 완성됐어요! 인물이나 세밀한 부분을 더 살리고 싶다면, 아래 팁을 참고하세요.</p>
+
+    <div class="detail-tip">
+      <h3 class="detail-tip__head" data-i18n="detail_tip_1_head">얼굴·중요한 부분이 크게 나오게 잘라서 올리세요 (가장 효과적)</h3>
+      <p class="detail-tip__body" data-i18n="detail_tip_1_body"></p>
+      <figure class="detail-tip__figure">
+        <!-- placeholder: 운영자가 guide/images/detail-tip-crop.png 업로드 시 자동 표시 -->
+        <img class="detail-tip__img" src="guide/images/detail-tip-crop.png"
+             data-i18n-alt="detail_tip_img_crop" alt="비교 이미지 — 전신 vs 얼굴 크롭"
+             loading="lazy" onerror="this.classList.add('is-missing')">
+        <figcaption class="detail-tip__caption" data-i18n="detail_tip_img_crop">비교 이미지 — 전신 vs 얼굴 크롭</figcaption>
+      </figure>
+    </div>
+
+    <div class="detail-tip">
+      <h3 class="detail-tip__head" data-i18n="detail_tip_2_head">캔버스 크기를 키우세요 (차선)</h3>
+      <p class="detail-tip__body" data-i18n="detail_tip_2_body"></p>
+      <figure class="detail-tip__figure">
+        <!-- placeholder: 운영자가 guide/images/detail-tip-size.png 업로드 시 자동 표시 -->
+        <img class="detail-tip__img" src="guide/images/detail-tip-size.png"
+             data-i18n-alt="detail_tip_img_size" alt="비교 이미지 — 작은 캔버스 vs 큰 캔버스"
+             loading="lazy" onerror="this.classList.add('is-missing')">
+        <figcaption class="detail-tip__caption" data-i18n="detail_tip_img_size">비교 이미지 — 작은 캔버스 vs 큰 캔버스</figcaption>
+      </figure>
+    </div>
+
+    <div class="detail-tip">
+      <h3 class="detail-tip__head" data-i18n="detail_tip_3_head">색상 수를 늘리는 건 디테일에 거의 도움이 안 돼요</h3>
+      <p class="detail-tip__body" data-i18n="detail_tip_3_body"></p>
+    </div>
+
+    <div class="detail-tip-modal__footer">
+      <label class="detail-tip-modal__dont">
+        <input type="checkbox" id="detail-tip-dont-show">
+        <span data-i18n="detail_tip_dont_show">다시 보지 않기</span>
+      </label>
+      <button class="btn primary" id="detail-tip-close-btn" type="button" data-i18n="detail_tip_close">닫고 계속하기</button>
+    </div>
+  </div>
+</div>
+
 <div id="notification"></div>
 <input type="file" id="load-input" accept=".json">
 
@@ -2494,6 +2604,18 @@ const i18n = {
     preview_open:      '✨ 예상도',
     preview_save_jpeg: 'JPEG 저장',
     preview_save_pdf:  'PDF 저장',
+    detail_tip_title: '더 완성도 높은 도안으로 만들려면?',
+    detail_tip_intro: '도안이 완성됐어요! 인물이나 세밀한 부분을 더 살리고 싶다면, 아래 팁을 참고하세요.',
+    detail_tip_1_head: '얼굴·중요한 부분이 크게 나오게 잘라서 올리세요 (가장 효과적)',
+    detail_tip_1_body: "도안의 세밀함은 '그 부분이 몇 칸을 차지하는가'로 정해져요. 전신 사진은 얼굴이 작은 일부라 눈·코·입이 몇 칸 안에 들어가 표정이 뭉개져요. 얼굴이나 상반신 위주로 잘라 올리면 같은 칸 수가 얼굴에 집중돼 표정이 살아나요.",
+    detail_tip_2_head: '캔버스 크기를 키우세요 (차선)',
+    detail_tip_2_body: '캔버스를 키우면 전체 칸 수가 늘어 얼굴 칸도 늘어나요. 다만 비즈 수·작업 시간·재료비가 함께 늘어나는 점은 감안하세요.',
+    detail_tip_3_head: '색상 수를 늘리는 건 디테일에 거의 도움이 안 돼요',
+    detail_tip_3_body: '색을 늘려도 한 칸은 여전히 한 가지 색이에요. 칸이 부족하면 색이 많아도 표정은 안 나와요. 디테일은 색이 아니라 칸 수의 문제예요.',
+    detail_tip_dont_show: '다시 보지 않기',
+    detail_tip_close: '닫고 계속하기',
+    detail_tip_img_crop: '비교 이미지 — 전신 vs 얼굴 크롭',
+    detail_tip_img_size: '비교 이미지 — 작은 캔버스 vs 큰 캔버스',
     preview_close:     '닫기',
     // 패널 제목
     section_upload:      '이미지 가져오기',
@@ -2669,6 +2791,18 @@ const i18n = {
     preview_open:      '✨ Preview',
     preview_save_jpeg: 'Save JPEG',
     preview_save_pdf:  'Save PDF',
+    detail_tip_title: 'Want a more detailed pattern?',
+    detail_tip_intro: 'Your pattern is ready! If you want faces or fine details to come through better, here are a few tips.',
+    detail_tip_1_head: 'Crop so the face fills more of the frame (most effective)',
+    detail_tip_1_body: 'Detail comes down to how many cells a feature occupies. In a full-body photo the face is tiny, so eyes, nose, and mouth land in just a few cells and the expression turns to mush. Crop to the face or upper body and the same cell count concentrates on the face, bringing the expression back.',
+    detail_tip_2_head: 'Increase the canvas size (next best)',
+    detail_tip_2_body: 'A larger canvas means more total cells, so the face gets more cells too. Keep in mind that bead count, working time, and material cost rise with it.',
+    detail_tip_3_head: 'Adding more colors barely helps detail',
+    detail_tip_3_body: "More colors won't help if a cell is still a single color. When there aren't enough cells, no amount of color brings out an expression. Detail is about cell count, not color count.",
+    detail_tip_dont_show: "Don't show again",
+    detail_tip_close: 'Close and continue',
+    detail_tip_img_crop: 'Comparison — full body vs face crop',
+    detail_tip_img_size: 'Comparison — small vs large canvas',
     preview_close:     'Close',
     section_upload:      'Import Image',
     section_settings:    'Pattern Setup',
@@ -2827,6 +2961,18 @@ const i18n = {
     preview_open:      '✨ 完成イメージ',
     preview_save_jpeg: 'JPEG保存',
     preview_save_pdf:  'PDF保存',
+    detail_tip_title: 'もっと精細な図案にするには?',
+    detail_tip_intro: '図案ができました！人物や細部をもっと出したい場合は、下のヒントを参考にしてください。',
+    detail_tip_1_head: '顔・大事な部分が大きく写るようにトリミングしてアップロード（最も効果的）',
+    detail_tip_1_body: '図案の精細さは「その部分が何マスを占めるか」で決まります。全身写真は顔が小さく、目・鼻・口が数マスに収まって表情がつぶれます。顔や上半身中心にトリミングすると、同じマス数が顔に集中して表情が出ます。',
+    detail_tip_2_head: 'キャンバスサイズを大きくする（次善）',
+    detail_tip_2_body: 'キャンバスを大きくすると総マス数が増え、顔のマスも増えます。ただしビーズ数・作業時間・材料費も増える点はご留意を。',
+    detail_tip_3_head: '色数を増やしても精細さにはほとんど効果がありません',
+    detail_tip_3_body: '色を増やしても1マスは1色のまま。マスが足りなければ色が多くても表情は出ません。精細さは色ではなくマス数の問題です。',
+    detail_tip_dont_show: '今後表示しない',
+    detail_tip_close: '閉じて続ける',
+    detail_tip_img_crop: '比較 — 全身 vs 顔トリミング',
+    detail_tip_img_size: '比較 — 小さいキャンバス vs 大きいキャンバス',
     preview_close:     '閉じる',
     section_upload:      '画像インポート',
     section_settings:    '図案設定',
@@ -2985,6 +3131,18 @@ const i18n = {
     preview_open:      '✨ 效果图',
     preview_save_jpeg: '保存JPEG',
     preview_save_pdf:  '保存PDF',
+    detail_tip_title: '想要更精细的图案?',
+    detail_tip_intro: '图案已生成！如果想让人物或细节更清晰，可参考以下提示。',
+    detail_tip_1_head: '裁剪让脸部占更大画面（最有效）',
+    detail_tip_1_body: '图案的精细度取决于该部位占多少格。全身照里脸很小，眼鼻口只占几格，表情就糊了。裁剪到脸部或半身，同样的格数集中到脸上，表情就出来了。',
+    detail_tip_2_head: '增大画布尺寸（次选）',
+    detail_tip_2_body: '画布越大总格数越多，脸部格数也增加。但钻数、工时和材料成本也会随之上升。',
+    detail_tip_3_head: '增加颜色数对细节几乎没用',
+    detail_tip_3_body: '颜色再多，一格仍是一种颜色。格子不够，颜色再多也表现不出表情。细节是格数问题，不是颜色问题。',
+    detail_tip_dont_show: '不再显示',
+    detail_tip_close: '关闭并继续',
+    detail_tip_img_crop: '对比 — 全身 vs 脸部裁剪',
+    detail_tip_img_size: '对比 — 小画布 vs 大画布',
     preview_close:     '关闭',
     section_upload:      '导入图片',
     section_settings:    '图案设置',
@@ -3140,6 +3298,10 @@ function applyTranslations() {
   // data-i18n-placeholder → placeholder 속성
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+  // data-i18n-alt → alt 속성
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+    el.alt = t(el.dataset.i18nAlt);
   });
   // 언어 셀렉트 동기화
   const sel = document.getElementById('lang-select');
@@ -4217,6 +4379,9 @@ async function generatePattern() {
 
   // ── 변환 이력(History): 생성 완료 후 스냅샷 (복원 중에는 제외) ──
   if (typeof captureHistorySnapshot === 'function' && !window.isRestoring) captureHistorySnapshot();
+
+  // ── 디테일 향상 팁 팝업: 첫 생성 1회 안내 (비차단, 복원 중에는 제외) ──
+  if (typeof window.maybeShowDetailTip === 'function' && !window.isRestoring) window.maybeShowDetailTip();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -5924,6 +6089,53 @@ applyTranslations();
   compareModal.querySelector('.compare-modal__close').addEventListener('click', closeCompare);
   compareModal.querySelector('.compare-modal__overlay').addEventListener('click', closeCompare);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !compareModal.hidden) closeCompare(); });
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// 디테일 향상 팁 팝업 — 첫 도안 생성 1회 (비차단). 생성 로직은 변경하지 않고
+// generatePattern 완료 후 훅(window.maybeShowDetailTip)만 호출한다.
+// ═══════════════════════════════════════════════════════════════
+(function () {
+  const modal = document.getElementById('detail-tip-modal');
+  if (!modal) return;
+  const overlay  = modal.querySelector('.detail-tip-modal__overlay');
+  const closeBtn = modal.querySelector('.detail-tip-modal__close');
+  const contBtn  = document.getElementById('detail-tip-close-btn');
+  const dontChk  = document.getElementById('detail-tip-dont-show');
+
+  let genCount = 0; // 이 세션(페이지 로드)에서의 생성 횟수
+
+  function isDismissed() {
+    return sessionStorage.getItem('dp_detail_tip_seen') === '1'
+        || localStorage.getItem('dp_detail_tip_dismissed') === '1';
+  }
+
+  function openModal() {
+    if (typeof applyTranslations === 'function') applyTranslations();
+    modal.hidden = false;
+  }
+  function closeModal() {
+    modal.hidden = true;
+    if (dontChk && dontChk.checked) {
+      try { localStorage.setItem('dp_detail_tip_dismissed', '1'); } catch (_) {}
+    }
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  contBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !modal.hidden) closeModal();
+  });
+
+  // generatePattern 완료 후(복원 제외)에 호출됨. 첫 생성 1회만, 억제 조건 미충족 시 표시.
+  window.maybeShowDetailTip = function () {
+    genCount++;
+    if (genCount !== 1) return;            // 첫 생성만 (같은 세션 재생성은 무시)
+    if (isDismissed()) return;             // 세션 중 봤거나 '다시 보지 않기' 영구 억제
+    try { sessionStorage.setItem('dp_detail_tip_seen', '1'); } catch (_) {}
+    openModal();
+  };
 })();
 </script>
 <script>
