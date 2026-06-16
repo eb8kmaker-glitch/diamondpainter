@@ -5538,7 +5538,21 @@ async function openPreviewModal() {
   previewOverlay.classList.add('open');
 
   try {
-    const patternData = { version: 1, pattern: state.pattern, palette: state.palette };
+    // 예상도는 "지금 이 순간의 도안"을 그대로 보여줘야 한다.
+    // 편집(펜/지우개/채우기/색상 추가·교체)은 state.userGrid 에 누적되므로,
+    // PDF 저장(generatePDF)과 동일한 머지 규칙(편집값 우선, 없으면 원본)으로
+    // grid 를 만들어 넘긴다. 그래야 캔버스에 보이는 것과 100% 일치한다.
+    const baseGrid = state.pattern.grid;
+    const mergedGrid = new Array(baseGrid.length);
+    for (let i = 0; i < baseGrid.length; i++) {
+      const u = state.userGrid[i];
+      mergedGrid[i] = { palIdx: u >= 0 ? u : baseGrid[i].palIdx };
+    }
+    const patternData = {
+      version: 1,
+      pattern: { width: state.pattern.width, height: state.pattern.height, grid: mergedGrid },
+      palette: state.palette
+    };
     const dataUrl = await renderFinishedPreview(patternData);
 
     if (!previewOverlay.classList.contains('open')) return; // 닫힌 경우 무시
