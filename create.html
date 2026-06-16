@@ -1866,6 +1866,42 @@
   }
   .history-compare-btn:not(:disabled):hover { border-color: rgba(111,231,255,0.35); color: var(--cyan); }
   .history-compare-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .history-panel__actions { display: flex; align-items: center; gap: 8px; }
+  .snapshot-save-btn {
+    height: 28px;
+    padding: 0 14px;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, #7c5ce7, #0eb4d4);
+    color: #fff;
+    font-family: var(--ui);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+  .snapshot-save-btn::before { content: '✎'; margin-right: 5px; }
+  .snapshot-save-btn:hover { opacity: 0.88; }
+  .snapshot-save-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* 자동/수동 구분 배지 (스트립 카드 + 비교 모달) */
+  .hist-badge {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 2;
+    font-size: 0.62rem;
+    line-height: 1.45;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    pointer-events: none;
+  }
+  .hist-badge--manual { background: var(--cyan, #4a90d9); color: #04121f; }
+  .hist-badge--auto   { background: rgba(0,0,0,0.55); }
+  .hist-badge--inline { position: static; display: inline-block; margin-right: 6px; vertical-align: middle; pointer-events: auto; }
   .history-strip {
     display: flex;
     gap: 10px;
@@ -1947,6 +1983,8 @@
   }
   @media (max-width: 600px) {
     .history-panel { margin: 0 12px 14px; }
+    .history-panel__header { flex-wrap: wrap; gap: 8px; }
+    .history-panel__actions { flex: 1 1 100%; justify-content: flex-end; }
     .compare-grid { grid-template-columns: 1fr; }
   }
   @keyframes histFadeIn {
@@ -2474,7 +2512,10 @@
 <section id="history-panel" class="history-panel" hidden>
   <div class="history-panel__header">
     <span class="history-panel__title" data-i18n="history_panel_title">History</span>
-    <button id="history-compare-btn" class="history-compare-btn" disabled data-i18n="history_compare">Compare</button>
+    <div class="history-panel__actions">
+      <button id="snapshot-save-btn" class="snapshot-save-btn" type="button" data-i18n="snapshot_save">Save current state</button>
+      <button id="history-compare-btn" class="history-compare-btn" disabled data-i18n="history_compare">Compare</button>
+    </div>
   </div>
   <div id="history-strip" class="history-strip"><!-- JS로 동적 생성 --></div>
 </section>
@@ -2588,6 +2629,10 @@ const i18n = {
     history_compare: '비교하기',
     compare_modal_title: '도안 비교',
     compare_use_this: '이걸로 사용',
+    snapshot_save: '현재 상태 저장',
+    snapshot_saved: '현재 상태를 이력에 저장했어요',
+    snapshot_badge_auto: '생성된 도안',
+    snapshot_badge_manual: '편집해서 저장한 도안',
     // 헤더 버튼
     btn_generate:      '⚡ 도안 생성',
     btn_autofill:      '🎨 색상 일괄 적용',
@@ -2776,6 +2821,10 @@ const i18n = {
     history_compare: 'Compare',
     compare_modal_title: 'Compare Patterns',
     compare_use_this: 'Use This',
+    snapshot_save: 'Save current state',
+    snapshot_saved: 'Saved current state to history',
+    snapshot_badge_auto: 'Generated pattern',
+    snapshot_badge_manual: 'Manually saved edit',
     btn_generate:      '⚡ Generate Pattern',
     btn_autofill:      '🎨 Apply All Colors',
     btn_replace_color: '🔄 Replace Color',
@@ -2946,6 +2995,10 @@ const i18n = {
     history_compare: '比較する',
     compare_modal_title: 'パターンを比較',
     compare_use_this: 'これを使う',
+    snapshot_save: '現在の状態を保存',
+    snapshot_saved: '現在の状態を履歴に保存しました',
+    snapshot_badge_auto: '生成された図案',
+    snapshot_badge_manual: '編集して保存した図案',
     btn_generate:      '⚡ 図案生成',
     btn_autofill:      '🎨 一括色適用',
     btn_replace_color: '🔄 色置換',
@@ -3116,6 +3169,10 @@ const i18n = {
     history_compare: '比较',
     compare_modal_title: '比较图案',
     compare_use_this: '使用此方案',
+    snapshot_save: '保存当前状态',
+    snapshot_saved: '已将当前状态保存到历史',
+    snapshot_badge_auto: '生成的图案',
+    snapshot_badge_manual: '手动保存的编辑',
     btn_generate:      '⚡ 生成图案',
     btn_autofill:      '🎨 批量应用颜色',
     btn_replace_color: '🔄 替换颜色',
@@ -5932,7 +5989,7 @@ applyTranslations();
 // ═══════════════════════════════════════════════════════════════
 (function () {
   window.isRestoring = window.isRestoring || false;
-  const MAX_HISTORY = 8;
+  const MAX_HISTORY = 12; // 자동(생성)+수동(편집) 합산 상한
 
   const historyStore = {
     items: [],
@@ -5947,6 +6004,7 @@ applyTranslations();
         settings: snap.settings,
         imageDataUrl: snap.imageDataUrl,
         thumbDataUrl: snap.thumbDataUrl,
+        type: snap.type === 'manual' ? 'manual' : 'generated', // 'generated'=자동 | 'manual'=수동
         createdAt: Date.now(),
       };
       this.items.unshift(item);
@@ -6006,8 +6064,9 @@ applyTranslations();
     if ($('show-symbols')) { $('show-symbols').checked = s.showSymbols !== false; fire($('show-symbols'), 'change'); }
   }
 
-  // generate 완료 후 호출 (메인 스크립트의 generatePattern 끝에서 훅)
-  window.captureHistorySnapshot = function () {
+  // 스냅샷 캡처. generate 완료 훅은 인자 없이 호출 → 'generated'(자동).
+  // 수동 저장 버튼은 'manual'로 호출 → 동일한 캡처 코드를 그대로 재사용한다.
+  window.captureHistorySnapshot = function (type) {
     if (!state.pattern) return;
     const full = composite(700);
     const thumbSrc = composite(0) || full;
@@ -6027,11 +6086,19 @@ applyTranslations();
       palette: state.palette,
       userGrid: Array.from(state.userGrid),
     }));
-    const item = historyStore.add({ save, settings: captureSettings(), imageDataUrl, thumbDataUrl, summary });
+    const item = historyStore.add({ save, settings: captureSettings(), imageDataUrl, thumbDataUrl, summary, type });
     activeId = item.id;
     renderStrip();
     if (panel.hidden) panel.hidden = false;
+    return item;
   };
+
+  // 수동 저장: 현재 편집 상태를 'manual' 스냅샷으로 기록 (generate 자동 캡처는 호출하지 않음)
+  function saveManualSnapshot() {
+    if (!state.pattern) return;
+    const item = window.captureHistorySnapshot('manual');
+    if (item && typeof showNotif === 'function') showNotif(t('snapshot_saved'), 'success');
+  }
 
   function selectedIds() {
     return [...strip.querySelectorAll('.history-card__checkbox:checked')].map(c => parseInt(c.dataset.id, 10));
@@ -6041,6 +6108,15 @@ applyTranslations();
     compareBtn.disabled = !(n >= 2 && n <= 3);
   }
 
+  // type별 배지 마크업 (자동 ⚡ / 수동 ✎). inline=true 면 비교 모달용 인라인 배지.
+  function badgeHtml(item, inline) {
+    const manual = item.type === 'manual';
+    const cls = 'hist-badge ' + (manual ? 'hist-badge--manual' : 'hist-badge--auto') + (inline ? ' hist-badge--inline' : '');
+    const title = manual ? t('snapshot_badge_manual') : t('snapshot_badge_auto');
+    const glyph = manual ? '✎' : '⚡';
+    return '<span class="' + cls + '" title="' + title + '">' + glyph + '</span>';
+  }
+
   function renderStrip() {
     strip.innerHTML = '';
     historyStore.items.forEach(item => {
@@ -6048,6 +6124,7 @@ applyTranslations();
       card.className = 'history-card' + (item.id === activeId ? ' history-card--active' : '');
       card.dataset.id = item.id;
       card.innerHTML =
+        badgeHtml(item) +
         '<label class="history-card__select-wrap"><input type="checkbox" class="history-card__checkbox" data-id="' + item.id + '"></label>' +
         '<img class="history-card__thumb" src="' + item.thumbDataUrl + '" alt="' + item.label + '">' +
         '<p class="history-card__label">' + item.label + '</p>' +
@@ -6089,7 +6166,7 @@ applyTranslations();
       col.className = 'compare-col';
       col.innerHTML =
         '<img class="compare-col__img" src="' + item.imageDataUrl + '" alt="' + item.label + '">' +
-        '<p class="compare-col__label">' + item.label + '</p>' +
+        '<p class="compare-col__label">' + badgeHtml(item, true) + item.label + '</p>' +
         '<p class="compare-col__summary">' + item.summary + '</p>' +
         '<button class="compare-col__use" type="button" data-id="' + item.id + '" data-i18n="compare_use_this">Use This</button>';
       compareGrid.appendChild(col);
@@ -6100,6 +6177,9 @@ applyTranslations();
     compareModal.hidden = false;
   }
   function closeCompare() { compareModal.hidden = true; }
+
+  const snapshotSaveBtn = document.getElementById('snapshot-save-btn');
+  if (snapshotSaveBtn) snapshotSaveBtn.addEventListener('click', saveManualSnapshot);
 
   compareBtn.addEventListener('click', openCompare);
   compareModal.querySelector('.compare-modal__close').addEventListener('click', closeCompare);
