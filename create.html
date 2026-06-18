@@ -2924,6 +2924,7 @@ const i18n = {
     btn_pdf:              '📄 PDF 저장',
     pdf_title_pattern:    'Diamond Painting Pattern',
     pdf_title_legend:     'Color Legend',
+    pdf_legend_empty:     'No colors used yet.',
     pdf_col_sym:          'Sym',
     pdf_col_dmc:          'DMC',
     pdf_col_name:         'Color Name',
@@ -3123,6 +3124,7 @@ const i18n = {
     btn_pdf:              '📄 Save PDF',
     pdf_title_pattern:    'Diamond Painting Pattern',
     pdf_title_legend:     'Color Legend',
+    pdf_legend_empty:     'No colors used yet.',
     pdf_col_sym:          'Sym',
     pdf_col_dmc:          'DMC',
     pdf_col_name:         'Color Name',
@@ -3322,6 +3324,7 @@ const i18n = {
     btn_pdf:              '📄 PDF保存',
     pdf_title_pattern:    'Diamond Painting Pattern',
     pdf_title_legend:     'Color Legend',
+    pdf_legend_empty:     'No colors used yet.',
     pdf_col_sym:          'Sym',
     pdf_col_dmc:          'DMC',
     pdf_col_name:         'Color Name',
@@ -3521,6 +3524,7 @@ const i18n = {
     btn_pdf:              '📄 保存PDF',
     pdf_title_pattern:    'Diamond Painting Pattern',
     pdf_title_legend:     'Color Legend',
+    pdf_legend_empty:     'No colors used yet.',
     pdf_col_sym:          'Sym',
     pdf_col_dmc:          'DMC',
     pdf_col_name:         'Color Name',
@@ -5258,6 +5262,9 @@ function placeBead(cx, cy, erase = false) {
   }
 
   const shouldErase = erase || state.tool === 'erase';
+  // 빈 도안에서 색 추가 전(유효한 선택 색 없음)에는 칠하지 않음 — 보이지 않는 셀 방지.
+  // 사진 모드는 팔레트가 항상 유효해 영향 없음.
+  if (!shouldErase && !state.palette[state.activePaletteIdx]) return;
   const newVal = shouldErase ? -1 : state.activePaletteIdx;
 
   if (state.userGrid[idx] === newVal) return;
@@ -6382,11 +6389,12 @@ function generatePDF() {
   const beadMM = parseFloat(document.querySelector('input[name="bead-type"]:checked')?.value || '2.8');
   const realW = (gridW * beadMM / 10).toFixed(1);
   const realH = (gridH * beadMM / 10).toFixed(1);
-  // 사용자 추가 색은 실제 칠해진 라이브 카운트를 사용 (미사용 추가색은 범례 제외).
-  // 일반 색은 기존 동작 그대로(저장된 count) — 출력 변화 없음.
+  // 범례는 실제 사용된 비즈 수(현재 격자 기준 라이브 카운트) 기준 — 0칸 색은 범례에서 제외.
+  // 편집 없는 사진 변환에선 라이브 카운트 == 생성 카운트라 출력 동일(회귀 0).
   const _liveCounts = calcBeadStats().map(s => s.count);
-  const effCount = (e, i) => e.userAdded ? (_liveCounts[i] || 0) : e.count;
+  const effCount = (e, i) => _liveCounts[i] || 0;
   const totalBeads = state.palette.reduce((s, e, i) => s + effCount(e, i), 0);
+  const usedCount = state.palette.filter((e, i) => effCount(e, i) > 0).length;
 
   // ── 요약 카드 ──
   let cy = CONTENT_Y + 2;
@@ -6396,7 +6404,7 @@ function generatePDF() {
   const summaryItems = [
     [t('pdf_sum_grid'),   `${gridW} \xD7 ${gridH}`],
     [t('pdf_sum_total'),  totalBeads.toLocaleString()],
-    [t('pdf_sum_colors'), `${state.palette.filter((e, i) => !(e.userAdded && (_liveCounts[i] || 0) === 0)).length}`],
+    [t('pdf_sum_colors'), `${usedCount}`],
     [t('pdf_sum_size'),   `${realW} \xD7 ${realH} cm`],
   ];
   summaryItems.forEach(([label, val], i) => {
@@ -6410,6 +6418,12 @@ function generatePDF() {
   });
   cy += 20;
 
+  if (usedCount === 0) {
+    // 빈 도안에서 아무것도 안 찍고 저장한 경우 — 안내 문구
+    doc.setFontSize(10);
+    doc.setTextColor(120, 120, 140);
+    doc.text(t('pdf_legend_empty'), MARGIN, cy + 8);
+  } else {
   // ── 테이블 헤더 ──
   const COL = {
     swatch: { x: MARGIN,        w: 8  },
@@ -6442,12 +6456,12 @@ function generatePDF() {
   drawTableHeader(cy);
   cy += TABLE_HEADER_H + 1;
 
-  const maxCount = state.palette[0]?.count || 1;
+  const maxCount = Math.max(1, ..._liveCounts);
 
   // ── 색상 행 ──
   state.palette.forEach((entry, pi) => {
-    // 미사용(칠해지지 않은) 사용자 추가 색은 범례에서 자동 제외
-    if (entry.userAdded && (_liveCounts[pi] || 0) === 0) return;
+    // 미사용(0칸) 색은 범례에서 제외
+    if (effCount(entry, pi) === 0) return;
     // 페이지 넘침 처리
     if (cy + ROW_H > PAGE_H - MARGIN) {
       doc.addPage();
@@ -6494,6 +6508,7 @@ function generatePDF() {
 
     cy += ROW_H;
   });
+  } // usedCount > 0
 
   // ── 파일명 & 저장 ──
   const now = new Date();
@@ -7306,17 +7321,6 @@ applyTranslations();
     return presetsPromise;
   }
 
-  // 빈 도안 기본 시작 팔레트 (DMC 코드로만 정의 — 없는 코드는 건너뜀). 이후 기존 팔레트-추가로 확장 가능.
-  const STARTER_CODES = ['blanc', '310', '321', '322', '320', '335', '334', '326', '317', '318', '319', '336'];
-  function buildStarterPalette() {
-    const out = [];
-    for (const code of STARTER_CODES) {
-      const c = DMC_COLORS.find(d => String(d.code) === code);
-      if (c) out.push({ dmc: c.code, name: c.name, color: c.rgb, symbol: SYMBOLS[out.length % SYMBOLS.length], count: 0 });
-    }
-    return out;
-  }
-
   // 빈 그리드 초기화 — 기존 적용 경로(resize→draw→updateUI→center…)를 그대로 사용
   function startBlankPattern(preset) {
     const cols = preset.cols | 0, rows = preset.rows | 0;
@@ -7326,11 +7330,11 @@ applyTranslations();
     for (let i = 0; i < grid.length; i++) grid[i] = { palIdx: -1 }; // 빈 셀 = 기존 규칙(-1)
     state.pattern = { width: cols, height: rows, grid };
     state.userGrid = new Int16Array(cols * rows).fill(-1);
-    state.palette = buildStarterPalette();
+    state.palette = [];           // 빈 팔레트로 시작 (이전 사진/세션 색 안 남김; 색은 팔레트-추가로)
     state.activePaletteIdx = 0;
     state.tool = 'paint';
     state.cellSize = 14;
-    state.requestedColors = state.palette.length;
+    state.requestedColors = 0;
     state.undoStack = []; state.redoStack = [];
     state.sourceImage = null; // 사진 모드와 구분(메인 생성 no-op)
 
