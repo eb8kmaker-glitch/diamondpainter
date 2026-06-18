@@ -2110,9 +2110,21 @@
   }
   .variation-colors { color: var(--cyan); font-weight: 600; }
   .variation-cells { color: var(--text3); }
+  .variation-avg { color: var(--text3); }
+  /* 프리셋×색상수 2축 그리드: 가로 3열(프리셋) 고정 */
+  .variations-grid.preset-mode { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .variation-preset {
+    font-size: 11.5px; font-weight: 700; color: var(--lavender);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .variation-card.is-applied {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 1px var(--cyan) inset, 0 0 12px rgba(111,231,255,0.25);
+  }
   @media (max-width: 600px) {
     .variations-box { padding: 16px 14px 20px; }
     .variations-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+    .variation-meta { flex-wrap: wrap; gap: 4px 8px; font-size: 11px; }
   }
 
   /* ── 광고 반응형 가드 (Phase 6): 모바일 가로 넘침 방지 ──
@@ -2829,13 +2841,19 @@ const i18n = {
     // 후보 도안(Variations)
     btn_variations:     '🎲 후보 도안 보기',
     var_modal_title:    '후보 도안 고르기',
-    var_modal_desc:     '현재 설정에서 색상 수만 다르게 한 후보예요. 마음에 드는 걸 클릭하면 에디터에 적용돼요.',
+    var_modal_desc:     '화질 프리셋과 색상 수를 달리한 후보예요. 마음에 드는 걸 클릭하면 에디터에 적용돼요.',
     var_generating:     '후보 생성 중... ({i}/{n})',
     var_pick_hint:      '마음에 드는 후보를 클릭하세요',
     var_label_colors:   '색',
     var_label_cells:    '칸',
     var_need_image:     '먼저 이미지를 가져오세요.',
     var_close:          '닫기',
+    var_label_avg:      '색당 평균',
+    preset_default:     '기본',
+    preset_crisp:       '또렷하게',
+    preset_soft:        '부드럽게',
+    preset_crisp_hint:  '일러스트·캐릭터용',
+    preset_soft_hint:   '사진용',
     // 알림
     notif_pattern_ready:  '도안 생성 완료! 편집을 시작하세요.',
     notif_autofill_done:  '모든 셀에 색상이 일괄 적용되었습니다.',
@@ -3017,13 +3035,19 @@ const i18n = {
     // Variations
     btn_variations:     '🎲 Show variations',
     var_modal_title:    'Pick a variation',
-    var_modal_desc:     'These candidates use your current settings with different color counts. Click one to apply it to the editor.',
+    var_modal_desc:     'Candidates across quality presets and color counts. Click one to apply it to the editor.',
     var_generating:     'Generating variations... ({i}/{n})',
     var_pick_hint:      'Click a variation you like',
     var_label_colors:   'colors',
     var_label_cells:    'beads',
     var_need_image:     'Please load an image first.',
     var_close:          'Close',
+    var_label_avg:      'avg/color',
+    preset_default:     'Default',
+    preset_crisp:       'Crisp',
+    preset_soft:        'Soft',
+    preset_crisp_hint:  'For illustrations & characters',
+    preset_soft_hint:   'For photos',
     notif_pattern_ready:  'Pattern ready! Start editing.',
     notif_autofill_done:  'All cells filled with pattern colors.',
     notif_cleared:        'All edits have been reset.',
@@ -3201,13 +3225,19 @@ const i18n = {
     // 候補図案（Variations）
     btn_variations:     '🎲 候補を見る',
     var_modal_title:    '候補から選ぶ',
-    var_modal_desc:     '現在の設定で色数だけを変えた候補です。気に入ったものをクリックするとエディターに適用されます。',
+    var_modal_desc:     '画質プリセットと色数を変えた候補です。気に入ったものをクリックするとエディターに適用されます。',
     var_generating:     '候補を生成中... ({i}/{n})',
     var_pick_hint:      '気に入った候補をクリックしてください',
     var_label_colors:   '色',
     var_label_cells:    '粒',
     var_need_image:     'まず画像を読み込んでください。',
     var_close:          '閉じる',
+    var_label_avg:      '色あたり平均',
+    preset_default:     '標準',
+    preset_crisp:       'くっきり',
+    preset_soft:        'やわらか',
+    preset_crisp_hint:  'イラスト・キャラ向け',
+    preset_soft_hint:   '写真向け',
     notif_pattern_ready:  '図案生成完了！編集を開始してください。',
     notif_autofill_done:  '全セルに色を一括適用しました。',
     notif_cleared:        '編集内容をリセットしました。',
@@ -3385,13 +3415,19 @@ const i18n = {
     // 候选图案（Variations）
     btn_variations:     '🎲 查看候选',
     var_modal_title:    '挑选候选图案',
-    var_modal_desc:     '这些候选使用当前设置，仅颜色数量不同。点击喜欢的即可应用到编辑器。',
+    var_modal_desc:     '不同画质预设与颜色数量的候选。点击喜欢的即可应用到编辑器。',
     var_generating:     '正在生成候选... ({i}/{n})',
     var_pick_hint:      '点击你喜欢的候选',
     var_label_colors:   '色',
     var_label_cells:    '颗',
     var_need_image:     '请先导入图片。',
     var_close:          '关闭',
+    var_label_avg:      '每色平均',
+    preset_default:     '标准',
+    preset_crisp:       '清晰',
+    preset_soft:        '柔和',
+    preset_crisp_hint:  '插画·角色用',
+    preset_soft_hint:   '照片用',
     notif_pattern_ready:  '图案已就绪！开始编辑吧。',
     notif_autofill_done:  '已批量应用所有格子的颜色。',
     notif_cleared:        '所有编辑已重置。',
@@ -4366,6 +4402,271 @@ function drawMinimap() {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// 변환 화질 레버 (4개 독립 토글 — 명명 상수로만 제어, 산재 하드코딩 금지)
+//  · 신규 3레버 off + dither=true  ⇒  현 배포본과 동일 코드 경로 (회귀 기준선)
+//  · 권장 개선 프리셋(시각 검증 후 활성화):
+//      preprocess:'mild', detailDownscale:true, saliencePalette:true, dither:false
+//    → 면 평탄 + 윤곽 보존 + 색 분별 + "한 칸=드릴 한 알"(디더 노이즈 없음)
+//  · 최종 DMC 매핑·팔레트 추가·드릴 단위는 불변. 레버는 "대표색을 어떻게 고르고
+//    어떻게 다운스케일하느냐"까지만 바꾼다.
+// ═══════════════════════════════════════════════════════════════
+const QUALITY = {
+  preprocess:      'off',   // Phase 1: 'off' | 'mild' | 'strong'  (에지 보존 전처리)
+  detailDownscale: false,   // Phase 2: 디테일 보존 다운스케일 (false=기존 bilinear) — 사용자 비노출, 항상 off
+  saliencePalette: false,   // Phase 3: 살리언스 가중 k-means + 최소 ΔE (false=기존 선택) — 사용자 비노출, 항상 off
+  dither:          false,   // Phase 4: Floyd-Steinberg (default 프리셋 = off, 평탄/포스터화)
+};
+
+// ─── 화질 프리셋 3종 (후보 갤러리 노출용) ───
+// Phase2·Phase3 은 항상 off(비노출). Phase1(전처리)·Phase4(디더)만 프리셋으로 묶어 노출.
+// 'default' = 메인 ⚡생성 버튼의 기본 화질(= 새 프로덕션 기본).
+const QUALITY_PRESETS = {
+  default: { preprocess: 'off',    dither: false },  // 기본
+  crisp:   { preprocess: 'strong', dither: true  },  // 또렷하게 (일러스트·캐릭터)
+  soft:    { preprocess: 'mild',   dither: false },  // 부드럽게 (사진)
+};
+const QUALITY_PRESET_ORDER = ['default', 'crisp', 'soft']; // 그리드 가로축 순서
+function applyQualityPreset(id) {
+  const p = QUALITY_PRESETS[id] || QUALITY_PRESETS.default;
+  QUALITY.preprocess = p.preprocess;
+  QUALITY.dither = p.dither;
+  QUALITY.detailDownscale = false; // Phase2 항상 off
+  QUALITY.saliencePalette = false; // Phase3 항상 off
+}
+
+const DITHER_STRENGTH     = 0.40;   // 기존 디더 강도(불변) — dither:false 면 0으로 적용
+const PREPROCESS_SIGMA    = { mild: { space: 1.2, color: 18 }, strong: { space: 2.0, color: 30 } };
+const PREPROCESS_SCALE    = 4;      // 전처리/디테일 다운스케일 중간 해상도 = 목표 격자 긴변 × 배수
+const PREPROCESS_MAX_EDGE = 1400;   // 중간 해상도 상한(px) — 큰 이미지 UI 블로킹 방지
+const DETAIL_GAIN         = 0.03;   // 디테일 다운스케일: 블록 평균 대비 편차 가중치
+const SALIENCE_WEIGHT     = 2.5;    // 에지 픽셀 가중 상한 (0=가중 없음)
+const PALETTE_MIN_DE      = 6;      // 팔레트 색 간 최소 ΔE(Lab Euclid). 0=비활성
+
+// ─── Phase 1: 에지 보존 bilateral filter (RGBA ImageData in-place) ───
+// 면은 평탄하게(공간 가우시안), 에지는 보존(색 차 가우시안). 다운스케일 앞단 적용.
+function bilateralFilterInPlace(imageData, sigma) {
+  const { data, width: w, height: h } = imageData;
+  const sSpace = sigma.space, sColor = sigma.color;
+  const radius = Math.max(1, Math.round(sSpace * 2));
+  const span = 2 * radius + 1;
+  const spatial = new Float32Array(span * span); // 공간 가중치 LUT
+  let si = 0;
+  for (let dy = -radius; dy <= radius; dy++) {
+    for (let dx = -radius; dx <= radius; dx++) {
+      spatial[si++] = Math.exp(-(dx * dx + dy * dy) / (2 * sSpace * sSpace));
+    }
+  }
+  const colorCoef = -1 / (2 * sColor * sColor);
+  const out = new Uint8ClampedArray(data.length);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const ci = (y * w + x) * 4;
+      const cr = data[ci], cg = data[ci + 1], cb = data[ci + 2];
+      let wsum = 0, rs = 0, gs = 0, bs = 0, k = 0;
+      for (let dy = -radius; dy <= radius; dy++) {
+        const yy = y + dy;
+        if (yy < 0 || yy >= h) { k += span; continue; }
+        for (let dx = -radius; dx <= radius; dx++, k++) {
+          const xx = x + dx;
+          if (xx < 0 || xx >= w) continue;
+          const ni = (yy * w + xx) * 4;
+          const dr = data[ni] - cr, dg = data[ni + 1] - cg, db = data[ni + 2] - cb;
+          const wgt = spatial[k] * Math.exp((dr * dr + dg * dg + db * db) * colorCoef);
+          wsum += wgt; rs += wgt * data[ni]; gs += wgt * data[ni + 1]; bs += wgt * data[ni + 2];
+        }
+      }
+      out[ci] = rs / wsum; out[ci + 1] = gs / wsum; out[ci + 2] = bs / wsum; out[ci + 3] = data[ci + 3];
+    }
+  }
+  data.set(out);
+}
+
+// 소스를 (전처리 포함) 중간 해상도 캔버스로 래스터화. preprocess='off'면 전처리 생략.
+function rasterizeSource(img, gridW, gridH) {
+  const longSrc = Math.max(img.width, img.height);
+  const longCap = Math.min(longSrc, Math.max(gridW, gridH) * PREPROCESS_SCALE, PREPROCESS_MAX_EDGE);
+  const scale = longCap / longSrc;
+  const sw = Math.max(gridW, Math.round(img.width * scale));
+  const sh = Math.max(gridH, Math.round(img.height * scale));
+  const c = document.createElement('canvas');
+  c.width = sw; c.height = sh;
+  const cx = c.getContext('2d');
+  cx.imageSmoothingEnabled = true;
+  cx.imageSmoothingQuality = 'high';
+  cx.drawImage(img, 0, 0, sw, sh);
+  if (QUALITY.preprocess !== 'off') {
+    const id = cx.getImageData(0, 0, sw, sh);
+    bilateralFilterInPlace(id, PREPROCESS_SIGMA[QUALITY.preprocess]);
+    cx.putImageData(id, 0, 0);
+  }
+  return { canvas: c, sw, sh };
+}
+
+// ─── Phase 2: 디테일 보존 다운스케일 (Weber 식 대비 가중 area 샘플링) ───
+// 블록 평균에서 멀리 떨어진(=고대비 피처) 픽셀에 가중 → 작은 윤곽이 평균에 묻히지 않음.
+function downscaleDetailPreserving(sdata, sw, sh, gw, gh) {
+  const out = new Array(gw * gh);
+  for (let gy = 0; gy < gh; gy++) {
+    const y0 = Math.floor(gy * sh / gh);
+    const y1 = Math.max(y0 + 1, Math.floor((gy + 1) * sh / gh));
+    for (let gx = 0; gx < gw; gx++) {
+      const x0 = Math.floor(gx * sw / gw);
+      const x1 = Math.max(x0 + 1, Math.floor((gx + 1) * sw / gw));
+      let mr = 0, mg = 0, mb = 0, n = 0;
+      for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) {
+        const i = (y * sw + x) * 4; mr += sdata[i]; mg += sdata[i + 1]; mb += sdata[i + 2]; n++;
+      }
+      mr /= n; mg /= n; mb /= n;
+      let wr = 0, wg = 0, wb = 0, wsum = 0;
+      for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) {
+        const i = (y * sw + x) * 4;
+        const r = sdata[i], g = sdata[i + 1], b = sdata[i + 2];
+        const dev = Math.sqrt((r - mr) ** 2 + (g - mg) ** 2 + (b - mb) ** 2);
+        const wt = 1 + DETAIL_GAIN * dev;
+        wr += wt * r; wg += wt * g; wb += wt * b; wsum += wt;
+      }
+      out[gy * gw + gx] = [wr / wsum, wg / wsum, wb / wsum];
+    }
+  }
+  return out;
+}
+
+// Phase 1+2 결합: 소스 → gridW×gridH RGB 픽셀 배열. (off 조합은 generatePattern 본문이 직접 처리)
+function buildDownscaledPixels(img, gridW, gridH) {
+  const { canvas, sw, sh } = rasterizeSource(img, gridW, gridH);
+  if (QUALITY.detailDownscale) {
+    const sdata = canvas.getContext('2d').getImageData(0, 0, sw, sh).data;
+    return downscaleDetailPreserving(sdata, sw, sh, gridW, gridH);
+  }
+  // 디테일 다운스케일 off → (전처리된) 소스를 기존 bilinear로 격자에 축소
+  const oc = document.createElement('canvas');
+  oc.width = gridW; oc.height = gridH;
+  const octx = oc.getContext('2d');
+  octx.imageSmoothingEnabled = true;
+  octx.imageSmoothingQuality = 'high';
+  octx.drawImage(canvas, 0, 0, gridW, gridH);
+  const d = octx.getImageData(0, 0, gridW, gridH).data;
+  const out = [];
+  for (let i = 0; i < d.length; i += 4) out.push([d[i], d[i + 1], d[i + 2]]);
+  return out;
+}
+
+// ─── Phase 3: 살리언스(에지) 가중치 맵 ───
+// Sobel 유사 그라디언트 크기 정규화 → 가중치 = 1 + SALIENCE_WEIGHT·(정규화 에지).
+function computeSalienceWeights(pixels, gw, gh) {
+  const lum = new Float32Array(gw * gh);
+  for (let i = 0; i < pixels.length; i++) {
+    const [r, g, b] = pixels[i];
+    lum[i] = 0.299 * r + 0.587 * g + 0.114 * b;
+  }
+  const mag = new Float32Array(gw * gh);
+  let maxMag = 1e-6;
+  for (let y = 0; y < gh; y++) for (let x = 0; x < gw; x++) {
+    const xm = Math.max(0, x - 1), xp = Math.min(gw - 1, x + 1);
+    const ym = Math.max(0, y - 1), yp = Math.min(gh - 1, y + 1);
+    const gxv = lum[y * gw + xp] - lum[y * gw + xm];
+    const gyv = lum[yp * gw + x] - lum[ym * gw + x];
+    const m = Math.sqrt(gxv * gxv + gyv * gyv);
+    mag[y * gw + x] = m;
+    if (m > maxMag) maxMag = m;
+  }
+  const w = new Float32Array(gw * gh);
+  for (let i = 0; i < w.length; i++) w[i] = 1 + SALIENCE_WEIGHT * (mag[i] / maxMag);
+  return w;
+}
+
+// 살리언스 가중 Lab k-means (kMeansLab 미러 + 가중치). 충돌 없이 K개 대표색 반환.
+function kMeansLabWeighted(labPixels, weights, k, maxIter = 20, onProgress) {
+  const maxSamples = 8000;
+  let samples = labPixels, sw = weights;
+  if (labPixels.length > maxSamples) {
+    const step = Math.ceil(labPixels.length / maxSamples);
+    samples = []; sw = [];
+    for (let i = 0; i < labPixels.length; i += step) { samples.push(labPixels[i]); sw.push(weights[i]); }
+  }
+  const centroids = [];
+  centroids.push([...samples[Math.floor(Math.random() * samples.length)]]);
+  for (let c = 1; c < k; c++) {
+    const dists = samples.map((p, idx) => {
+      let md = Infinity;
+      for (const ce of centroids) {
+        const d = (p[0] - ce[0]) ** 2 + (p[1] - ce[1]) ** 2 + (p[2] - ce[2]) ** 2;
+        if (d < md) md = d;
+      }
+      return md * sw[idx]; // 가중 거리로 초기 시드 선택
+    });
+    const total = dists.reduce((a, b) => a + b, 0);
+    let rv = Math.random() * total, acc = 0, chosen = 0;
+    for (let i = 0; i < dists.length; i++) { acc += dists[i]; if (acc >= rv) { chosen = i; break; } }
+    centroids.push([...samples[chosen]]);
+  }
+  const assign = new Int32Array(samples.length);
+  for (let iter = 0; iter < maxIter; iter++) {
+    onProgress && onProgress(Math.round((iter / maxIter) * 60));
+    for (let i = 0; i < samples.length; i++) {
+      const p = samples[i];
+      let best = 0, bestD = Infinity;
+      for (let c = 0; c < k; c++) {
+        const d = (p[0] - centroids[c][0]) ** 2 + (p[1] - centroids[c][1]) ** 2 + (p[2] - centroids[c][2]) ** 2;
+        if (d < bestD) { bestD = d; best = c; }
+      }
+      assign[i] = best;
+    }
+    const sums = Array.from({ length: k }, () => [0, 0, 0, 0]);
+    for (let i = 0; i < samples.length; i++) {
+      const c = assign[i], wt = sw[i];
+      sums[c][0] += samples[i][0] * wt; sums[c][1] += samples[i][1] * wt;
+      sums[c][2] += samples[i][2] * wt; sums[c][3] += wt;
+    }
+    let moved = false;
+    for (let c = 0; c < k; c++) {
+      if (sums[c][3] > 0) {
+        const nL = sums[c][0] / sums[c][3], na = sums[c][1] / sums[c][3], nb = sums[c][2] / sums[c][3];
+        if (Math.abs(nL - centroids[c][0]) + Math.abs(na - centroids[c][1]) + Math.abs(nb - centroids[c][2]) > 0.1) moved = true;
+        centroids[c] = [nL, na, nb];
+      }
+    }
+    if (!moved) break;
+  }
+  return { centroids, samples, sampleWeights: sw };
+}
+
+// 팔레트 색 간 최소 ΔE 확보: 가까운 쌍은 제거하고 가장 먼(가중) 샘플로 보충해 K 유지.
+// 이미지에 충분히 구별되는 색이 없으면 간격을 완화하며 멈춤(실제 K가 그대로 다운스트림 반영됨).
+function enforceMinDeltaE(centroids, samples, sampleWeights, k, minDE) {
+  const cents = centroids.map(c => [...c]);
+  let guard = 0;
+  while (guard++ < k * 3) {
+    let pi = -1, pj = -1, best = Infinity;
+    for (let i = 0; i < cents.length; i++) {
+      for (let j = i + 1; j < cents.length; j++) {
+        const d = deltaE(cents[i], cents[j]);
+        if (d < best) { best = d; pi = i; pj = j; }
+      }
+    }
+    if (best >= minDE) break;        // 모든 쌍이 충분히 떨어짐
+    cents.splice(pj, 1);             // 가까운 쌍 중 하나 제거
+    // 현재 집합에서 가장 먼(가중) 샘플로 보충 → K 유지
+    let far = -1, farScore = -1;
+    for (let s = 0; s < samples.length; s++) {
+      let md = Infinity;
+      for (const ce of cents) {
+        const d = (samples[s][0] - ce[0]) ** 2 + (samples[s][1] - ce[1]) ** 2 + (samples[s][2] - ce[2]) ** 2;
+        if (d < md) md = d;
+      }
+      const score = md * sampleWeights[s];
+      if (score > farScore) { farScore = score; far = s; }
+    }
+    if (far < 0) break;
+    const cand = [...samples[far]];
+    const stillClose = cents.some(ce => deltaE(ce, cand) < minDE);
+    cents.push(cand);
+    if (stillClose) break;           // 더 떨어진 색이 없음 → 간격 완화하고 K 유지하며 종료
+  }
+  return cents;
+}
+
+// ═══════════════════════════════════════════════════════════════
 // IMAGE PROCESSING & PATTERN GENERATION
 // ═══════════════════════════════════════════════════════════════
 async function generatePattern() {
@@ -4382,33 +4683,49 @@ async function generatePattern() {
   state.requestedColors = k;
   const img = state.sourceImage;
 
-  // Step 1: Resize image to grid dimensions
-  const offscreen = document.createElement('canvas');
-  offscreen.width = gridW; offscreen.height = gridH;
-  const ctx2 = offscreen.getContext('2d');
-  ctx2.imageSmoothingEnabled = true;
-  ctx2.imageSmoothingQuality = 'high';
-  ctx2.drawImage(img, 0, 0, gridW, gridH);
+  // Step 1: Resize image to grid dimensions (Phase 1 전처리 + Phase 2 다운스케일 레버)
+  let pixels;
+  if (QUALITY.preprocess === 'off' && !QUALITY.detailDownscale) {
+    // ── 기존 경로 (회귀 가드: 두 레버 off면 코드/출력 동일) ──
+    const offscreen = document.createElement('canvas');
+    offscreen.width = gridW; offscreen.height = gridH;
+    const ctx2 = offscreen.getContext('2d');
+    ctx2.imageSmoothingEnabled = true;
+    ctx2.imageSmoothingQuality = 'high';
+    ctx2.drawImage(img, 0, 0, gridW, gridH);
 
-  const imgData = ctx2.getImageData(0, 0, gridW, gridH);
-  const data = imgData.data;
+    const imgData = ctx2.getImageData(0, 0, gridW, gridH);
+    const data = imgData.data;
 
-  // Extract pixel array
-  const pixels = [];
-  for (let i = 0; i < data.length; i += 4) {
-    pixels.push([data[i], data[i+1], data[i+2]]);
+    // Extract pixel array
+    pixels = [];
+    for (let i = 0; i < data.length; i += 4) {
+      pixels.push([data[i], data[i+1], data[i+2]]);
+    }
+  } else {
+    pixels = buildDownscaledPixels(img, gridW, gridH);
   }
 
   showProcessing(true, t('proc_kmeans'), 10);
   await sleep(30);
 
-  // Step 2: Convert pixels to Lab, then cluster in Lab space.
+  // Step 2: Convert pixels to Lab, then select Lab representative colors.
   // Lab-space k-means prevents RGB bias that causes teal/cyan centroids to drift toward brown.
   const labPixels = pixels.map(([r, g, b]) => rgbToLab(r, g, b));
 
-  const centroidLabs = kMeansLab(labPixels, k, 20, pct => {
-    showProcessing(true, t('proc_clustering'), 10 + pct * 0.6);
-  });
+  const onClusterPct = pct => showProcessing(true, t('proc_clustering'), 10 + pct * 0.6);
+  let centroidLabs;
+  if (QUALITY.saliencePalette) {
+    // Phase 3: 에지/살리언스 가중 k-means → 작은 형태 결정 피처가 색 배정에서 밀리지 않음.
+    const salience = computeSalienceWeights(pixels, gridW, gridH);
+    const km = kMeansLabWeighted(labPixels, salience, k, 20, onClusterPct);
+    centroidLabs = (PALETTE_MIN_DE > 0)
+      ? enforceMinDeltaE(km.centroids, km.samples, km.sampleWeights, k, PALETTE_MIN_DE)
+      : km.centroids;
+  } else {
+    // ── 기존 경로 (회귀 가드) ──
+    centroidLabs = kMeansLab(labPixels, k, 20, onClusterPct);
+  }
 
   showProcessing(true, t('proc_dmc'), 70);
   await sleep(30);
@@ -4461,9 +4778,10 @@ async function generatePattern() {
   showProcessing(true, t('proc_grid'), 80);
   await sleep(30);
 
-  // Step 4: Assign pixels to centroids with Floyd-Steinberg dithering (40% strength).
+  // Step 4: Assign pixels to centroids. Floyd-Steinberg dithering is the 4th lever.
+  // dither:true → 기존 동작(40% 오차 확산). dither:false → 디더 없음(한 칸=드릴 한 알).
   // Error diffusion in Lab space preserves perceptual color balance across smooth gradients.
-  const DITHER_STR = 0.40;
+  const DITHER_STR = QUALITY.dither ? DITHER_STRENGTH : 0;
   const errBuf = new Float32Array(gridW * gridH * 3); // accumulated Lab error per pixel
 
   const grid = [];
@@ -4491,22 +4809,24 @@ async function generatePattern() {
       const dmcLab = DMC_LAB[dmcIdx];
 
       // Quantization error: difference between effective color and assigned DMC
-      const eL = (effL - dmcLab[0]) * DITHER_STR;
-      const ea = (effa - dmcLab[1]) * DITHER_STR;
-      const eb = (effb - dmcLab[2]) * DITHER_STR;
+      if (DITHER_STR) {
+        const eL = (effL - dmcLab[0]) * DITHER_STR;
+        const ea = (effa - dmcLab[1]) * DITHER_STR;
+        const eb = (effb - dmcLab[2]) * DITHER_STR;
 
-      // Floyd-Steinberg diffusion to 4 neighbors
-      const diffuse = (tx, ty, w) => {
-        if (tx < 0 || tx >= gridW || ty >= gridH) return;
-        const ti = (ty * gridW + tx) * 3;
-        errBuf[ti    ] += eL * w;
-        errBuf[ti + 1] += ea * w;
-        errBuf[ti + 2] += eb * w;
-      };
-      diffuse(px+1, py,   7/16);
-      diffuse(px-1, py+1, 3/16);
-      diffuse(px,   py+1, 5/16);
-      diffuse(px+1, py+1, 1/16);
+        // Floyd-Steinberg diffusion to 4 neighbors
+        const diffuse = (tx, ty, w) => {
+          if (tx < 0 || tx >= gridW || ty >= gridH) return;
+          const ti = (ty * gridW + tx) * 3;
+          errBuf[ti    ] += eL * w;
+          errBuf[ti + 1] += ea * w;
+          errBuf[ti + 2] += eb * w;
+        };
+        diffuse(px+1, py,   7/16);
+        diffuse(px-1, py+1, 3/16);
+        diffuse(px,   py+1, 5/16);
+        diffuse(px+1, py+1, 1/16);
+      }
 
       const palIdx = paletteMap.get(dmcIdx);
       state.palette[palIdx].count++;
@@ -5345,7 +5665,11 @@ function loadImageFile(file) {
 // ═══════════════════════════════════════════════════════════════
 // GENERATE BUTTON
 // ═══════════════════════════════════════════════════════════════
-document.getElementById('btn-generate').addEventListener('click', generatePattern);
+// 메인 ⚡생성 = 항상 default 프리셋(갤러리에서 다른 프리셋을 적용한 뒤에도 메인은 기본으로 복귀)
+document.getElementById('btn-generate').addEventListener('click', () => {
+  applyQualityPreset('default');
+  generatePattern();
+});
 
 // ═══════════════════════════════════════════════════════════════
 // AUTO FILL
@@ -6629,8 +6953,8 @@ applyTranslations();
      ═══════════════════════════════════════════════════════════════ -->
 <script>
 (function () {
-  const PREVIEW_MAX    = 72;   // 썸네일 계산용 격자 긴 변 최대 길이 (체감 속도 확보)
-  const MAX_CANDIDATES = 6;    // 후보 상한 (요구사항: 7개 이상 금지)
+  const PREVIEW_MAX       = 72;  // 썸네일 계산용 격자 긴 변 최대 길이 (체감 속도 확보)
+  const COLOR_COUNT_DELTA = 5;   // 색상 수 축 간격: 후보 = [N-5, N, N+5]
 
   const overlay  = document.getElementById('variations-overlay');
   const gridEl   = document.getElementById('variations-grid');
@@ -6639,20 +6963,19 @@ applyTranslations();
   const btnClose = document.getElementById('variations-close');
   if (!overlay || !btnShow || typeof generatePattern !== 'function') return;
 
-  let genToken = 0;     // 생성 취소 토큰 (모달 닫기/재생성 시 진행 중 작업 무효화)
-  let busy     = false;
+  let genToken   = 0;    // 생성 취소 토큰 (모달 닫기/재생성 시 진행 중 작업 무효화)
+  let busy       = false;
+  let appliedKey = null; // 현재 적용된 후보 강조용 "presetId|colorCount"
 
-  // 후보 색상 수 목록: 현재값 기준으로 분산 → 5~100 클램프 → 중복 제거 → 3~6개
+  // 색상 수 후보: [N-5, N, N+5] → 5~100 클램프 → 중복 제거 (최대 3단계)
   function buildColorCounts(base) {
-    const offsets = [0, -6, 6, -12, 12, -18, 18, -24, 24, -3, 3, -9, 9];
     const out = [];
-    for (const o of offsets) {
-      if (out.length >= MAX_CANDIDATES) break;
-      const v = Math.max(5, Math.min(100, base + o));
+    for (const d of [-COLOR_COUNT_DELTA, 0, COLOR_COUNT_DELTA]) {
+      const v = Math.max(5, Math.min(100, base + d));
       if (!out.includes(v)) out.push(v);
     }
     out.sort((a, b) => a - b);
-    return out.slice(0, MAX_CANDIDATES);
+    return out;
   }
 
   // 미리보기용 축소 격자 + 실제 생성 격자(라벨용 총 칸 수)
@@ -6678,15 +7001,23 @@ applyTranslations();
     }, []));
   }
 
-  // 단일 후보 계산(축소 해상도). 코어 알고리즘 함수만 호출, 디더링은 썸네일이라 생략.
-  function computeCandidate(img, pw, ph, k, ownedAllowSet) {
+  // 단일 후보 계산(축소 해상도). 프리셋의 Phase1(전처리)·Phase4(디더)만 반영.
+  // Phase2/3 는 항상 off(비노출). 코어 알고리즘 함수만 호출, 변환기 내부 미변경.
+  function computeCandidate(img, pw, ph, k, ownedAllowSet, preset) {
     const oc = document.createElement('canvas');
     oc.width = pw; oc.height = ph;
     const cx = oc.getContext('2d');
     cx.imageSmoothingEnabled = true;
     cx.imageSmoothingQuality = 'high';
     cx.drawImage(img, 0, 0, pw, ph);
-    const data = cx.getImageData(0, 0, pw, ph).data;
+    const imgData = cx.getImageData(0, 0, pw, ph);
+
+    // Phase1 전처리(bilateral) — 썸네일 해상도에 직접 적용(미리보기 근사)
+    if (preset && preset.preprocess && preset.preprocess !== 'off'
+        && typeof bilateralFilterInPlace === 'function' && PREPROCESS_SIGMA[preset.preprocess]) {
+      bilateralFilterInPlace(imgData, PREPROCESS_SIGMA[preset.preprocess]);
+    }
+    const data = imgData.data;
 
     const labPixels = [];
     for (let i = 0; i < data.length; i += 4) {
@@ -6709,18 +7040,40 @@ applyTranslations();
     paletteDmcs.forEach((di, pi) => paletteMap.set(di, pi));
     const palette = paletteDmcs.map(di => ({ color: DMC_COLORS[di].rgb }));
 
+    // Phase4 디더 — generatePattern 과 동일 규칙(Floyd-Steinberg, Lab 오차 확산)
+    const DITHER = (preset && preset.dither) ? DITHER_STRENGTH : 0;
+    const errBuf = DITHER ? new Float32Array(pw * ph * 3) : null;
     const grid = new Int32Array(pw * ph);
-    for (let i = 0; i < labPixels.length; i++) {
-      const [pL, pa, pb] = labPixels[i];
-      let best = 0, bestD = Infinity;
-      for (let c = 0; c < centroidLabs.length; c++) {
-        const dL = pL - centroidLabs[c][0];
-        const da = pa - centroidLabs[c][1];
-        const db = pb - centroidLabs[c][2];
-        const d = dL * dL + da * da + db * db;
-        if (d < bestD) { bestD = d; best = c; }
+    for (let py = 0; py < ph; py++) {
+      for (let px = 0; px < pw; px++) {
+        const i = py * pw + px;
+        const [pL, pa, pb] = labPixels[i];
+        const effL = DITHER ? pL + errBuf[i*3]   : pL;
+        const effa = DITHER ? pa + errBuf[i*3+1] : pa;
+        const effb = DITHER ? pb + errBuf[i*3+2] : pb;
+        let best = 0, bestD = Infinity;
+        for (let c = 0; c < centroidLabs.length; c++) {
+          const dL = effL - centroidLabs[c][0];
+          const da = effa - centroidLabs[c][1];
+          const db = effb - centroidLabs[c][2];
+          const d = dL * dL + da * da + db * db;
+          if (d < bestD) { bestD = d; best = c; }
+        }
+        const dmcIdx = centroidToDmc[best];
+        if (DITHER) {
+          const dmcLab = DMC_LAB[dmcIdx];
+          const eL = (effL - dmcLab[0]) * DITHER;
+          const ea = (effa - dmcLab[1]) * DITHER;
+          const eb = (effb - dmcLab[2]) * DITHER;
+          const diff = (tx, ty, w) => {
+            if (tx < 0 || tx >= pw || ty >= ph) return;
+            const ti = (ty * pw + tx) * 3;
+            errBuf[ti] += eL * w; errBuf[ti + 1] += ea * w; errBuf[ti + 2] += eb * w;
+          };
+          diff(px+1, py, 7/16); diff(px-1, py+1, 3/16); diff(px, py+1, 5/16); diff(px+1, py+1, 1/16);
+        }
+        grid[i] = paletteMap.get(dmcIdx);
       }
-      grid[i] = paletteMap.get(centroidToDmc[best]);
     }
     return { width: pw, height: ph, grid, palette };
   }
@@ -6751,51 +7104,69 @@ applyTranslations();
     const myToken = ++genToken;
 
     overlay.classList.add('open');
+    gridEl.classList.add('preset-mode');
     gridEl.innerHTML = '';
     statusEl.textContent = '';
 
     const base = parseInt(document.getElementById('k-colors').value, 10) || 35;
-    const counts = buildColorCounts(base);
+    const counts = buildColorCounts(base);                 // 세로축: 색상 수 (≤3)
+    const presets = QUALITY_PRESET_ORDER;                  // 가로축: 프리셋 3종
     const { pw, ph, fullW, fullH } = getPreviewDims();
     const totalCells = fullW * fullH;
     const ownedAllowSet = buildOwnedAllowSet();
 
-    for (let idx = 0; idx < counts.length; idx++) {
+    // row-major(색상 수 행) 로 채워 각 열이 동일 프리셋으로 정렬되게
+    const jobs = [];
+    for (const cnt of counts) for (const pid of presets) jobs.push({ pid, cnt });
+
+    for (let idx = 0; idx < jobs.length; idx++) {
       if (myToken !== genToken) { busy = false; return; }   // 취소됨
+      const { pid, cnt } = jobs[idx];
       statusEl.textContent = t('var_generating')
-        .replace('{i}', idx + 1).replace('{n}', counts.length);
+        .replace('{i}', idx + 1).replace('{n}', jobs.length);
       await sleep(20);                                       // UI flush (멈춤 방지)
       if (myToken !== genToken) { busy = false; return; }
 
       let cand;
       try {
-        cand = computeCandidate(state.sourceImage, pw, ph, counts[idx], ownedAllowSet);
+        cand = computeCandidate(state.sourceImage, pw, ph, cnt, ownedAllowSet, QUALITY_PRESETS[pid]);
       } catch (e) { console.error('[Variations]', e); continue; }
       if (myToken !== genToken) { busy = false; return; }
 
       const card = document.createElement('button');
       card.type = 'button';
       card.className = 'variation-card';
+      if (appliedKey === pid + '|' + cnt) card.classList.add('is-applied');
 
       const cv = document.createElement('canvas');
       cv.className = 'variation-thumb';
       renderThumb(cand, cv, 240);
 
+      const tag = document.createElement('div');
+      tag.className = 'variation-preset';
+      tag.textContent = `${t('preset_' + pid)} · ${cnt} ${t('var_label_colors')}`;
+
+      const colors = cand.palette.length;
+      const avg = Math.round(totalCells / Math.max(1, colors));
       const meta = document.createElement('div');
       meta.className = 'variation-meta';
       const colorsSpan = document.createElement('span');
       colorsSpan.className = 'variation-colors';
-      colorsSpan.textContent = `${cand.palette.length} ${t('var_label_colors')}`;
+      colorsSpan.textContent = `${colors} ${t('var_label_colors')}`;
       const cellsSpan = document.createElement('span');
       cellsSpan.className = 'variation-cells';
       cellsSpan.textContent = `${totalCells.toLocaleString()} ${t('var_label_cells')}`;
+      const avgSpan = document.createElement('span');
+      avgSpan.className = 'variation-avg';
+      avgSpan.textContent = `${t('var_label_avg')} ${avg}`;
       meta.appendChild(colorsSpan);
       meta.appendChild(cellsSpan);
+      meta.appendChild(avgSpan);
 
       card.appendChild(cv);
+      card.appendChild(tag);
       card.appendChild(meta);
-      const chosenK = counts[idx];
-      card.addEventListener('click', () => applyVariation(chosenK));
+      card.addEventListener('click', () => applyVariation(pid, cnt));
       gridEl.appendChild(card);
     }
 
@@ -6803,14 +7174,16 @@ applyTranslations();
     busy = false;
   }
 
-  // 후보 적용: 색상 수만 맞춘 뒤 기존 변환기(generatePattern) 그대로 호출 = 풀해상도 적용
-  function applyVariation(k) {
+  // 후보 적용: 프리셋(전처리·디더)과 색상 수를 맞춘 뒤 기존 변환기 호출 = 풀해상도 적용
+  function applyVariation(presetId, k) {
+    appliedKey = presetId + '|' + k;
     closeVariations();
     const slider = document.getElementById('k-colors');
     if (slider) {
       slider.value = k;
       slider.dispatchEvent(new Event('input', { bubbles: true })); // 배지/힌트 동기화
     }
+    if (typeof applyQualityPreset === 'function') applyQualityPreset(presetId);
     generatePattern();
   }
 
