@@ -2110,9 +2110,21 @@
   }
   .variation-colors { color: var(--cyan); font-weight: 600; }
   .variation-cells { color: var(--text3); }
+  .variation-avg { color: var(--text3); }
+  /* 프리셋×색상수 2축 그리드: 가로 3열(프리셋) 고정 */
+  .variations-grid.preset-mode { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .variation-preset {
+    font-size: 11.5px; font-weight: 700; color: var(--lavender);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .variation-card.is-applied {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 1px var(--cyan) inset, 0 0 12px rgba(111,231,255,0.25);
+  }
   @media (max-width: 600px) {
     .variations-box { padding: 16px 14px 20px; }
     .variations-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+    .variation-meta { flex-wrap: wrap; gap: 4px 8px; font-size: 11px; }
   }
 
   /* ── 광고 반응형 가드 (Phase 6): 모바일 가로 넘침 방지 ──
@@ -2829,13 +2841,19 @@ const i18n = {
     // 후보 도안(Variations)
     btn_variations:     '🎲 후보 도안 보기',
     var_modal_title:    '후보 도안 고르기',
-    var_modal_desc:     '현재 설정에서 색상 수만 다르게 한 후보예요. 마음에 드는 걸 클릭하면 에디터에 적용돼요.',
+    var_modal_desc:     '화질 프리셋과 색상 수를 달리한 후보예요. 마음에 드는 걸 클릭하면 에디터에 적용돼요.',
     var_generating:     '후보 생성 중... ({i}/{n})',
     var_pick_hint:      '마음에 드는 후보를 클릭하세요',
     var_label_colors:   '색',
     var_label_cells:    '칸',
     var_need_image:     '먼저 이미지를 가져오세요.',
     var_close:          '닫기',
+    var_label_avg:      '색당 평균',
+    preset_default:     '기본',
+    preset_crisp:       '또렷하게',
+    preset_soft:        '부드럽게',
+    preset_crisp_hint:  '일러스트·캐릭터용',
+    preset_soft_hint:   '사진용',
     // 알림
     notif_pattern_ready:  '도안 생성 완료! 편집을 시작하세요.',
     notif_autofill_done:  '모든 셀에 색상이 일괄 적용되었습니다.',
@@ -3017,13 +3035,19 @@ const i18n = {
     // Variations
     btn_variations:     '🎲 Show variations',
     var_modal_title:    'Pick a variation',
-    var_modal_desc:     'These candidates use your current settings with different color counts. Click one to apply it to the editor.',
+    var_modal_desc:     'Candidates across quality presets and color counts. Click one to apply it to the editor.',
     var_generating:     'Generating variations... ({i}/{n})',
     var_pick_hint:      'Click a variation you like',
     var_label_colors:   'colors',
     var_label_cells:    'beads',
     var_need_image:     'Please load an image first.',
     var_close:          'Close',
+    var_label_avg:      'avg/color',
+    preset_default:     'Default',
+    preset_crisp:       'Crisp',
+    preset_soft:        'Soft',
+    preset_crisp_hint:  'For illustrations & characters',
+    preset_soft_hint:   'For photos',
     notif_pattern_ready:  'Pattern ready! Start editing.',
     notif_autofill_done:  'All cells filled with pattern colors.',
     notif_cleared:        'All edits have been reset.',
@@ -3201,13 +3225,19 @@ const i18n = {
     // 候補図案（Variations）
     btn_variations:     '🎲 候補を見る',
     var_modal_title:    '候補から選ぶ',
-    var_modal_desc:     '現在の設定で色数だけを変えた候補です。気に入ったものをクリックするとエディターに適用されます。',
+    var_modal_desc:     '画質プリセットと色数を変えた候補です。気に入ったものをクリックするとエディターに適用されます。',
     var_generating:     '候補を生成中... ({i}/{n})',
     var_pick_hint:      '気に入った候補をクリックしてください',
     var_label_colors:   '色',
     var_label_cells:    '粒',
     var_need_image:     'まず画像を読み込んでください。',
     var_close:          '閉じる',
+    var_label_avg:      '色あたり平均',
+    preset_default:     '標準',
+    preset_crisp:       'くっきり',
+    preset_soft:        'やわらか',
+    preset_crisp_hint:  'イラスト・キャラ向け',
+    preset_soft_hint:   '写真向け',
     notif_pattern_ready:  '図案生成完了！編集を開始してください。',
     notif_autofill_done:  '全セルに色を一括適用しました。',
     notif_cleared:        '編集内容をリセットしました。',
@@ -3385,13 +3415,19 @@ const i18n = {
     // 候选图案（Variations）
     btn_variations:     '🎲 查看候选',
     var_modal_title:    '挑选候选图案',
-    var_modal_desc:     '这些候选使用当前设置，仅颜色数量不同。点击喜欢的即可应用到编辑器。',
+    var_modal_desc:     '不同画质预设与颜色数量的候选。点击喜欢的即可应用到编辑器。',
     var_generating:     '正在生成候选... ({i}/{n})',
     var_pick_hint:      '点击你喜欢的候选',
     var_label_colors:   '色',
     var_label_cells:    '颗',
     var_need_image:     '请先导入图片。',
     var_close:          '关闭',
+    var_label_avg:      '每色平均',
+    preset_default:     '标准',
+    preset_crisp:       '清晰',
+    preset_soft:        '柔和',
+    preset_crisp_hint:  '插画·角色用',
+    preset_soft_hint:   '照片用',
     notif_pattern_ready:  '图案已就绪！开始编辑吧。',
     notif_autofill_done:  '已批量应用所有格子的颜色。',
     notif_cleared:        '所有编辑已重置。',
@@ -4376,10 +4412,28 @@ function drawMinimap() {
 // ═══════════════════════════════════════════════════════════════
 const QUALITY = {
   preprocess:      'off',   // Phase 1: 'off' | 'mild' | 'strong'  (에지 보존 전처리)
-  detailDownscale: false,   // Phase 2: 디테일 보존 다운스케일 (false=기존 bilinear)
-  saliencePalette: false,   // Phase 3: 살리언스 가중 k-means + 최소 ΔE (false=기존 선택)
-  dither:          true,    // 기존 Floyd-Steinberg (true=현 배포본 유지, false=디더 없음)
+  detailDownscale: false,   // Phase 2: 디테일 보존 다운스케일 (false=기존 bilinear) — 사용자 비노출, 항상 off
+  saliencePalette: false,   // Phase 3: 살리언스 가중 k-means + 최소 ΔE (false=기존 선택) — 사용자 비노출, 항상 off
+  dither:          false,   // Phase 4: Floyd-Steinberg (default 프리셋 = off, 평탄/포스터화)
 };
+
+// ─── 화질 프리셋 3종 (후보 갤러리 노출용) ───
+// Phase2·Phase3 은 항상 off(비노출). Phase1(전처리)·Phase4(디더)만 프리셋으로 묶어 노출.
+// 'default' = 메인 ⚡생성 버튼의 기본 화질(= 새 프로덕션 기본).
+const QUALITY_PRESETS = {
+  default: { preprocess: 'off',    dither: false },  // 기본
+  crisp:   { preprocess: 'strong', dither: true  },  // 또렷하게 (일러스트·캐릭터)
+  soft:    { preprocess: 'mild',   dither: false },  // 부드럽게 (사진)
+};
+const QUALITY_PRESET_ORDER = ['default', 'crisp', 'soft']; // 그리드 가로축 순서
+function applyQualityPreset(id) {
+  const p = QUALITY_PRESETS[id] || QUALITY_PRESETS.default;
+  QUALITY.preprocess = p.preprocess;
+  QUALITY.dither = p.dither;
+  QUALITY.detailDownscale = false; // Phase2 항상 off
+  QUALITY.saliencePalette = false; // Phase3 항상 off
+}
+
 const DITHER_STRENGTH     = 0.40;   // 기존 디더 강도(불변) — dither:false 면 0으로 적용
 const PREPROCESS_SIGMA    = { mild: { space: 1.2, color: 18 }, strong: { space: 2.0, color: 30 } };
 const PREPROCESS_SCALE    = 4;      // 전처리/디테일 다운스케일 중간 해상도 = 목표 격자 긴변 × 배수
@@ -5611,7 +5665,11 @@ function loadImageFile(file) {
 // ═══════════════════════════════════════════════════════════════
 // GENERATE BUTTON
 // ═══════════════════════════════════════════════════════════════
-document.getElementById('btn-generate').addEventListener('click', generatePattern);
+// 메인 ⚡생성 = 항상 default 프리셋(갤러리에서 다른 프리셋을 적용한 뒤에도 메인은 기본으로 복귀)
+document.getElementById('btn-generate').addEventListener('click', () => {
+  applyQualityPreset('default');
+  generatePattern();
+});
 
 // ═══════════════════════════════════════════════════════════════
 // AUTO FILL
@@ -6895,8 +6953,8 @@ applyTranslations();
      ═══════════════════════════════════════════════════════════════ -->
 <script>
 (function () {
-  const PREVIEW_MAX    = 72;   // 썸네일 계산용 격자 긴 변 최대 길이 (체감 속도 확보)
-  const MAX_CANDIDATES = 6;    // 후보 상한 (요구사항: 7개 이상 금지)
+  const PREVIEW_MAX       = 72;  // 썸네일 계산용 격자 긴 변 최대 길이 (체감 속도 확보)
+  const COLOR_COUNT_DELTA = 5;   // 색상 수 축 간격: 후보 = [N-5, N, N+5]
 
   const overlay  = document.getElementById('variations-overlay');
   const gridEl   = document.getElementById('variations-grid');
@@ -6905,20 +6963,19 @@ applyTranslations();
   const btnClose = document.getElementById('variations-close');
   if (!overlay || !btnShow || typeof generatePattern !== 'function') return;
 
-  let genToken = 0;     // 생성 취소 토큰 (모달 닫기/재생성 시 진행 중 작업 무효화)
-  let busy     = false;
+  let genToken   = 0;    // 생성 취소 토큰 (모달 닫기/재생성 시 진행 중 작업 무효화)
+  let busy       = false;
+  let appliedKey = null; // 현재 적용된 후보 강조용 "presetId|colorCount"
 
-  // 후보 색상 수 목록: 현재값 기준으로 분산 → 5~100 클램프 → 중복 제거 → 3~6개
+  // 색상 수 후보: [N-5, N, N+5] → 5~100 클램프 → 중복 제거 (최대 3단계)
   function buildColorCounts(base) {
-    const offsets = [0, -6, 6, -12, 12, -18, 18, -24, 24, -3, 3, -9, 9];
     const out = [];
-    for (const o of offsets) {
-      if (out.length >= MAX_CANDIDATES) break;
-      const v = Math.max(5, Math.min(100, base + o));
+    for (const d of [-COLOR_COUNT_DELTA, 0, COLOR_COUNT_DELTA]) {
+      const v = Math.max(5, Math.min(100, base + d));
       if (!out.includes(v)) out.push(v);
     }
     out.sort((a, b) => a - b);
-    return out.slice(0, MAX_CANDIDATES);
+    return out;
   }
 
   // 미리보기용 축소 격자 + 실제 생성 격자(라벨용 총 칸 수)
@@ -6944,15 +7001,23 @@ applyTranslations();
     }, []));
   }
 
-  // 단일 후보 계산(축소 해상도). 코어 알고리즘 함수만 호출, 디더링은 썸네일이라 생략.
-  function computeCandidate(img, pw, ph, k, ownedAllowSet) {
+  // 단일 후보 계산(축소 해상도). 프리셋의 Phase1(전처리)·Phase4(디더)만 반영.
+  // Phase2/3 는 항상 off(비노출). 코어 알고리즘 함수만 호출, 변환기 내부 미변경.
+  function computeCandidate(img, pw, ph, k, ownedAllowSet, preset) {
     const oc = document.createElement('canvas');
     oc.width = pw; oc.height = ph;
     const cx = oc.getContext('2d');
     cx.imageSmoothingEnabled = true;
     cx.imageSmoothingQuality = 'high';
     cx.drawImage(img, 0, 0, pw, ph);
-    const data = cx.getImageData(0, 0, pw, ph).data;
+    const imgData = cx.getImageData(0, 0, pw, ph);
+
+    // Phase1 전처리(bilateral) — 썸네일 해상도에 직접 적용(미리보기 근사)
+    if (preset && preset.preprocess && preset.preprocess !== 'off'
+        && typeof bilateralFilterInPlace === 'function' && PREPROCESS_SIGMA[preset.preprocess]) {
+      bilateralFilterInPlace(imgData, PREPROCESS_SIGMA[preset.preprocess]);
+    }
+    const data = imgData.data;
 
     const labPixels = [];
     for (let i = 0; i < data.length; i += 4) {
@@ -6975,18 +7040,40 @@ applyTranslations();
     paletteDmcs.forEach((di, pi) => paletteMap.set(di, pi));
     const palette = paletteDmcs.map(di => ({ color: DMC_COLORS[di].rgb }));
 
+    // Phase4 디더 — generatePattern 과 동일 규칙(Floyd-Steinberg, Lab 오차 확산)
+    const DITHER = (preset && preset.dither) ? DITHER_STRENGTH : 0;
+    const errBuf = DITHER ? new Float32Array(pw * ph * 3) : null;
     const grid = new Int32Array(pw * ph);
-    for (let i = 0; i < labPixels.length; i++) {
-      const [pL, pa, pb] = labPixels[i];
-      let best = 0, bestD = Infinity;
-      for (let c = 0; c < centroidLabs.length; c++) {
-        const dL = pL - centroidLabs[c][0];
-        const da = pa - centroidLabs[c][1];
-        const db = pb - centroidLabs[c][2];
-        const d = dL * dL + da * da + db * db;
-        if (d < bestD) { bestD = d; best = c; }
+    for (let py = 0; py < ph; py++) {
+      for (let px = 0; px < pw; px++) {
+        const i = py * pw + px;
+        const [pL, pa, pb] = labPixels[i];
+        const effL = DITHER ? pL + errBuf[i*3]   : pL;
+        const effa = DITHER ? pa + errBuf[i*3+1] : pa;
+        const effb = DITHER ? pb + errBuf[i*3+2] : pb;
+        let best = 0, bestD = Infinity;
+        for (let c = 0; c < centroidLabs.length; c++) {
+          const dL = effL - centroidLabs[c][0];
+          const da = effa - centroidLabs[c][1];
+          const db = effb - centroidLabs[c][2];
+          const d = dL * dL + da * da + db * db;
+          if (d < bestD) { bestD = d; best = c; }
+        }
+        const dmcIdx = centroidToDmc[best];
+        if (DITHER) {
+          const dmcLab = DMC_LAB[dmcIdx];
+          const eL = (effL - dmcLab[0]) * DITHER;
+          const ea = (effa - dmcLab[1]) * DITHER;
+          const eb = (effb - dmcLab[2]) * DITHER;
+          const diff = (tx, ty, w) => {
+            if (tx < 0 || tx >= pw || ty >= ph) return;
+            const ti = (ty * pw + tx) * 3;
+            errBuf[ti] += eL * w; errBuf[ti + 1] += ea * w; errBuf[ti + 2] += eb * w;
+          };
+          diff(px+1, py, 7/16); diff(px-1, py+1, 3/16); diff(px, py+1, 5/16); diff(px+1, py+1, 1/16);
+        }
+        grid[i] = paletteMap.get(dmcIdx);
       }
-      grid[i] = paletteMap.get(centroidToDmc[best]);
     }
     return { width: pw, height: ph, grid, palette };
   }
@@ -7017,51 +7104,69 @@ applyTranslations();
     const myToken = ++genToken;
 
     overlay.classList.add('open');
+    gridEl.classList.add('preset-mode');
     gridEl.innerHTML = '';
     statusEl.textContent = '';
 
     const base = parseInt(document.getElementById('k-colors').value, 10) || 35;
-    const counts = buildColorCounts(base);
+    const counts = buildColorCounts(base);                 // 세로축: 색상 수 (≤3)
+    const presets = QUALITY_PRESET_ORDER;                  // 가로축: 프리셋 3종
     const { pw, ph, fullW, fullH } = getPreviewDims();
     const totalCells = fullW * fullH;
     const ownedAllowSet = buildOwnedAllowSet();
 
-    for (let idx = 0; idx < counts.length; idx++) {
+    // row-major(색상 수 행) 로 채워 각 열이 동일 프리셋으로 정렬되게
+    const jobs = [];
+    for (const cnt of counts) for (const pid of presets) jobs.push({ pid, cnt });
+
+    for (let idx = 0; idx < jobs.length; idx++) {
       if (myToken !== genToken) { busy = false; return; }   // 취소됨
+      const { pid, cnt } = jobs[idx];
       statusEl.textContent = t('var_generating')
-        .replace('{i}', idx + 1).replace('{n}', counts.length);
+        .replace('{i}', idx + 1).replace('{n}', jobs.length);
       await sleep(20);                                       // UI flush (멈춤 방지)
       if (myToken !== genToken) { busy = false; return; }
 
       let cand;
       try {
-        cand = computeCandidate(state.sourceImage, pw, ph, counts[idx], ownedAllowSet);
+        cand = computeCandidate(state.sourceImage, pw, ph, cnt, ownedAllowSet, QUALITY_PRESETS[pid]);
       } catch (e) { console.error('[Variations]', e); continue; }
       if (myToken !== genToken) { busy = false; return; }
 
       const card = document.createElement('button');
       card.type = 'button';
       card.className = 'variation-card';
+      if (appliedKey === pid + '|' + cnt) card.classList.add('is-applied');
 
       const cv = document.createElement('canvas');
       cv.className = 'variation-thumb';
       renderThumb(cand, cv, 240);
 
+      const tag = document.createElement('div');
+      tag.className = 'variation-preset';
+      tag.textContent = `${t('preset_' + pid)} · ${cnt} ${t('var_label_colors')}`;
+
+      const colors = cand.palette.length;
+      const avg = Math.round(totalCells / Math.max(1, colors));
       const meta = document.createElement('div');
       meta.className = 'variation-meta';
       const colorsSpan = document.createElement('span');
       colorsSpan.className = 'variation-colors';
-      colorsSpan.textContent = `${cand.palette.length} ${t('var_label_colors')}`;
+      colorsSpan.textContent = `${colors} ${t('var_label_colors')}`;
       const cellsSpan = document.createElement('span');
       cellsSpan.className = 'variation-cells';
       cellsSpan.textContent = `${totalCells.toLocaleString()} ${t('var_label_cells')}`;
+      const avgSpan = document.createElement('span');
+      avgSpan.className = 'variation-avg';
+      avgSpan.textContent = `${t('var_label_avg')} ${avg}`;
       meta.appendChild(colorsSpan);
       meta.appendChild(cellsSpan);
+      meta.appendChild(avgSpan);
 
       card.appendChild(cv);
+      card.appendChild(tag);
       card.appendChild(meta);
-      const chosenK = counts[idx];
-      card.addEventListener('click', () => applyVariation(chosenK));
+      card.addEventListener('click', () => applyVariation(pid, cnt));
       gridEl.appendChild(card);
     }
 
@@ -7069,14 +7174,16 @@ applyTranslations();
     busy = false;
   }
 
-  // 후보 적용: 색상 수만 맞춘 뒤 기존 변환기(generatePattern) 그대로 호출 = 풀해상도 적용
-  function applyVariation(k) {
+  // 후보 적용: 프리셋(전처리·디더)과 색상 수를 맞춘 뒤 기존 변환기 호출 = 풀해상도 적용
+  function applyVariation(presetId, k) {
+    appliedKey = presetId + '|' + k;
     closeVariations();
     const slider = document.getElementById('k-colors');
     if (slider) {
       slider.value = k;
       slider.dispatchEvent(new Event('input', { bubbles: true })); // 배지/힌트 동기화
     }
+    if (typeof applyQualityPreset === 'function') applyQualityPreset(presetId);
     generatePattern();
   }
 
