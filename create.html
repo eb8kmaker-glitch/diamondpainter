@@ -480,6 +480,29 @@
     background: rgba(0,0,0,0.4);
   }
 
+  /* ── 빈 도안에서 시작 ── */
+  .blank-start { margin-top: 10px; }
+  .blank-start-or {
+    text-align: center; font-size: 9.5px; color: var(--text3);
+    margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase;
+  }
+  #btn-blank-start { width: 100%; justify-content: center; }
+  .keyring-presets { margin-top: 8px; }
+  .keyring-presets-title { font-size: 10px; color: var(--text3); margin-bottom: 6px; }
+  .keyring-presets-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .keyring-preset-card {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 8px 4px; border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border); background: var(--glass);
+    color: var(--text2); cursor: pointer; font-family: var(--ui);
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .keyring-preset-card:hover {
+    border-color: var(--glass-border-glow); background: var(--glass-hover); color: var(--cyan);
+  }
+  .keyring-preset-card .kp-name { font-size: 11px; font-weight: 600; }
+  .keyring-preset-card .kp-dim { font-size: 9.5px; color: var(--text3); }
+
   /* ── 툴 버튼 ── */
   .tool-group { display: flex; gap: 5px; }
   .tool-btn {
@@ -2318,6 +2341,16 @@
       </div>
       <img id="preview-img" alt="preview">
       <input type="file" id="file-input" accept="image/*">
+
+      <!-- 빈 도안에서 시작 (키링 등) -->
+      <div class="blank-start">
+        <div class="blank-start-or" data-i18n="blank_or">또는</div>
+        <button class="btn" id="btn-blank-start" type="button" data-i18n="blank_start">✏️ 빈 도안에서 시작</button>
+        <div id="keyring-presets" class="keyring-presets" hidden>
+          <div class="keyring-presets-title" data-i18n="keyring_choose_title">크기 선택</div>
+          <div id="keyring-presets-list" class="keyring-presets-list"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Settings -->
@@ -2823,6 +2856,15 @@ const i18n = {
     edit_coverage:       '셀 적용률',
     // 업로드
     upload_hint: '클릭하거나 이미지를 드롭하세요',
+    blank_or: '또는',
+    blank_start: '✏️ 빈 도안에서 시작',
+    blank_ready: '빈 도안이 준비됐어요. 색을 골라 칸을 칠해보세요!',
+    keyring_choose_title: '크기 선택',
+    keyring_load_error: '프리셋을 불러오지 못했어요.',
+    'keyring.preset.miniSquare': '미니 정사각',
+    'keyring.preset.basicSquare': '기본 정사각',
+    'keyring.preset.tallRect': '세로형',
+    'keyring.preset.wideRect': '가로형',
     // 상태 메시지
     status_ready:        '준비 완료 — 이미지를 가져오세요',
     status_generating:   '도안 생성 중...',
@@ -3019,6 +3061,15 @@ const i18n = {
     edit_history:        'Edit history',
     edit_coverage:       'Coverage',
     upload_hint: 'Click or drop image here',
+    blank_or: 'or',
+    blank_start: '✏️ Create from blank',
+    blank_ready: 'Blank canvas ready. Pick a color and start painting!',
+    keyring_choose_title: 'Choose a size',
+    keyring_load_error: 'Failed to load presets.',
+    'keyring.preset.miniSquare': 'Mini square',
+    'keyring.preset.basicSquare': 'Basic square',
+    'keyring.preset.tallRect': 'Tall',
+    'keyring.preset.wideRect': 'Wide',
     status_ready:        'Ready — import an image to begin',
     status_generating:   'Generating pattern...',
     status_done_pattern: 'Pattern generated',
@@ -3209,6 +3260,15 @@ const i18n = {
     edit_history:        '編集履歴',
     edit_coverage:       '適用率',
     upload_hint: 'クリックまたは画像をドロップ',
+    blank_or: 'または',
+    blank_start: '✏️ 空の図案から作成',
+    blank_ready: '空の図案ができました。色を選んでマスを塗りましょう！',
+    keyring_choose_title: 'サイズを選択',
+    keyring_load_error: 'プリセットを読み込めませんでした。',
+    'keyring.preset.miniSquare': 'ミニ正方形',
+    'keyring.preset.basicSquare': '基本正方形',
+    'keyring.preset.tallRect': '縦長',
+    'keyring.preset.wideRect': '横長',
     status_ready:        '準備完了 — 画像をインポートしてください',
     status_generating:   '図案生成中...',
     status_done_pattern: '図案生成完了',
@@ -3399,6 +3459,15 @@ const i18n = {
     edit_history:        '编辑历史',
     edit_coverage:       '覆盖率',
     upload_hint: '点击或拖拽图片到此处',
+    blank_or: '或',
+    blank_start: '✏️ 从空白图案开始',
+    blank_ready: '空白图案已就绪。选择颜色开始绘制吧！',
+    keyring_choose_title: '选择尺寸',
+    keyring_load_error: '无法加载预设。',
+    'keyring.preset.miniSquare': '迷你方形',
+    'keyring.preset.basicSquare': '基本方形',
+    'keyring.preset.tallRect': '竖向',
+    'keyring.preset.wideRect': '横向',
     status_ready:        '准备就绪 — 请导入图片',
     status_generating:   '生成图案中...',
     status_done_pattern: '图案生成完成',
@@ -4280,7 +4349,16 @@ function drawPatternFull() {
 
 function drawPatternCell(ctx, px, py, cs, cell) {
   const pal = state.palette[cell.palIdx];
-  if (!pal) return;
+  if (!pal) {
+    // 빈 셀(빈 도안 모드) — 밝은 배경 + 격자선으로 그리기 영역을 보이게.
+    // 사진 모드는 모든 base 셀이 유효해 이 분기를 타지 않음(회귀 없음).
+    ctx.fillStyle = '#e9edf5';
+    ctx.fillRect(px, py, cs, cs);
+    ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+    ctx.lineWidth = 0.5;
+    ctx.strokeRect(px + 0.5, py + 0.5, cs - 1, cs - 1);
+    return;
+  }
 
   const [r,g,b] = pal.color;
 
@@ -5162,12 +5240,15 @@ function placeBead(cx, cy, erase = false) {
   const idx = cy * width + cx;
 
   if (state.tool === 'pick') {
-    const palIdx = state.pattern.grid[idx].palIdx;
+    // 편집값 우선(빈 도안/편집 셀 대응), 없으면 base. 빈 셀이면 무시.
+    const palIdx = state.userGrid[idx] >= 0 ? state.userGrid[idx] : state.pattern.grid[idx].palIdx;
+    const pal = state.palette[palIdx];
+    if (!pal) return;
     state.activePaletteIdx = palIdx;
     state.tool = 'paint';
     setActiveTool('paint');
     updatePaletteUI();
-    showNotif(`${t('notif_picked')}: DMC ${state.palette[palIdx].dmc}`, 'success');
+    showNotif(`${t('notif_picked')}: DMC ${pal.dmc}`, 'success');
     return;
   }
 
@@ -5953,6 +6034,8 @@ function startAutoSave() {
 
 // Try restore from autosave on load
 window.addEventListener('load', () => {
+  // 키링 딥링크(?mode=keyring)가 있으면 자동복원 대신 키링 모드로 진입
+  if (typeof window.__keyringDeepLink === 'function' && window.__keyringDeepLink()) return;
   const saved = localStorage.getItem('diamond_painter_autosave');
   if (saved) {
     try {
@@ -7199,6 +7282,117 @@ applyTranslations();
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && overlay.classList.contains('open')) closeVariations();
   });
+})();
+</script>
+<!-- ═══════════════════════════════════════════════════════════════
+     빈 도안에서 시작 + 키링 프리셋 + 딥링크 (추가형 기능)
+     · 기존 그리기/undo/터치/심볼차트/출력 인프라를 그대로 재사용.
+     · "빈 그리드에서 출발" = state.pattern/userGrid/palette 를 빈 상태로 초기화하는 특수 케이스.
+     · 프리셋·드릴 크기는 keyring-presets.json 단일 소스에서만 정의.
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  if (typeof state === 'undefined') return;
+
+  let KEYRING = null;          // 로드된 프리셋 JSON
+  let presetsPromise = null;
+
+  function loadPresets() {
+    if (presetsPromise) return presetsPromise;
+    presetsPromise = fetch('keyring-presets.json')
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+      .then(d => { KEYRING = d; return d; })
+      .catch(e => { console.error('[Keyring] presets load failed', e); return null; });
+    return presetsPromise;
+  }
+
+  // 빈 도안 기본 시작 팔레트 (DMC 코드로만 정의 — 없는 코드는 건너뜀). 이후 기존 팔레트-추가로 확장 가능.
+  const STARTER_CODES = ['blanc', '310', '321', '322', '320', '335', '334', '326', '317', '318', '319', '336'];
+  function buildStarterPalette() {
+    const out = [];
+    for (const code of STARTER_CODES) {
+      const c = DMC_COLORS.find(d => String(d.code) === code);
+      if (c) out.push({ dmc: c.code, name: c.name, color: c.rgb, symbol: SYMBOLS[out.length % SYMBOLS.length], count: 0 });
+    }
+    return out;
+  }
+
+  // 빈 그리드 초기화 — 기존 적용 경로(resize→draw→updateUI→center…)를 그대로 사용
+  function startBlankPattern(preset) {
+    const cols = preset.cols | 0, rows = preset.rows | 0;
+    if (cols < 1 || rows < 1) return;
+
+    const grid = new Array(cols * rows);
+    for (let i = 0; i < grid.length; i++) grid[i] = { palIdx: -1 }; // 빈 셀 = 기존 규칙(-1)
+    state.pattern = { width: cols, height: rows, grid };
+    state.userGrid = new Int16Array(cols * rows).fill(-1);
+    state.palette = buildStarterPalette();
+    state.activePaletteIdx = 0;
+    state.tool = 'paint';
+    state.cellSize = 14;
+    state.requestedColors = state.palette.length;
+    state.undoStack = []; state.redoStack = [];
+    state.sourceImage = null; // 사진 모드와 구분(메인 생성 no-op)
+
+    resizeCanvases(cols * state.cellSize, rows * state.cellSize);
+    drawPatternFull();
+    redrawAllUserCells();
+    updateUI();
+    centerView();
+    emptyState.style.display = 'none';
+    hideChooser();
+    enableButtons();
+    startAutoSave();
+    if (typeof setActiveTool === 'function') setActiveTool('paint');
+    setStatus('done', `${cols}×${rows}`);
+    showNotif(t('blank_ready'), 'success');
+  }
+
+  function renderChooser() {
+    const listEl = document.getElementById('keyring-presets-list');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+    const presets = (KEYRING && Array.isArray(KEYRING.presets)) ? KEYRING.presets : [];
+    if (!presets.length) { listEl.textContent = t('keyring_load_error'); return; }
+    for (const p of presets) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'keyring-preset-card';
+      const name = document.createElement('span');
+      name.className = 'kp-name';
+      name.textContent = t(p.labelKey);
+      const dim = document.createElement('span');
+      dim.className = 'kp-dim';
+      dim.textContent = `${p.cols}×${p.rows}`;
+      btn.appendChild(name); btn.appendChild(dim);
+      btn.addEventListener('click', () => startBlankPattern(p));
+      listEl.appendChild(btn);
+    }
+  }
+
+  function showChooser() { const el = document.getElementById('keyring-presets'); if (el) { el.hidden = false; renderChooser(); } }
+  function hideChooser() { const el = document.getElementById('keyring-presets'); if (el) el.hidden = true; }
+
+  const btnBlank = document.getElementById('btn-blank-start');
+  if (btnBlank) btnBlank.addEventListener('click', async () => {
+    await loadPresets();
+    const el = document.getElementById('keyring-presets');
+    if (el && el.hidden) showChooser(); else hideChooser();
+  });
+
+  // 딥링크: ?mode=keyring[&preset=<id>]  (autosave 복원보다 우선)
+  window.__keyringDeepLink = function () {
+    const params = new URLSearchParams(location.search);
+    if (params.get('mode') !== 'keyring') return false; // 그 외 = 기존 동작
+    loadPresets().then(() => {
+      const pid = params.get('preset');
+      const presets = (KEYRING && Array.isArray(KEYRING.presets)) ? KEYRING.presets : [];
+      const found = pid ? presets.find(p => p.id === pid) : null;
+      if (found) startBlankPattern(found);   // 유효 preset → 바로 빈 도안
+      else showChooser();                    // preset 없음/무효 → 선택 UI (graceful)
+    });
+    return true;
+  };
 })();
 </script>
 <script src="/js/renderFinishedPreview.js"></script>
