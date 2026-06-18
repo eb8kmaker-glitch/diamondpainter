@@ -7094,6 +7094,86 @@ applyTranslations();
   });
 })();
 </script>
+<!-- ═══════════════════════════════════════════════════════════════
+     🧪 화질 레버 테스트 패널 (TEST-ONLY — main 머지 금지)
+     create.html의 QUALITY 상수를 화면에서 켜고/끄며 A/B 비교용.
+     자체 DOM/스타일 주입형이라 본문 마크업은 건드리지 않음.
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  if (typeof QUALITY === 'undefined') return; // 레버 코드 없는 빌드면 비활성
+  const PRESET_BASE = { preprocess: 'off',  detailDownscale: false, saliencePalette: false, dither: true  };
+  const PRESET_RECO = { preprocess: 'mild', detailDownscale: true,  saliencePalette: true,  dither: false };
+
+  const css = `
+  #qlab{position:fixed;left:12px;bottom:64px;z-index:1200;width:228px;
+    background:linear-gradient(180deg,#0d1638,#0a1230);border:1px solid rgba(111,231,255,0.35);
+    border-radius:12px;color:#e6ebff;font:12px/1.5 system-ui,sans-serif;box-shadow:0 12px 40px rgba(0,0,0,.5);}
+  #qlab .qhead{display:flex;align-items:center;justify-content:space-between;gap:8px;
+    padding:9px 11px;border-bottom:1px solid rgba(255,255,255,.08);cursor:pointer;}
+  #qlab .qtitle{font-weight:700;font-size:12px;color:#6fe7ff;}
+  #qlab .qbody{padding:9px 11px;display:grid;gap:8px;}
+  #qlab.collapsed .qbody{display:none;}
+  #qlab label.row{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;}
+  #qlab select{background:#0a1230;color:#e6ebff;border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:2px 6px;font:inherit;}
+  #qlab input[type=checkbox]{accent-color:#6fe7ff;width:15px;height:15px;}
+  #qlab .qbtns{display:flex;gap:6px;margin-top:2px;}
+  #qlab .qbtns button{flex:1;background:rgba(255,255,255,.06);color:#e6ebff;border:1px solid rgba(255,255,255,.16);
+    border-radius:7px;padding:5px 4px;font:11px/1.2 inherit;cursor:pointer;}
+  #qlab .qbtns button:hover{background:rgba(111,231,255,.12);border-color:rgba(111,231,255,.4);}
+  #qlab .qhint{font-size:10px;color:#8f9bbd;line-height:1.45;}
+  #qlab .qtag{font-size:9px;color:#ffb3d9;}`;
+  const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+
+  const panel = document.createElement('div');
+  panel.id = 'qlab';
+  panel.innerHTML = `
+    <div class="qhead"><span class="qtitle">🧪 화질 레버 <span class="qtag">TEST</span></span><span class="qcol">▾</span></div>
+    <div class="qbody">
+      <label class="row"><span>Phase1 전처리</span>
+        <select id="q-pre"><option value="off">off</option><option value="mild">mild</option><option value="strong">strong</option></select></label>
+      <label class="row"><span>Phase2 디테일 다운스케일</span><input type="checkbox" id="q-detail"></label>
+      <label class="row"><span>Phase3 살리언스 팔레트</span><input type="checkbox" id="q-sal"></label>
+      <label class="row"><span>Phase4 디더링</span><input type="checkbox" id="q-dither"></label>
+      <div class="qbtns">
+        <button id="q-base">기준선</button>
+        <button id="q-reco">권장 프리셋</button>
+      </div>
+      <div class="qhint">변경하면 자동으로 다시 생성돼요 (이미지가 올라가 있어야 함). 이 패널은 테스트 전용입니다.</div>
+    </div>`;
+  document.body.appendChild(panel);
+
+  const $ = id => panel.querySelector(id);
+  const pre = $('#q-pre'), detail = $('#q-detail'), sal = $('#q-sal'), dither = $('#q-dither');
+
+  function syncFromQuality() {
+    pre.value = QUALITY.preprocess;
+    detail.checked = QUALITY.detailDownscale;
+    sal.checked = QUALITY.saliencePalette;
+    dither.checked = QUALITY.dither;
+  }
+  function applyAndRegen() {
+    QUALITY.preprocess = pre.value;
+    QUALITY.detailDownscale = detail.checked;
+    QUALITY.saliencePalette = sal.checked;
+    QUALITY.dither = dither.checked;
+    if (typeof state !== 'undefined' && state && state.sourceImage && typeof generatePattern === 'function') {
+      generatePattern();
+    }
+  }
+  [pre, detail, sal, dither].forEach(el => el.addEventListener('change', applyAndRegen));
+  $('#q-base').addEventListener('click', () => { Object.assign(QUALITY, PRESET_BASE); syncFromQuality(); applyAndRegen(); });
+  $('#q-reco').addEventListener('click', () => { Object.assign(QUALITY, PRESET_RECO); syncFromQuality(); applyAndRegen(); });
+
+  // 헤더 클릭 시 접기/펴기
+  panel.querySelector('.qhead').addEventListener('click', () => {
+    panel.classList.toggle('collapsed');
+    panel.querySelector('.qcol').textContent = panel.classList.contains('collapsed') ? '▸' : '▾';
+  });
+
+  syncFromQuality();
+})();
+</script>
 <script src="/js/renderFinishedPreview.js"></script>
 <script src="cafe-toast.js" defer></script>
 <script src="ads.js" defer></script>
