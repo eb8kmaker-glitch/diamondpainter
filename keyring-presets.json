@@ -1,0 +1,9 @@
+{
+  "drillSizeMm": 2.5,
+  "presets": [
+    { "id": "mini_square",  "labelKey": "keyring.preset.miniSquare",  "cols": 16, "rows": 16 },
+    { "id": "basic_square", "labelKey": "keyring.preset.basicSquare", "cols": 20, "rows": 20 },
+    { "id": "tall_rect",    "labelKey": "keyring.preset.tallRect",    "cols": 20, "rows": 28 },
+    { "id": "wide_rect",    "labelKey": "keyring.preset.wideRect",    "cols": 28, "rows": 20 }
+  ]
+}
