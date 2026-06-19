@@ -7,6 +7,7 @@
     { "source": "/anniversary-diamond-painting.html", "destination": "/anniversary-diamond-painting", "permanent": true },
     { "source": "/contact.html", "destination": "/contact", "permanent": true },
     { "source": "/create.html", "destination": "/create", "permanent": true },
+    { "source": "/keyring.html", "destination": "/keyring", "permanent": true },
     { "source": "/custom-diamond-art.html", "destination": "/custom-diamond-art", "permanent": true },
     { "source": "/custom-diamond-painting.html", "destination": "/custom-diamond-painting", "permanent": true },
     { "source": "/diamond-art-generator.html", "destination": "/diamond-art-generator", "permanent": true },

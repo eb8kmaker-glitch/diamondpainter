@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script defer src="utils.js"></script>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8254204287118850"
+       crossorigin="anonymous"></script>
+  <title data-i18n="kr_meta_title">Diamond Painting Keyring Pattern Maker — Diamond Painter</title>
+  <meta name="description" content="Make a diamond painting keyring pattern from your own photo or illustration — free. Pick a keyring size, place DMC-coded drills, and download a print-ready PDF. No kit, no sign-up.">
+  <meta name="keywords" content="diamond painting keyring, diamond art keyring pattern, keyring pattern maker, diamond painting keychain, custom diamond painting keyring, small diamond painting pattern">
+  <link rel="canonical" href="https://diamondpainter.app/keyring">
+
+  <!-- hreflang (client-side i18n: single URL serves all languages) -->
+  <link rel="alternate" hreflang="en" href="https://diamondpainter.app/keyring">
+  <link rel="alternate" hreflang="ko" href="https://diamondpainter.app/keyring">
+  <link rel="alternate" hreflang="ja" href="https://diamondpainter.app/keyring">
+  <link rel="alternate" hreflang="zh" href="https://diamondpainter.app/keyring">
+  <link rel="alternate" hreflang="x-default" href="https://diamondpainter.app/keyring">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://diamondpainter.app/keyring">
+  <meta property="og:title" content="Diamond Painting Keyring Pattern Maker — Diamond Painter">
+  <meta property="og:description" content="Turn any image into a diamond painting keyring pattern — free, in your browser. Pick a size, place drills, download a print-ready PDF.">
+  <meta property="og:image" content="https://diamondpainter.app/og-image.png">
+  <meta property="og:site_name" content="Diamond Painter">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Diamond Painting Keyring Pattern Maker — Free">
+  <meta name="twitter:description" content="Make a diamond painting keyring pattern from any image. DMC colors, print-ready PDF, no sign-up.">
+  <meta name="twitter:image" content="https://diamondpainter.app/og-image.png">
+
+  <link rel="stylesheet" href="shared.css">
+
+  <!-- Structured Data: FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Can I make a diamond painting keyring without a kit?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The pattern is free to create and print on Diamond Painter; you only buy the physical materials (canvas blank, drills, keyring hardware) separately." } },
+      { "@type": "Question", "name": "Can I use a photo for a keyring pattern?",
+        "acceptedAnswer": { "@type": "Answer", "text": "You can, but at keyring size a simple, high-contrast image stays much clearer than a busy photo." } },
+      { "@type": "Question", "name": "Which keyring size should I pick?",
+        "acceptedAnswer": { "@type": "Answer", "text": "If it is your first one, the 5 by 5 cm Basic Square is the easiest size to start with." } },
+      { "@type": "Question", "name": "What do I buy after exporting the pattern?",
+        "acceptedAnswer": { "@type": "Answer", "text": "An adhesive canvas blank, DMC drills in the listed color numbers, a drill pen and tray, and keyring hardware." } },
+      { "@type": "Question", "name": "Is the keyring pattern maker really free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Creating, editing, and downloading the pattern is completely free, with no sign-up." } }
+    ]
+  }
+  </script>
+
+  <style>
+    .kr-hero { text-align: center; padding: 56px 0 32px; }
+    .kr-hero h1 { max-width: 760px; margin: 0 auto 16px; }
+    .kr-lead { max-width: 620px; margin: 0 auto 28px; color: var(--text3, #5a6172); font-size: clamp(15px, 2.2vw, 18px); line-height: 1.7; }
+    .kr-cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .kr-presets-grid {
+      display: grid; gap: 16px; margin-top: 28px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    }
+    .kr-card {
+      border: 1px solid var(--border, #e4e7ee); border-radius: 14px;
+      padding: 20px; background: #fff; display: flex; flex-direction: column; gap: 6px;
+    }
+    .kr-card__name { font-weight: 700; font-size: 17px; }
+    .kr-card__dims { font-size: 13px; color: var(--text3, #5a6172); }
+    .kr-card__desc { font-size: 14px; color: var(--text2, #3a4150); margin: 4px 0 14px; flex: 1; }
+    .kr-card__cta { margin-top: auto; font-size: 14px; }
+
+    .kr-steps { counter-reset: step; max-width: 760px; margin: 0 auto; padding: 0; list-style: none; }
+    .kr-steps li {
+      position: relative; padding: 14px 0 14px 52px; border-bottom: 1px solid var(--border, #eef0f4);
+      font-size: 15px; line-height: 1.6; color: var(--text2, #3a4150);
+    }
+    .kr-steps li::before {
+      counter-increment: step; content: counter(step);
+      position: absolute; left: 0; top: 12px;
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--primary, #2e6da4); color: #fff; font-weight: 700; font-size: 15px;
+    }
+    .kr-materials { max-width: 680px; margin: 0 auto; }
+    .kr-materials ul { padding-left: 20px; line-height: 1.9; color: var(--text2, #3a4150); }
+    .kr-note { font-size: 13px; color: var(--text3, #5a6172); margin-top: 12px; font-style: italic; }
+    .kr-section { padding: 40px 0; }
+    .kr-section > .container > h2 { text-align: center; margin-bottom: 8px; }
+    .kr-section__sub { text-align: center; color: var(--text3, #5a6172); margin-bottom: 8px; }
+    .kr-ad { text-align: center; margin: 28px 0; }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="container">
+    <a href="index.html" class="nav-logo" aria-label="Diamond Painter home">
+      <div class="nav-logo-icon" aria-hidden="true">◆</div>
+      Diamond Painter
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="guide/index.html" data-i18n="nav_guide">Guide</a></li>
+      <li><a href="gallery.html" data-i18n="nav_gallery">Gallery</a></li>
+      <li><a href="faq.html" data-i18n="nav_faq">FAQ</a></li>
+      <li><a href="about.html" data-i18n="nav_about">About</a></li>
+      <li><a href="contact.html" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <div class="nav-spacer"></div>
+    <select class="dp-lang-select" aria-label="Language">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+      <option value="zh">中文</option>
+    </select>
+    <a href="create.html" class="nav-cta" data-i18n="nav_try_free">Try Free →</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<main>
+  <!-- Hero -->
+  <header class="kr-hero">
+    <div class="container">
+      <h1 data-i18n="kr_h1">Make a Diamond Painting Keyring from Any Image</h1>
+      <p class="kr-lead" data-i18n="kr_lead">Turn your own photo or illustration into a diamond painting keyring pattern — no kit required. Pick a size, place your drills, and download a print-ready PDF for free.</p>
+      <div class="kr-cta-row">
+        <a href="create.html?mode=keyring&preset=basic_square" class="btn-primary" data-i18n="kr_cta">Create Keyring Pattern</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Preset sizes -->
+  <section class="kr-section" style="background:var(--surface,#f7f8fb);">
+    <div class="container">
+      <h2 data-i18n="kr_presets_h2">Keyring sizes</h2>
+      <p class="kr-section__sub" data-i18n="kr_presets_sub">Pick a starting size — you can change colors and details in the editor.</p>
+      <div class="kr-presets-grid">
+        <div class="kr-card">
+          <span class="kr-card__name" data-i18n="kr_preset_mini_name">Mini Square</span>
+          <span class="kr-card__dims">16 × 16 · 4 × 4 cm</span>
+          <span class="kr-card__desc" data-i18n="kr_preset_mini_desc">Simple pixel characters</span>
+          <a class="kr-card__cta btn-secondary" href="create.html?mode=keyring&preset=mini_square" data-i18n="kr_preset_start">Start with this size →</a>
+        </div>
+        <div class="kr-card">
+          <span class="kr-card__name" data-i18n="kr_preset_basic_name">Basic Square</span>
+          <span class="kr-card__dims">20 × 20 · 5 × 5 cm</span>
+          <span class="kr-card__desc" data-i18n="kr_preset_basic_desc">Most versatile — great for first-timers</span>
+          <a class="kr-card__cta btn-secondary" href="create.html?mode=keyring&preset=basic_square" data-i18n="kr_preset_start">Start with this size →</a>
+        </div>
+        <div class="kr-card">
+          <span class="kr-card__name" data-i18n="kr_preset_tall_name">Tall Rectangle</span>
+          <span class="kr-card__dims">20 × 28 · 5 × 7 cm</span>
+          <span class="kr-card__desc" data-i18n="kr_preset_tall_desc">Portraits &amp; vertical designs</span>
+          <a class="kr-card__cta btn-secondary" href="create.html?mode=keyring&preset=tall_rect" data-i18n="kr_preset_start">Start with this size →</a>
+        </div>
+        <div class="kr-card">
+          <span class="kr-card__name" data-i18n="kr_preset_wide_name">Wide Rectangle</span>
+          <span class="kr-card__dims">28 × 20 · 7 × 5 cm</span>
+          <span class="kr-card__desc" data-i18n="kr_preset_wide_desc">Landscape &amp; horizontal designs</span>
+          <a class="kr-card__cta btn-secondary" href="create.html?mode=keyring&preset=wide_rect" data-i18n="kr_preset_start">Start with this size →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ad slot: AdFit (KO) + AdSense (other langs) handled by ads.js -->
+  <div class="kr-ad container">
+    <ins class="kakao_ad_area" style="display:none;"
+      data-ad-unit="DAN-IhSMDRvA0QRGGtj5"
+      data-ad-width="728"
+      data-ad-height="90"></ins>
+    <script type="text/javascript" src="//t1.kakaocdn.net/kas/static/ba.min.js" async></script>
+  </div>
+
+  <!-- How to -->
+  <section class="kr-section">
+    <div class="container">
+      <h2 data-i18n="kr_how_h2">How to make a diamond painting keyring</h2>
+      <ol class="kr-steps">
+        <li data-i18n="kr_how_1">Prepare your image. Simple, bold images (characters, logos, illustrations) read best at keyring size.</li>
+        <li data-i18n="kr_how_2">Choose your size, bead type, and number of colors.</li>
+        <li data-i18n="kr_how_3">Compare the auto-generated candidates and pick the one you like.</li>
+        <li data-i18n="kr_how_4">Fine-tune in the editor — repaint cells or swap colors (optional).</li>
+        <li data-i18n="kr_how_5">Export a PDF or PNG, then assemble it with your physical materials.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Materials -->
+  <section class="kr-section" style="background:var(--surface,#f7f8fb);">
+    <div class="container kr-materials">
+      <h2 data-i18n="kr_mat_h2">What you'll need</h2>
+      <p data-i18n="kr_mat_intro">The pattern is free to create and print on Diamond Painter. The physical materials are purchased separately:</p>
+      <ul>
+        <!-- KO: 쿠팡 파트너스 링크 / EN·JA·ZH: Amazon Associates 링크 — 실제 URL은 직접 입력 -->
+        <li data-i18n="kr_mat_1">Adhesive canvas blank (acrylic keyring blank)</li>
+        <li data-i18n="kr_mat_2">DMC resin drills (buy the color numbers shown in your pattern)</li>
+        <li data-i18n="kr_mat_3">Drill pen &amp; tray</li>
+        <li data-i18n="kr_mat_4">Keyring hardware (rings, chain)</li>
+      </ul>
+      <p class="kr-note" data-i18n="kr_mat_note">We don't sell materials — Diamond Painter only makes the pattern. Any diamond painting drills and blanks will work.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="kr-section">
+    <div class="container">
+      <h2 data-i18n="kr_faq_h2">Frequently asked questions</h2>
+      <div class="faq-list" style="max-width:760px;margin:24px auto 0;">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span data-i18n="kr_faq_q1">Can I make one without a kit?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" data-i18n="kr_faq_a1">Yes. The pattern is free here; you only buy the materials (canvas blank, drills, hardware) separately.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span data-i18n="kr_faq_q2">Can I use a photo?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" data-i18n="kr_faq_a2">You can, but at keyring size a simple, high-contrast image stays much clearer than a busy photo.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span data-i18n="kr_faq_q3">Which size should I pick?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" data-i18n="kr_faq_a3">If it's your first one, the 5 × 5 cm Basic Square is the easiest to start with.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span data-i18n="kr_faq_q4">What do I buy after exporting?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" data-i18n="kr_faq_a4">An adhesive canvas blank, DMC drills in the listed colors, a drill pen/tray, and keyring hardware.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span data-i18n="kr_faq_q5">Is it really free?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" data-i18n="kr_faq_a5">Yes — creating, editing, and downloading the pattern is completely free, no sign-up.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section class="kr-section" style="text-align:center;">
+    <div class="container">
+      <h2 data-i18n="kr_cta_bottom_h2">Ready to make yours?</h2>
+      <div class="kr-cta-row" style="margin-top:18px;">
+        <a href="create.html?mode=keyring&preset=basic_square" class="btn-primary" data-i18n="kr_cta">Create Keyring Pattern</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:14px;display:inline-flex;">
+          <div class="nav-logo-icon" aria-hidden="true">◆</div>
+          Diamond Painter
+        </a>
+        <p class="footer-tagline" data-i18n="footer_tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_tool">Tool</h4>
+        <a href="create.html" data-i18n="footer_create_pattern">Create Pattern</a>
+        <a href="diamond-painting-converter.html">Diamond Painting Converter</a>
+        <a href="diamond-art-generator.html">Diamond Art Generator</a>
+        <a href="photo-to-diamond-painting.html">Photo to Diamond Painting</a>
+        <a href="diamond-painting-pattern-maker.html">Pattern Maker</a>
+        <a href="custom-diamond-painting.html">Custom Diamond Painting</a>
+        <a href="anniversary-diamond-painting.html">Anniversary Gifts</a>
+        <a href="meaningful-photo-gifts.html">Photo Keepsakes</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_guides">Guides</h4>
+        <a href="guide/index.html" data-i18n="footer_all_guides">All Guides</a>
+        <a href="guide/diamond-painting-tips.html" data-i18n="footer_tips">Tips &amp; Tricks</a>
+        <a href="guide/best-diamond-painting-accessories.html" data-i18n="footer_accessories">Accessories</a>
+        <a href="guide/dmc-color-guide.html" data-i18n="footer_dmc_guide">DMC Color Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_info">Info</h4>
+        <a href="faq.html" data-i18n="footer_faq">FAQ</a>
+        <a href="about.html" data-i18n="footer_about">About</a>
+        <a href="contact.html" data-i18n="footer_contact">Contact</a>
+        <a href="privacy-policy.html" data-i18n="footer_privacy">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer_copyright">© 2026 Diamond Painter. All rights reserved.</p>
+      <p data-i18n="footer_made_for">Made for diamond painting enthusiasts everywhere.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Mobile Nav Toggle ──
+  const toggle = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+  if (toggle && navLinks) {
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+    });
+  }
+  // ── FAQ Accordion ──
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+      btn.setAttribute('aria-expanded', (!isOpen).toString());
+    });
+  });
+</script>
+<script src="i18n.js"></script>
+<script src="ads.js" defer></script>
+<script type="module" src="/analytics.js"></script>
+</body>
+</html>
