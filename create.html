@@ -7,6 +7,7 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <script defer src="utils.js"></script>
+  <script src="dmc-families.js"></script>
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8254204287118850"
        crossorigin="anonymous"></script>
@@ -2238,6 +2239,38 @@
   .palette-search__hex label { display: block; font-size: 10px; color: var(--text3); margin-bottom: 5px; }
   .palette-hex-suggest { margin-top: 8px; }
 
+  /* 색상 계열(Color Family) 탐색 */
+  .palette-families { margin-top: 8px; }
+  .palette-families[hidden] { display: none; }
+  .palette-families__title { font-size: 10px; color: var(--text3); margin-bottom: 6px; }
+  .palette-families__list {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;
+  }
+  .family-chip {
+    display: flex; align-items: center; gap: 7px;
+    padding: 6px 8px; border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border); background: var(--glass);
+    color: var(--text2); cursor: pointer; font-family: var(--ui);
+    font-size: 11px; text-align: left; min-height: 34px;
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .family-chip:hover { border-color: rgba(111,231,255,0.4); color: var(--cyan); background: var(--glass-active); }
+  .family-chip__swatch {
+    width: 16px; height: 16px; border-radius: 4px; flex: none;
+    border: 1px solid rgba(0,0,0,0.25);
+  }
+  .palette-families__back {
+    margin-top: 8px; width: 100%; padding: 7px;
+    border: 1px solid var(--glass-border); border-radius: var(--radius-sm);
+    background: var(--glass); color: var(--text2); cursor: pointer;
+    font-family: var(--ui); font-size: 11px;
+  }
+  .palette-families__back:hover { color: var(--cyan); border-color: rgba(111,231,255,0.4); }
+  .palette-families__back[hidden] { display: none; }
+  @media (max-width: 600px) {
+    .family-chip { min-height: 44px; }
+  }
+
   /* 팔레트 행의 제거(×) 버튼 (사용자 추가·미사용 색) */
   .stats-row--added-unused .stats-ratio { opacity: 0; }
   .stats-remove-btn {
@@ -2591,6 +2624,13 @@
       <div id="palette-search" class="palette-search" hidden>
         <input type="text" id="palette-search-input" class="palette-search__input"
                data-i18n-placeholder="palette_search_placeholder" placeholder="Search DMC code or name…">
+        <!-- 색상 계열 탐색 (빈 도안 모드에서만 노출) -->
+        <div id="palette-families" class="palette-families" hidden>
+          <div class="palette-families__title" data-i18n="palette_browse_families">색상 계열에서 찾기</div>
+          <div id="palette-families-list" class="palette-families__list"></div>
+          <button type="button" id="palette-families-back" class="palette-families__back" hidden
+                  data-i18n="palette_families_back">← 계열 목록</button>
+        </div>
         <div id="palette-search-results" class="palette-search__results"></div>
         <div class="palette-search__hex">
           <label data-i18n="palette_or_hex">Or enter a hex color</label>
@@ -2794,6 +2834,18 @@ const i18n = {
     section_view_options:'표시 옵션',
     section_dmc_palette: 'DMC 팔레트',
     palette_add_color: '+ 색상 추가',
+    palette_browse_families: '색상 계열에서 찾기',
+    palette_families_back: '← 계열 목록',
+    family_white_ivory: '화이트·아이보리',
+    family_yellow_gold: '옐로우·골드',
+    family_orange: '오렌지',
+    family_red_pink: '레드·핑크',
+    family_purple: '퍼플·바이올렛',
+    family_blue: '블루',
+    family_green: '그린',
+    family_brown_beige: '브라운·베이지',
+    family_gray_silver: '그레이·실버',
+    family_black: '블랙',
     palette_search_placeholder: 'DMC 코드나 이름 검색…',
     palette_or_hex: '또는 hex 색상 입력',
     palette_add: '추가',
@@ -3010,6 +3062,18 @@ const i18n = {
     section_view_options:'View Options',
     section_dmc_palette: 'DMC Palette',
     palette_add_color: '+ Add Color',
+    palette_browse_families: 'Browse by color family',
+    palette_families_back: '← Families',
+    family_white_ivory: 'White & Ivory',
+    family_yellow_gold: 'Yellow & Gold',
+    family_orange: 'Orange',
+    family_red_pink: 'Red & Pink',
+    family_purple: 'Purple & Violet',
+    family_blue: 'Blue',
+    family_green: 'Green',
+    family_brown_beige: 'Brown & Beige',
+    family_gray_silver: 'Gray & Silver',
+    family_black: 'Black',
     palette_search_placeholder: 'Search DMC code or name…',
     palette_or_hex: 'Or enter a hex color',
     palette_add: 'Add',
@@ -3210,6 +3274,18 @@ const i18n = {
     section_view_options:'表示オプション',
     section_dmc_palette: 'DMCパレット',
     palette_add_color: '+ 色を追加',
+    palette_browse_families: '色系から探す',
+    palette_families_back: '← 色系一覧',
+    family_white_ivory: 'ホワイト・アイボリー',
+    family_yellow_gold: 'イエロー・ゴールド',
+    family_orange: 'オレンジ',
+    family_red_pink: 'レッド・ピンク',
+    family_purple: 'パープル・バイオレット',
+    family_blue: 'ブルー',
+    family_green: 'グリーン',
+    family_brown_beige: 'ブラウン・ベージュ',
+    family_gray_silver: 'グレー・シルバー',
+    family_black: 'ブラック',
     palette_search_placeholder: 'DMCコードまたは名前で検索…',
     palette_or_hex: 'またはhexカラーを入力',
     palette_add: '追加',
@@ -3410,6 +3486,18 @@ const i18n = {
     section_view_options:'显示选项',
     section_dmc_palette: 'DMC调色板',
     palette_add_color: '+ 添加颜色',
+    palette_browse_families: '按色系浏览',
+    palette_families_back: '← 色系列表',
+    family_white_ivory: '白·象牙',
+    family_yellow_gold: '黄·金',
+    family_orange: '橙',
+    family_red_pink: '红·粉',
+    family_purple: '紫',
+    family_blue: '蓝',
+    family_green: '绿',
+    family_brown_beige: '棕·米',
+    family_gray_silver: '灰·银',
+    family_black: '黑',
     palette_search_placeholder: '搜索DMC编号或名称…',
     palette_or_hex: '或输入hex颜色',
     palette_add: '添加',
@@ -4753,6 +4841,7 @@ function enforceMinDeltaE(centroids, samples, sampleWeights, k, minDE) {
 // ═══════════════════════════════════════════════════════════════
 async function generatePattern() {
   if (!state.sourceImage) return;
+  state.blankMode = false; // 사진 변환 = 빈 도안 모드 아님
 
   showProcessing(true, t('proc_analyzing'), 0);
   setStatus('processing', t('status_generating'));
@@ -5944,6 +6033,7 @@ function loadFromJSON(data) {
   state.pattern = data.pattern;
   state.palette = data.palette;
   state.userGrid = new Int16Array(data.userGrid);
+  state.blankMode = false; // 불러온 도안 = 빈 도안 탐색 모드 아님
   state.cellSize = 14; // 기본 셀 크기 고정
 
   const {width, height} = state.pattern;
@@ -6877,6 +6967,9 @@ applyTranslations();
   const resultsEl  = document.getElementById('palette-search-results');
   const hexInput   = document.getElementById('palette-hex-input');
   const hexSuggest = document.getElementById('palette-hex-suggest');
+  const famWrap    = document.getElementById('palette-families');
+  const famList    = document.getElementById('palette-families-list');
+  const famBack    = document.getElementById('palette-families-back');
   if (!addBtn || !panel || !input || !resultsEl) return;
 
   const codeStr = c => String(c).toLowerCase();
@@ -6970,6 +7063,55 @@ applyTranslations();
     if (typeof applyTranslations === 'function') applyTranslations();
   }
 
+  // 다른 곳(계열 탐색 등)에서 기존 추가 로직 재사용
+  window.addPaletteColor = addColor;
+
+  // ── 색상 계열(Color Family) 탐색 ──
+  const familiesAvailable = () =>
+    famWrap && famList && Array.isArray(window.DMC_FAMILIES) && typeof window.classifyDmcFamily === 'function';
+  const isBlankMode = () => !!(state && state.blankMode);
+
+  // 계열 스와치 목록 표시 (결과 영역 비움)
+  function showFamilyChips() {
+    if (!familiesAvailable()) return;
+    famList.innerHTML = '';
+    if (famBack) famBack.hidden = true;
+    resultsEl.innerHTML = '';
+    window.DMC_FAMILIES.forEach(fam => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'family-chip';
+      const sw = document.createElement('span');
+      sw.className = 'family-chip__swatch';
+      sw.style.background = fam.hex;
+      const label = document.createElement('span');
+      label.textContent = t(fam.labelKey);
+      chip.appendChild(sw);
+      chip.appendChild(label);
+      chip.addEventListener('click', () => showFamilyColors(fam.id));
+      famList.appendChild(chip);
+    });
+    famList.hidden = false;
+  }
+
+  // 한 계열의 DMC 색 목록을 결과 영역에 표시 (resultRow/addColor 재사용)
+  function showFamilyColors(famId) {
+    if (!familiesAvailable()) return;
+    famList.hidden = true;
+    if (famBack) famBack.hidden = false;
+    const colors = DMC_COLORS.filter(c => window.classifyDmcFamily(c) === famId);
+    renderResults(colors);
+  }
+
+  function showFamilyBrowser() {
+    if (!familiesAvailable()) { if (famWrap) famWrap.hidden = true; return; }
+    famWrap.hidden = false;
+    showFamilyChips();
+  }
+  function hideFamilyBrowser() { if (famWrap) famWrap.hidden = true; }
+
+  if (famBack) famBack.addEventListener('click', showFamilyChips);
+
   // 임의 hex → 가장 가까운 DMC 추천 (임의색을 그대로 넣지 않음)
   function hexToRgb(hex) {
     const m = /^#?([0-9a-fA-F]{6})$/.exec((hex || '').trim());
@@ -6999,6 +7141,9 @@ applyTranslations();
     addBtn.classList.add('is-open');
     input.value = ''; resultsEl.innerHTML = '';
     hexInput.value = ''; hexSuggest.innerHTML = '';
+    // 빈 도안 모드면 계열 탐색을 기본 노출, 사진/일반 모드는 기존 검색만(동작 불변)
+    if (isBlankMode()) showFamilyBrowser();
+    else hideFamilyBrowser();
     input.focus();
   }
   function closeSearch() {
@@ -7012,7 +7157,16 @@ applyTranslations();
   let sTimer = null;
   input.addEventListener('input', () => {
     clearTimeout(sTimer);
-    sTimer = setTimeout(() => renderResults(searchDmc(input.value)), 110);
+    const q = input.value.trim();
+    // 검색어 입력 중엔 계열 칩 숨기고 검색 결과 우선, 비우면 빈 도안 모드는 계열로 복귀
+    if (q) {
+      if (famWrap && !famWrap.hidden) { famList.hidden = true; if (famBack) famBack.hidden = true; }
+      sTimer = setTimeout(() => renderResults(searchDmc(q)), 110);
+    } else if (isBlankMode()) {
+      showFamilyBrowser();
+    } else {
+      resultsEl.innerHTML = '';
+    }
   });
   let hTimer = null;
   hexInput.addEventListener('input', () => {
@@ -7337,6 +7491,7 @@ applyTranslations();
     state.requestedColors = 0;
     state.undoStack = []; state.redoStack = [];
     state.sourceImage = null; // 사진 모드와 구분(메인 생성 no-op)
+    state.blankMode = true;   // 빈 도안 모드 — 계열 탐색 UI 노출 조건
 
     resizeCanvases(cols * state.cellSize, rows * state.cellSize);
     drawPatternFull();
