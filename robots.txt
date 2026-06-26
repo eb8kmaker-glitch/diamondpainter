@@ -1,4 +1,29 @@
-﻿User-agent: *
+User-agent: *
 Allow: /
+Disallow: /*?*
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: serpstatbot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
 
 Sitemap: https://diamondpainter.app/sitemap.xml
