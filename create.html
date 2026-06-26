@@ -2329,7 +2329,6 @@
     <button class="btn" id="btn-variations" disabled data-i18n="btn_variations">🎲 후보 도안 보기</button>
     <button class="btn" id="btn-undo" disabled title="Undo (Ctrl+Z)">↩ Undo</button>
     <button class="btn" id="btn-redo" disabled title="Redo (Ctrl+Y)">↪ Redo</button>
-    <button class="btn" id="btn-autofill" disabled data-i18n="btn_autofill">🎨 색상 일괄 적용</button>
     <button class="btn btn-replace-color" id="btn-replace-color" disabled data-i18n="btn_replace_color">🔄 색상 교체</button>
     <button class="btn" id="btn-clear-progress" disabled data-i18n="btn_clear">🗑 편집 초기화</button>
     <button class="btn" id="btn-load" data-i18n="btn_load">📂 불러오기</button>
@@ -2792,7 +2791,6 @@ const i18n = {
     snapshot_badge_manual: '편집해서 저장한 도안',
     // 헤더 버튼
     btn_generate:      '⚡ 도안 생성',
-    btn_autofill:      '🎨 색상 일괄 적용',
     btn_replace_color: '🔄 색상 교체',
     btn_clear:         '🗑 편집 초기화',
     btn_load:          '📂 불러오기',
@@ -2950,7 +2948,6 @@ const i18n = {
     preset_soft_hint:   '사진용',
     // 알림
     notif_pattern_ready:  '도안 생성 완료! 편집을 시작하세요.',
-    notif_autofill_done:  '모든 셀에 색상이 일괄 적용되었습니다.',
     notif_cleared:        '편집 내용이 초기화되었습니다.',
     notif_saved:          '도안이 저장되었습니다.',
     notif_loaded:         '도안을 불러왔습니다!',
@@ -3021,7 +3018,6 @@ const i18n = {
     snapshot_badge_auto: 'Generated pattern',
     snapshot_badge_manual: 'Manually saved edit',
     btn_generate:      '⚡ Generate Pattern',
-    btn_autofill:      '🎨 Apply All Colors',
     btn_replace_color: '🔄 Replace Color',
     btn_clear:         '🗑 Reset Edits',
     btn_load:          '📂 Load JSON',
@@ -3165,7 +3161,6 @@ const i18n = {
     preset_crisp_hint:  'For illustrations & characters',
     preset_soft_hint:   'For photos',
     notif_pattern_ready:  'Pattern ready! Start editing.',
-    notif_autofill_done:  'All cells filled with pattern colors.',
     notif_cleared:        'All edits have been reset.',
     notif_saved:          'Pattern saved.',
     notif_loaded:         'Pattern loaded!',
@@ -3233,7 +3228,6 @@ const i18n = {
     snapshot_badge_auto: '生成された図案',
     snapshot_badge_manual: '編集して保存した図案',
     btn_generate:      '⚡ 図案生成',
-    btn_autofill:      '🎨 一括色適用',
     btn_replace_color: '🔄 色置換',
     btn_clear:         '🗑 編集リセット',
     btn_load:          '📂 読み込み',
@@ -3377,7 +3371,6 @@ const i18n = {
     preset_crisp_hint:  'イラスト・キャラ向け',
     preset_soft_hint:   '写真向け',
     notif_pattern_ready:  '図案生成完了！編集を開始してください。',
-    notif_autofill_done:  '全セルに色を一括適用しました。',
     notif_cleared:        '編集内容をリセットしました。',
     notif_saved:          '図案を保存しました。',
     notif_loaded:         '図案を読み込みました！',
@@ -3445,7 +3438,6 @@ const i18n = {
     snapshot_badge_auto: '生成的图案',
     snapshot_badge_manual: '手动保存的编辑',
     btn_generate:      '⚡ 生成图案',
-    btn_autofill:      '🎨 批量应用颜色',
     btn_replace_color: '🔄 替换颜色',
     btn_clear:         '🗑 重置编辑',
     btn_load:          '📂 加载',
@@ -3589,7 +3581,6 @@ const i18n = {
     preset_crisp_hint:  '插画·角色用',
     preset_soft_hint:   '照片用',
     notif_pattern_ready:  '图案已就绪！开始编辑吧。',
-    notif_autofill_done:  '已批量应用所有格子的颜色。',
     notif_cleared:        '所有编辑已重置。',
     notif_saved:          '图案已保存。',
     notif_loaded:         '图案加载成功！',
@@ -5849,19 +5840,6 @@ document.getElementById('btn-generate').addEventListener('click', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════
-// AUTO FILL
-// ═══════════════════════════════════════════════════════════════
-document.getElementById('btn-autofill').addEventListener('click', () => {
-  if (!state.pattern || !state.userGrid) return;
-  for (let i = 0; i < state.pattern.grid.length; i++) {
-    state.userGrid[i] = state.pattern.grid[i].palIdx;
-  }
-  redrawAllUserCells();
-  updateUI();
-  showNotif(t('notif_autofill_done'), 'success');
-});
-
-// ═══════════════════════════════════════════════════════════════
 // UNDO / REDO
 // ═══════════════════════════════════════════════════════════════
 const MAX_UNDO = 50;
@@ -6267,7 +6245,7 @@ async function openPreviewModal() {
 }
 
 function enableButtons() {
-  ['btn-generate','btn-autofill','btn-replace-color','btn-clear-progress','btn-save','btn-export','btn-download-pattern','btn-pdf','palette-add-btn'].forEach(id => {
+  ['btn-generate','btn-replace-color','btn-clear-progress','btn-save','btn-export','btn-download-pattern','btn-pdf','palette-add-btn'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = false;
   });
