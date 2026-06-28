@@ -8,6 +8,7 @@
   <link rel="manifest" href="/site.webmanifest">
   <script defer src="utils.js"></script>
   <script src="dmc-families.js"></script>
+  <script src="dmc-ab-codes.js"></script>
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8254204287118850"
        crossorigin="anonymous"></script>
@@ -2457,6 +2458,16 @@
         </details>
       </div>
 
+      <!-- AB(오로라) 비즈 포함 -->
+      <div class="field">
+        <label>
+          <div class="checkbox-row">
+            <input type="checkbox" id="ab-toggle">
+            <span data-i18n="ab_toggle_label">AB 비즈 포함</span>
+          </div>
+        </label>
+      </div>
+
       <!-- 내 보유 색상만 사용 -->
       <div class="field">
         <label style="cursor:pointer">
@@ -2862,6 +2873,7 @@ const i18n = {
     label_custom_w:    '가로 (cm)',
     label_custom_h:    '세로 (cm)',
     label_colors:      'DMC 색상 수',
+    ab_toggle_label:   'AB 비즈 포함',
     label_keep_ratio:  '비율 유지',
     label_show_symbols:'기호 표시',
     label_cell_size:   '셀 크기 (px)',
@@ -3087,6 +3099,7 @@ const i18n = {
     label_custom_w:    'Width (cm)',
     label_custom_h:    'Height (cm)',
     label_colors:      'DMC Color Count',
+    ab_toggle_label:   'Include AB drills',
     label_keep_ratio:  'Maintain ratio',
     label_show_symbols:'Show symbols',
     label_cell_size:   'Cell size (px)',
@@ -3297,6 +3310,7 @@ const i18n = {
     label_custom_w:    '幅 (cm)',
     label_custom_h:    '高さ (cm)',
     label_colors:      'DMC色数',
+    ab_toggle_label:   'ABビーズを含む',
     label_keep_ratio:  '縦横比を維持',
     label_show_symbols:'記号を表示',
     label_cell_size:   'セルサイズ (px)',
@@ -3507,6 +3521,7 @@ const i18n = {
     label_custom_w:    '宽度 (cm)',
     label_custom_h:    '高度 (cm)',
     label_colors:      'DMC颜色数量',
+    ab_toggle_label:   '包含AB钻',
     label_keep_ratio:  '保持纵横比',
     label_show_symbols:'显示符号',
     label_cell_size:   '格子大小 (px)',
@@ -5004,6 +5019,18 @@ async function generatePattern() {
   const oldToNew = new Map(sortedPaletteWithOldIdx.map((p, ni) => [p.oldIdx, ni]));
   state.palette = sortedPaletteWithOldIdx.map((p, i) => ({...p, symbol: SYMBOLS[i % SYMBOLS.length]}));
 
+  // AB(오로라) 비즈: 토글 시 AB 제공 코드에 isAB 플래그 부여 (베이스 RGB·색 매칭 불변)
+  const abEnabled = document.getElementById('ab-toggle')?.checked;
+  if (abEnabled) {
+    state.palette = state.palette.map(entry => {
+      const code = String(entry.dmc ?? '').toLowerCase();
+      if (window.DMC_AB_CODES && window.DMC_AB_CODES.has(code)) {
+        return { ...entry, isAB: true };
+      }
+      return entry;
+    });
+  }
+
   // Remap grid
   grid.forEach(cell => { cell.palIdx = oldToNew.get(cell.palIdx); });
 
@@ -5056,10 +5083,10 @@ function updatePaletteUI() {
     el.className = 'palette-item' + (i === state.activePaletteIdx ? ' active' : '');
     el.innerHTML = `
       <div class="palette-swatch" style="background:rgb(${p.color[0]},${p.color[1]},${p.color[2]})"></div>
-      <div class="palette-symbol">${p.symbol}</div>
+      <div class="palette-symbol">${p.symbol}${p.isAB ? '*' : ''}</div>
       <div class="palette-info">
-        <div class="palette-dmc">DMC ${p.dmc}</div>
-        <div class="palette-name">${p.name}</div>
+        <div class="palette-dmc">DMC ${p.dmc}${p.isAB ? ' AB' : ''}</div>
+        <div class="palette-name">${p.name}${p.isAB ? ' (AB)' : ''}</div>
       </div>
       <div class="palette-count">${p.count.toLocaleString()}</div>
     `;
@@ -5093,6 +5120,7 @@ function calcBeadStats() {
     count:  counts[i],
     ratio:  total > 0 ? counts[i] / total * 100 : 0,
     userAdded: !!p.userAdded,
+    isAB:   !!p.isAB,
   }));
 }
 
@@ -5199,9 +5227,9 @@ function updateColorList() {
     row.innerHTML = `
       <div class="stats-own-btn${isOwned ? ' owned' : ''}" title="${isOwned ? t('owned_unmark') : t('owned_mark')}">${isOwned ? '★' : '☆'}</div>
       <div class="stats-swatch" style="background:rgb(${r},${g},${b})" title="DMC ${s.dmcNo}"></div>
-      <div class="stats-sym">${s.symbol}</div>
-      <div class="stats-dmc-no" title="DMC ${s.dmcNo}">${s.dmcNo}</div>
-      <div class="stats-name" title="${s.name}">${s.name}</div>
+      <div class="stats-sym">${s.symbol}${s.isAB ? '*' : ''}</div>
+      <div class="stats-dmc-no" title="DMC ${s.dmcNo}">${s.dmcNo}${s.isAB ? ' AB' : ''}</div>
+      <div class="stats-name" title="${s.name}">${s.name}${s.isAB ? ' (AB)' : ''}</div>
       <div class="stats-count">${isTiny ? `<span class="tiny-badge" title="${t('tiny_color_badge')}">⚠</span>` : ''}${s.count.toLocaleString()}</div>
       <div class="stats-ratio">${s.ratio.toFixed(1)}%</div>
     `;
@@ -6561,10 +6589,13 @@ function generatePDF() {
     doc.setFontSize(6.5);
     doc.setTextColor(30, 30, 30);
 
+    // AB(오로라) 비즈 표시: 기호 영역 우상단에 작은 별표 배지
+    if (entry.isAB) doc.text('*', COL.sym.x + COL.sym.w - 1.8, cy + 2.6);
+
     // DMC 번호
-    doc.text(String(entry.dmc), COL.dmc.x + 1, cy + 3.8);
+    doc.text(String(entry.dmc) + (entry.isAB ? ' AB' : ''), COL.dmc.x + 1, cy + 3.8);
     // 색상명 (32자 제한)
-    doc.text(entry.name.length > 32 ? entry.name.slice(0, 31) + '…' : entry.name, COL.name.x + 1, cy + 3.8);
+    doc.text((entry.name.length > 32 ? entry.name.slice(0, 31) + '…' : entry.name) + (entry.isAB ? ' (AB)' : ''), COL.name.x + 1, cy + 3.8);
     // 비즈 수
     doc.text(effCount(entry, pi).toLocaleString(), COL.count.x + 1, cy + 3.8);
     // 비율
