@@ -2367,6 +2367,7 @@
     <!-- Image Upload -->
     <div class="panel-section">
       <div class="panel-title" data-i18n="section_upload">이미지 업로드</div>
+      <button class="btn" id="btn-reset-image" type="button" data-i18n="btn_reset_image_label">초기화</button>
       <div class="upload-zone" id="upload-zone">
         <span class="icon">🖼</span>
         <span data-i18n="upload_hint">클릭하거나 이미지를 드롭하세요</span><br>
@@ -2919,6 +2920,7 @@ const i18n = {
     'keyring.preset.wideRect': '가로형',
     // 상태 메시지
     status_ready:        '준비 완료 — 이미지를 가져오세요',
+    btn_reset_image_label: '초기화',
     status_generating:   '도안 생성 중...',
     status_done_pattern: '도안 생성 완료',
     status_img_loaded:   '이미지 로드됨',
@@ -3135,6 +3137,7 @@ const i18n = {
     'keyring.preset.tallRect': 'Tall',
     'keyring.preset.wideRect': 'Wide',
     status_ready:        'Ready — import an image to begin',
+    btn_reset_image_label: 'Reset',
     status_generating:   'Generating pattern...',
     status_done_pattern: 'Pattern generated',
     status_img_loaded:   'Image imported',
@@ -3346,6 +3349,7 @@ const i18n = {
     'keyring.preset.tallRect': '縦長',
     'keyring.preset.wideRect': '横長',
     status_ready:        '準備完了 — 画像をインポートしてください',
+    btn_reset_image_label: 'リセット',
     status_generating:   '図案生成中...',
     status_done_pattern: '図案生成完了',
     status_img_loaded:   '画像インポート完了',
@@ -3557,6 +3561,7 @@ const i18n = {
     'keyring.preset.tallRect': '竖向',
     'keyring.preset.wideRect': '横向',
     status_ready:        '准备就绪 — 请导入图片',
+    btn_reset_image_label: '重置',
     status_generating:   '生成图案中...',
     status_done_pattern: '图案生成完成',
     status_img_loaded:   '图片导入完成',
@@ -5815,6 +5820,60 @@ uploadZone.addEventListener('drop', e => {
 fileInput.addEventListener('change', e => {
   if (e.target.files[0]) loadImageFile(e.target.files[0]);
 });
+
+// 이미지 초기화 — 새로고침 없이 첫 로드 상태로 되돌림
+function resetImage() {
+  // 상태를 초기값으로 복원
+  state.sourceImage = null;
+  state.pattern = null;
+  state.userGrid = null;
+  state.palette = [];
+  state.requestedColors = 0;
+  state.activePaletteIdx = 0;
+  state.highlightPaletteIdx = -1;
+  state.blankMode = false;
+  state.undoStack = [];
+  state.redoStack = [];
+  if (state.paletteSpecialtyTags) state.paletteSpecialtyTags = {};
+
+  // 캔버스 비우기
+  pCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height);
+  uCtx.clearRect(0, 0, userCanvas.width, userCanvas.height);
+  oCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+  if (mmCtx) mmCtx.clearRect(0, 0, minimapCanvas.width, minimapCanvas.height);
+
+  // 업로드 입력/미리보기 초기화 (같은 파일 재선택 허용)
+  previewImg.src = '';
+  previewImg.style.display = 'none';
+  fileInput.value = '';
+
+  // 자동 저장 제거 — 새로고침해도 빈 상태 유지
+  try { localStorage.removeItem('diamond_painter_autosave'); } catch (e) {}
+
+  // 빈 상태 화면 노출 + 팔레트 검색 패널 닫기
+  emptyState.style.display = '';
+  if (typeof window.closePaletteSearch === 'function') window.closePaletteSearch();
+
+  // 버튼 비활성화 (첫 로드 상태)
+  ['btn-generate','btn-variations','btn-generate-mobile','btn-replace-color',
+   'btn-clear-progress','btn-save','btn-export','btn-download-pattern','btn-pdf',
+   'palette-add-btn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = true;
+  });
+
+  // 통계 표시 초기화
+  ['stat-total','stat-colors','stat-modified','stat-remaining'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = '0';
+  });
+
+  // UI 재렌더 + 상태 텍스트 복원
+  updateUI();
+  updateCalcDisplay();
+  document.getElementById('status-text').textContent = t('status_ready');
+}
+document.getElementById('btn-reset-image').addEventListener('click', resetImage);
 
 function loadImageFile(file) {
   const reader = new FileReader();
