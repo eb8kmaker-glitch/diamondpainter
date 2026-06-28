@@ -5368,7 +5368,12 @@ function placeBead(cx, cy, erase = false) {
   }
 
   if (state.tool === 'fill') {
-    floodFill(cx, cy, state.activePaletteIdx);
+    // 선택 영역이 있으면 전체 연결 영역이 아니라 선택 안만 채움 (undo 는 pointerdown 에서 이미 push)
+    if (state.selection && state.selection.pixels.size) {
+      fillSelection(true);
+    } else {
+      floodFill(cx, cy, state.activePaletteIdx);
+    }
     return;
   }
 
@@ -5538,10 +5543,10 @@ function drawSelectionPreviewLasso(cells) {
 }
 
 // 선택 영역을 현재 활성 색으로 채움 (state.userGrid 에 기록 → 기존 undo 로 복원 가능)
-function fillSelection() {
+function fillSelection(skipUndo = false) {
   if (!state.pattern || !state.selection || !state.selection.pixels.size) return;
   if (!state.palette[state.activePaletteIdx]) return; // 유효한 활성 색 없으면 무시
-  pushUndo();
+  if (!skipUndo) pushUndo();
   const { width, height } = state.pattern;
   for (const key of state.selection.pixels) {
     const i = key.indexOf(','), x = +key.slice(0, i), y = +key.slice(i + 1);
