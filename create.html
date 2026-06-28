@@ -7020,22 +7020,26 @@ applyTranslations();
     if (hl) hl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
-  function addColor(code) {
+  function addColor(code, isAB = false) {
     if (!state.pattern) return;
-    if (isInPalette(code)) { highlightExisting(code); return; }
     const dmc = DMC_COLORS.find(c => codeStr(c.code) === codeStr(code));
     if (!dmc) return;
+    // AB(특수) 비즈는 베이스 DMC와 별개 항목 — dmc 필드에 "{코드} AB"로 구분
+    const fullCode = isAB ? dmc.code + ' AB' : dmc.code;
+    const fullName = isAB ? dmc.name + ' (AB)' : dmc.name;
+    if (isInPalette(fullCode)) { highlightExisting(fullCode); return; }
     state.palette.push({
-      dmc: dmc.code,
-      name: dmc.name,
+      dmc: fullCode,
+      name: fullName,
       color: dmc.rgb.slice(),
       symbol: assignFreeSymbol(),
       count: 0,
       userAdded: true,
+      isAB: !!isAB,
     });
     setActive(state.palette.length - 1);
     closeSearch();
-    if (typeof showNotif === 'function') showNotif('DMC ' + dmc.code + ' · ' + dmc.name, 'success');
+    if (typeof showNotif === 'function') showNotif('DMC ' + fullCode + ' · ' + fullName, 'success');
   }
 
   // DMC 검색: 코드 접두 매치 우선, 그다음 이름 부분 매치
@@ -7052,7 +7056,9 @@ applyTranslations();
   }
 
   function resultRow(c, codeSuffix = '') {
-    const exists = isInPalette(c.code);
+    const isAB = !!codeSuffix;          // AB 목록은 codeSuffix=' AB'
+    const fullCode = c.code + codeSuffix; // 예: "310 AB"
+    const exists = isInPalette(fullCode);
     const row = document.createElement('div');
     row.className = 'dmc-result' + (exists ? ' dmc-result--exists' : '');
     row.innerHTML =
@@ -7062,8 +7068,8 @@ applyTranslations();
       '<button type="button" class="dmc-result__add" data-i18n="' + (exists ? 'palette_already_added' : 'palette_add') + '">' +
         (exists ? t('palette_already_added') : t('palette_add')) + '</button>';
     row.querySelector('.dmc-result__add').addEventListener('click', () => {
-      if (isInPalette(c.code)) highlightExisting(c.code);
-      else addColor(c.code);
+      if (isInPalette(fullCode)) highlightExisting(fullCode);
+      else addColor(c.code, isAB);
     });
     return row;
   }
