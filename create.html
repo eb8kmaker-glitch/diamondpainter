@@ -2492,6 +2492,8 @@
         <button class="tool-btn" id="tool-erase" data-tool="erase">🗑</button>
         <button class="tool-btn" id="tool-fill" data-tool="fill">🪣</button>
         <button class="tool-btn" id="tool-pick" data-tool="pick">💉</button>
+        <button class="tool-btn" id="tool-marquee" data-tool="marquee" data-i18n-title="tool_marquee_label">⬚</button>
+        <button class="tool-btn" id="tool-lasso" data-tool="lasso" data-i18n-title="tool_lasso_label">➰</button>
       </div>
 
       <!-- 도구 설명 카드 -->
@@ -2921,6 +2923,9 @@ const i18n = {
     // 상태 메시지
     status_ready:        '준비 완료 — 이미지를 가져오세요',
     btn_reset_image_label: '초기화',
+    tool_marquee_label: '사각 선택',
+    tool_lasso_label: '올가미',
+    selection_fill_hint: '선택 영역 채우기',
     status_generating:   '도안 생성 중...',
     status_done_pattern: '도안 생성 완료',
     status_img_loaded:   '이미지 로드됨',
@@ -3138,6 +3143,9 @@ const i18n = {
     'keyring.preset.wideRect': 'Wide',
     status_ready:        'Ready — import an image to begin',
     btn_reset_image_label: 'Reset',
+    tool_marquee_label: 'Marquee',
+    tool_lasso_label: 'Lasso',
+    selection_fill_hint: 'Fill selection',
     status_generating:   'Generating pattern...',
     status_done_pattern: 'Pattern generated',
     status_img_loaded:   'Image imported',
@@ -3350,6 +3358,9 @@ const i18n = {
     'keyring.preset.wideRect': '横長',
     status_ready:        '準備完了 — 画像をインポートしてください',
     btn_reset_image_label: 'リセット',
+    tool_marquee_label: '矩形選択',
+    tool_lasso_label: 'なげなわ',
+    selection_fill_hint: '選択範囲を塗りつぶす',
     status_generating:   '図案生成中...',
     status_done_pattern: '図案生成完了',
     status_img_loaded:   '画像インポート完了',
@@ -3562,6 +3573,9 @@ const i18n = {
     'keyring.preset.wideRect': '横向',
     status_ready:        '准备就绪 — 请导入图片',
     btn_reset_image_label: '重置',
+    tool_marquee_label: '矩形选择',
+    tool_lasso_label: '套索',
+    selection_fill_hint: '填充选区',
     status_generating:   '生成图案中...',
     status_done_pattern: '图案生成完成',
     status_img_loaded:   '图片导入完成',
@@ -4363,6 +4377,11 @@ const state = {
   // Undo/Redo
   undoStack: [],
   redoStack: [],
+
+  // 선택 도구 (마퀴/올가미)
+  selection: null,            // null | { type:'marquee'|'lasso', pixels:Set<"x,y"> }
+  isDrawingSelection: false,  // 드래그/올가미 진행 중
+  marqueeStart: null,         // {x,y} | null
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -4534,6 +4553,7 @@ function drawHoverCell(cx, cy) {
   const {width, height} = state.pattern;
 
   oCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+  drawSelectionOverlay(); // 선택 영역 오버레이 유지 (호버로 지워지지 않게 재렌더)
 
   if (cx < 0 || cy < 0 || cx >= width || cy >= height) return;
   lastHoverCell = {cx, cy};
@@ -4843,6 +4863,7 @@ function enforceMinDeltaE(centroids, samples, sampleWeights, k, minDE) {
 async function generatePattern() {
   if (!state.sourceImage) return;
   state.blankMode = false; // 사진 변환 = 빈 도안 모드 아님
+  clearSelection();        // 새 도안 생성 시 이전 선택 영역 해제
 
   showProcessing(true, t('proc_analyzing'), 0);
   setStatus('processing', t('status_generating'));
@@ -5347,9 +5368,17 @@ function placeBead(cx, cy, erase = false) {
   }
 
   if (state.tool === 'fill') {
-    floodFill(cx, cy, state.activePaletteIdx);
+    // 선택 영역이 있으면 전체 연결 영역이 아니라 선택 안만 채움 (undo 는 pointerdown 에서 이미 push)
+    if (state.selection && state.selection.pixels.size) {
+      fillSelection(true);
+    } else {
+      floodFill(cx, cy, state.activePaletteIdx);
+    }
     return;
   }
+
+  // 선택 영역이 있으면 그리기/지우기는 선택 안에서만 적용
+  if (state.selection && !state.selection.pixels.has(cx + ',' + cy)) return;
 
   const shouldErase = erase || state.tool === 'erase';
   // 빈 도안에서 색 추가 전(유효한 선택 색 없음)에는 칠하지 않음 — 보이지 않는 셀 방지.
@@ -5400,6 +5429,175 @@ function floodFill(startX, startY, paletteIdx) {
   updateUI();
 }
 
+// ═══════════════════════════════════════════════════════════════
+// SELECTION TOOLS (Marquee / Lasso)
+// 선택 영역은 그리드 셀 "x,y" 문자열 Set 으로 보관. 오버레이는 overlayCanvas(oCtx)에 그림.
+// ═══════════════════════════════════════════════════════════════
+let _lassoCells = [];     // 올가미 드래그 중 통과 셀
+let _selMoved   = false;  // 드래그 발생 여부(클릭 vs 드래그 판별)
+let _selEndCell = null;   // 마퀴 드래그 현재 끝 셀
+
+function clearSelection() {
+  if (!state.selection) return;
+  state.selection = null;
+  if (state.pattern) oCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+}
+
+function buildMarqueeSelection(x0, y0, x1, y1) {
+  const { width, height } = state.pattern;
+  const minX = Math.max(0, Math.min(x0, x1)), maxX = Math.min(width - 1, Math.max(x0, x1));
+  const minY = Math.max(0, Math.min(y0, y1)), maxY = Math.min(height - 1, Math.max(y0, y1));
+  const pixels = new Set();
+  for (let y = minY; y <= maxY; y++)
+    for (let x = minX; x <= maxX; x++) pixels.add(x + ',' + y);
+  return pixels;
+}
+
+// 올가미: 통과 셀을 경계로 보고, bbox 테두리에서 '바깥'을 flood 한 뒤 (bbox − 바깥) = 내부+경계
+function buildLassoSelection(cells) {
+  const { width, height } = state.pattern;
+  const boundary = new Set();
+  let minX = width, minY = height, maxX = -1, maxY = -1;
+  for (const c of cells) {
+    if (c.x < 0 || c.y < 0 || c.x >= width || c.y >= height) continue;
+    boundary.add(c.x + ',' + c.y);
+    if (c.x < minX) minX = c.x; if (c.x > maxX) maxX = c.x;
+    if (c.y < minY) minY = c.y; if (c.y > maxY) maxY = c.y;
+  }
+  if (!boundary.size) return new Set();
+  const x0 = Math.max(0, minX - 1), y0 = Math.max(0, minY - 1);
+  const x1 = Math.min(width - 1, maxX + 1), y1 = Math.min(height - 1, maxY + 1);
+  const outside = new Set();
+  const stack = [];
+  for (let x = x0; x <= x1; x++) { stack.push([x, y0], [x, y1]); }
+  for (let y = y0; y <= y1; y++) { stack.push([x0, y], [x1, y]); }
+  while (stack.length) {
+    const [x, y] = stack.pop();
+    if (x < x0 || y < y0 || x > x1 || y > y1) continue;
+    const k = x + ',' + y;
+    if (outside.has(k) || boundary.has(k)) continue;
+    outside.add(k);
+    stack.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
+  }
+  const pixels = new Set(boundary);
+  for (let y = y0; y <= y1; y++)
+    for (let x = x0; x <= x1; x++) { const k = x + ',' + y; if (!outside.has(k)) pixels.add(k); }
+  return pixels;
+}
+
+// 확정된 선택 영역 오버레이 (반투명 채움 + 경계 점선). oCtx 가 지워질 때마다 다시 호출됨.
+function drawSelectionOverlay() {
+  if (!state.pattern || !state.selection || !state.selection.pixels.size) return;
+  const cs = state.cellSize, px = state.selection.pixels;
+  oCtx.save();
+  oCtx.fillStyle = 'rgba(111,231,255,0.22)';
+  for (const key of px) {
+    const i = key.indexOf(','), x = +key.slice(0, i), y = +key.slice(i + 1);
+    oCtx.fillRect(x * cs, y * cs, cs, cs);
+  }
+  oCtx.strokeStyle = 'rgba(111,231,255,0.95)';
+  oCtx.lineWidth = 1.5;
+  oCtx.setLineDash([4, 3]);
+  oCtx.beginPath();
+  for (const key of px) {
+    const i = key.indexOf(','), x = +key.slice(0, i), y = +key.slice(i + 1);
+    const X = x * cs, Y = y * cs;
+    if (!px.has((x - 1) + ',' + y)) { oCtx.moveTo(X, Y); oCtx.lineTo(X, Y + cs); }
+    if (!px.has((x + 1) + ',' + y)) { oCtx.moveTo(X + cs, Y); oCtx.lineTo(X + cs, Y + cs); }
+    if (!px.has(x + ',' + (y - 1))) { oCtx.moveTo(X, Y); oCtx.lineTo(X + cs, Y); }
+    if (!px.has(x + ',' + (y + 1))) { oCtx.moveTo(X, Y + cs); oCtx.lineTo(X + cs, Y + cs); }
+  }
+  oCtx.stroke();
+  oCtx.restore();
+}
+
+function drawSelectionPreviewMarquee(x0, y0, x1, y1) {
+  const cs = state.cellSize;
+  oCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+  const minX = Math.min(x0, x1), minY = Math.min(y0, y1);
+  const X = minX * cs, Y = minY * cs;
+  const W = (Math.abs(x1 - x0) + 1) * cs, H = (Math.abs(y1 - y0) + 1) * cs;
+  oCtx.save();
+  oCtx.fillStyle = 'rgba(111,231,255,0.18)';
+  oCtx.fillRect(X, Y, W, H);
+  oCtx.strokeStyle = 'rgba(111,231,255,0.95)';
+  oCtx.lineWidth = 1.5;
+  oCtx.setLineDash([4, 3]);
+  oCtx.strokeRect(X + 0.5, Y + 0.5, W - 1, H - 1);
+  oCtx.restore();
+}
+
+function drawSelectionPreviewLasso(cells) {
+  const cs = state.cellSize;
+  oCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+  if (!cells.length) return;
+  oCtx.save();
+  oCtx.strokeStyle = 'rgba(111,231,255,0.95)';
+  oCtx.lineWidth = 1.5;
+  oCtx.setLineDash([4, 3]);
+  oCtx.beginPath();
+  oCtx.moveTo(cells[0].x * cs + cs / 2, cells[0].y * cs + cs / 2);
+  for (let i = 1; i < cells.length; i++) oCtx.lineTo(cells[i].x * cs + cs / 2, cells[i].y * cs + cs / 2);
+  oCtx.stroke();
+  oCtx.restore();
+}
+
+// 선택 영역을 현재 활성 색으로 채움 (state.userGrid 에 기록 → 기존 undo 로 복원 가능)
+function fillSelection(skipUndo = false) {
+  if (!state.pattern || !state.selection || !state.selection.pixels.size) return;
+  if (!state.palette[state.activePaletteIdx]) return; // 유효한 활성 색 없으면 무시
+  if (!skipUndo) pushUndo();
+  const { width, height } = state.pattern;
+  for (const key of state.selection.pixels) {
+    const i = key.indexOf(','), x = +key.slice(0, i), y = +key.slice(i + 1);
+    if (x < 0 || y < 0 || x >= width || y >= height) continue;
+    state.userGrid[y * width + x] = state.activePaletteIdx;
+    drawUserCell(x, y);
+  }
+  drawSelectionOverlay();
+  updateUI();
+}
+
+function handleSelectionPointerDown(cx, cy) {
+  state.isDrawingSelection = true;
+  _selMoved = false;
+  state.marqueeStart = { x: cx, y: cy };
+  _selEndCell = { x: cx, y: cy };
+  _lassoCells = [{ x: cx, y: cy }];
+}
+
+function updateSelectionDrag(cx, cy) {
+  _selEndCell = { x: cx, y: cy };
+  if (cx !== state.marqueeStart.x || cy !== state.marqueeStart.y) _selMoved = true;
+  if (state.tool === 'lasso') {
+    const last = _lassoCells[_lassoCells.length - 1];
+    if (!last || last.x !== cx || last.y !== cy) _lassoCells.push({ x: cx, y: cy });
+    drawSelectionPreviewLasso(_lassoCells);
+  } else {
+    drawSelectionPreviewMarquee(state.marqueeStart.x, state.marqueeStart.y, cx, cy);
+  }
+}
+
+function finalizeSelection() {
+  if (_selMoved) {
+    if (state.tool === 'lasso') {
+      state.selection = { type: 'lasso', pixels: buildLassoSelection(_lassoCells) };
+    } else {
+      const s = state.marqueeStart, e = _selEndCell;
+      state.selection = { type: 'marquee', pixels: buildMarqueeSelection(s.x, s.y, e.x, e.y) };
+    }
+    if (!state.selection.pixels.size) state.selection = null;
+  } else if (state.selection && state.selection.pixels.size) {
+    // 클릭(드래그 없음) + 선택 있음 → 채우기. 선택 없으면 무시(no-op).
+    fillSelection();
+  }
+  state.isDrawingSelection = false;
+  state.marqueeStart = null;
+  _lassoCells = [];
+  oCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+  drawSelectionOverlay();
+}
+
 // ─── Mouse events ───
 let isSpacePressed = false;
 let isPanning = false;
@@ -5409,6 +5607,10 @@ document.addEventListener('keydown', e => {
     e.preventDefault();
     isSpacePressed = true;
     canvasArea.style.cursor = state.pattern ? 'grab' : 'default';
+  }
+  // Escape: 선택 영역 해제
+  if (e.code === 'Escape' && state.selection && !e.target.matches('input, textarea, select')) {
+    clearSelection();
   }
 });
 document.addEventListener('keyup', e => {
@@ -5490,6 +5692,11 @@ canvasArea.addEventListener('pointerdown', e => {
 
   if (e.button === 0) {
     const {cx, cy} = canvasToCell(e.clientX, e.clientY);
+    // 선택 도구(마퀴/올가미): 선택 드래그 시작 (페인트 안 함)
+    if (state.tool === 'marquee' || state.tool === 'lasso') {
+      handleSelectionPointerDown(cx, cy);
+      return;
+    }
     state.isPainting = true;
     state.lastCell = {cx, cy};
     pushUndo(); // 편집 시작 전 스냅샷
@@ -5513,6 +5720,13 @@ canvasArea.addEventListener('pointermove', e => {
   // ── 단일 포인터: 기존 mousemove 로직 ──
   const {cx, cy} = canvasToCell(e.clientX, e.clientY);
   document.getElementById('coords').textContent = `${cx}, ${cy}`;
+
+  // 선택 드래그 진행 중: 실시간 프리뷰 (호버/페인트 건너뜀)
+  if (state.isDrawingSelection) {
+    updateSelectionDrag(cx, cy);
+    return;
+  }
+
   drawHoverCell(cx, cy);
 
   if (isPanning) {
@@ -5545,6 +5759,9 @@ function onPointerEnd(e) {
     state.isDragging = false;
     canvasArea.style.cursor = isSpacePressed ? 'grab' : (state.pattern ? 'crosshair' : 'default');
   }
+  if (activePointers.size === 0 && state.isDrawingSelection) {
+    finalizeSelection();
+  }
   if (activePointers.size === 0 && state.isPainting) {
     state.isPainting = false;
     updateUI();
@@ -5563,6 +5780,7 @@ canvasArea.addEventListener('pointerleave', e => {
     state.isDragging = false;
   }
   oCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+  drawSelectionOverlay(); // 선택 영역 오버레이 유지
   document.getElementById('coords').textContent = '— , —';
 });
 
@@ -5603,7 +5821,7 @@ minimapCanvas.addEventListener('click', e => {
 });
 
 // ─── Tool buttons ───
-['paint','erase','fill','pick'].forEach(t => {
+['paint','erase','fill','pick','marquee','lasso'].forEach(t => {
   document.getElementById('tool-'+t).addEventListener('click', () => {
     state.tool = t;
     setActiveTool(t);
@@ -5612,7 +5830,7 @@ minimapCanvas.addEventListener('click', e => {
 
 function setActiveTool(tool) {
   // 버튼 active 상태
-  ['paint','erase','fill','pick'].forEach(id =>
+  ['paint','erase','fill','pick','marquee','lasso'].forEach(id =>
     document.getElementById('tool-'+id).classList.toggle('active', id === tool)
   );
   // 도구 설명 카드 갱신 (state.tool 기준으로 읽음)
@@ -5623,7 +5841,7 @@ function setActiveTool(tool) {
 function _refreshToolDesc() {
   if (!document.getElementById('tool-desc-card')) return;
   const tool = (state && state.tool) ? state.tool : 'paint';
-  const icons = { paint: '🖊', erase: '🗑', fill: '🪣', pick: '💉' };
+  const icons = { paint: '🖊', erase: '🗑', fill: '🪣', pick: '💉', marquee: '⬚', lasso: '➰' };
 
   const card = document.getElementById('tool-desc-card');
   card.className = 'tool-desc-card';
@@ -5631,7 +5849,14 @@ function _refreshToolDesc() {
   if (tool === 'fill')  card.classList.add('fill-active');
   if (tool === 'pick')  card.classList.add('pick-active');
 
-  document.getElementById('tool-desc-icon').textContent = icons[tool];
+  document.getElementById('tool-desc-icon').textContent = icons[tool] || '🖊';
+  // 선택 도구는 전용 설명 키가 없으므로 라벨 + 채우기 안내를 재사용
+  if (tool === 'marquee' || tool === 'lasso') {
+    document.getElementById('tool-desc-name').textContent = t(tool === 'lasso' ? 'tool_lasso_label' : 'tool_marquee_label');
+    document.getElementById('tool-desc-text').textContent = t('selection_fill_hint');
+    document.getElementById('tool-desc-hint').textContent = '';
+    return;
+  }
   document.getElementById('tool-desc-name').textContent = t('tool_name_' + tool);
   document.getElementById('tool-desc-text').textContent = t('tool_desc_' + tool);
   document.getElementById('tool-desc-hint').textContent = t('tool_hint_' + tool);
@@ -5834,6 +6059,9 @@ function resetImage() {
   state.blankMode = false;
   state.undoStack = [];
   state.redoStack = [];
+  state.selection = null;
+  state.isDrawingSelection = false;
+  state.marqueeStart = null;
   if (state.paletteSpecialtyTags) state.paletteSpecialtyTags = {};
 
   // 캔버스 비우기
