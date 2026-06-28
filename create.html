@@ -8,6 +8,7 @@
   <link rel="manifest" href="/site.webmanifest">
   <script defer src="utils.js"></script>
   <script src="dmc-families.js"></script>
+  <script src="dmc-ab-codes.js"></script>
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8254204287118850"
        crossorigin="anonymous"></script>
@@ -2844,6 +2845,7 @@ const i18n = {
     family_brown_beige: '브라운·베이지',
     family_gray_silver: '그레이·실버',
     family_black: '블랙',
+    family_ab_drills: '특수비즈 (AB)',
     palette_search_placeholder: 'DMC 코드나 이름 검색…',
     palette_or_hex: '또는 hex 색상 입력',
     palette_add: '추가',
@@ -3072,6 +3074,7 @@ const i18n = {
     family_brown_beige: 'Brown & Beige',
     family_gray_silver: 'Gray & Silver',
     family_black: 'Black',
+    family_ab_drills: 'AB Drills',
     palette_search_placeholder: 'Search DMC code or name…',
     palette_or_hex: 'Or enter a hex color',
     palette_add: 'Add',
@@ -3284,6 +3287,7 @@ const i18n = {
     family_brown_beige: 'ブラウン・ベージュ',
     family_gray_silver: 'グレー・シルバー',
     family_black: 'ブラック',
+    family_ab_drills: 'ABビーズ',
     palette_search_placeholder: 'DMCコードまたは名前で検索…',
     palette_or_hex: 'またはhexカラーを入力',
     palette_add: '追加',
@@ -3496,6 +3500,7 @@ const i18n = {
     family_brown_beige: '棕·米',
     family_gray_silver: '灰·银',
     family_black: '黑',
+    family_ab_drills: 'AB钻',
     palette_search_placeholder: '搜索DMC编号或名称…',
     palette_or_hex: '或输入hex颜色',
     palette_add: '添加',
@@ -7046,13 +7051,13 @@ applyTranslations();
     return starts.concat(rest).slice(0, 30);
   }
 
-  function resultRow(c) {
+  function resultRow(c, codeSuffix = '') {
     const exists = isInPalette(c.code);
     const row = document.createElement('div');
     row.className = 'dmc-result' + (exists ? ' dmc-result--exists' : '');
     row.innerHTML =
       '<span class="dmc-result__swatch" style="background:' + rgbStr(c.rgb) + '"></span>' +
-      '<span class="dmc-result__code">DMC ' + esc(c.code) + '</span>' +
+      '<span class="dmc-result__code">DMC ' + esc(c.code) + codeSuffix + '</span>' +
       '<span class="dmc-result__name">' + esc(c.name) + '</span>' +
       '<button type="button" class="dmc-result__add" data-i18n="' + (exists ? 'palette_already_added' : 'palette_add') + '">' +
         (exists ? t('palette_already_added') : t('palette_add')) + '</button>';
@@ -7063,9 +7068,9 @@ applyTranslations();
     return row;
   }
 
-  function renderResults(list) {
+  function renderResults(list, codeSuffix = '') {
     resultsEl.innerHTML = '';
-    list.forEach(c => resultsEl.appendChild(resultRow(c)));
+    list.forEach(c => resultsEl.appendChild(resultRow(c, codeSuffix)));
     if (typeof applyTranslations === 'function') applyTranslations();
   }
 
@@ -7097,6 +7102,21 @@ applyTranslations();
       chip.addEventListener('click', () => showFamilyColors(fam.id));
       famList.appendChild(chip);
     });
+    // 특수비즈(AB) 계열 칩 — DMC_AB_CODES 로드 시에만 추가
+    if (window.DMC_AB_CODES) {
+      const abChip = document.createElement('button');
+      abChip.type = 'button';
+      abChip.className = 'family-chip';
+      const abSw = document.createElement('span');
+      abSw.className = 'family-chip__swatch';
+      abSw.style.background = 'linear-gradient(135deg,#f6a6c1,#a6c8f6,#a6f6c1)';
+      const abLabel = document.createElement('span');
+      abLabel.textContent = t('family_ab_drills');
+      abChip.appendChild(abSw);
+      abChip.appendChild(abLabel);
+      abChip.addEventListener('click', showAbColors);
+      famList.appendChild(abChip);
+    }
     famList.hidden = false;
   }
 
@@ -7107,6 +7127,16 @@ applyTranslations();
     if (famBack) famBack.hidden = false;
     const colors = DMC_COLORS.filter(c => window.classifyDmcFamily(c) === famId);
     renderResults(colors);
+  }
+
+  // 특수비즈(AB) 목록: DMC_AB_CODES 에 포함된 DMC 색만, 코드 뒤 " AB" 표기
+  function showAbColors() {
+    if (!famWrap || !famList) return;
+    famList.hidden = true;
+    if (famBack) famBack.hidden = false;
+    const ab = window.DMC_AB_CODES;
+    const colors = ab ? DMC_COLORS.filter(c => ab.has(codeStr(c.code))) : [];
+    renderResults(colors, ' AB');
   }
 
   function showFamilyBrowser() {
@@ -7147,9 +7177,8 @@ applyTranslations();
     addBtn.classList.add('is-open');
     input.value = ''; resultsEl.innerHTML = '';
     hexInput.value = ''; hexSuggest.innerHTML = '';
-    // 빈 도안 모드면 계열 탐색을 기본 노출, 사진/일반 모드는 기존 검색만(동작 불변)
-    if (isBlankMode()) showFamilyBrowser();
-    else hideFamilyBrowser();
+    // 색상 계열 탐색을 항상 노출 (생성 전/후, 모든 모드)
+    showFamilyBrowser();
     input.focus();
   }
   function closeSearch() {
@@ -7168,10 +7197,8 @@ applyTranslations();
     if (q) {
       if (famWrap && !famWrap.hidden) { famList.hidden = true; if (famBack) famBack.hidden = true; }
       sTimer = setTimeout(() => renderResults(searchDmc(q)), 110);
-    } else if (isBlankMode()) {
-      showFamilyBrowser();
     } else {
-      resultsEl.innerHTML = '';
+      showFamilyBrowser();
     }
   });
   let hTimer = null;
