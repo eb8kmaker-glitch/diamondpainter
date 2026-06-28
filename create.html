@@ -1738,7 +1738,7 @@
 
   .stats-thead {
     display: grid;
-    grid-template-columns: 18px 14px 14px 36px 1fr 40px 28px 46px;
+    grid-template-columns: 18px 14px 14px 36px 1fr 40px 28px;
     gap: 2px;
     padding: 4px 10px 3px;
     font-family: var(--ui);
@@ -1766,7 +1766,7 @@
 
   .stats-row {
     display: grid;
-    grid-template-columns: 18px 14px 14px 36px 1fr 40px 28px 46px;
+    grid-template-columns: 18px 14px 14px 36px 1fr 40px 28px;
     gap: 2px;
     padding: 3px 10px;
     align-items: center;
@@ -2864,8 +2864,6 @@ const i18n = {
     label_custom_w:    '가로 (cm)',
     label_custom_h:    '세로 (cm)',
     label_colors:      'DMC 색상 수',
-    specialty_tag_placeholder: '예: AB',
-    specialty_tag_header:      '태그',
     label_keep_ratio:  '비율 유지',
     label_show_symbols:'기호 표시',
     label_cell_size:   '셀 크기 (px)',
@@ -3092,8 +3090,6 @@ const i18n = {
     label_custom_w:    'Width (cm)',
     label_custom_h:    'Height (cm)',
     label_colors:      'DMC Color Count',
-    specialty_tag_placeholder: 'e.g. AB',
-    specialty_tag_header:      'Tag',
     label_keep_ratio:  'Maintain ratio',
     label_show_symbols:'Show symbols',
     label_cell_size:   'Cell size (px)',
@@ -3305,8 +3301,6 @@ const i18n = {
     label_custom_w:    '幅 (cm)',
     label_custom_h:    '高さ (cm)',
     label_colors:      'DMC色数',
-    specialty_tag_placeholder: '例: AB',
-    specialty_tag_header:      'タグ',
     label_keep_ratio:  '縦横比を維持',
     label_show_symbols:'記号を表示',
     label_cell_size:   'セルサイズ (px)',
@@ -3518,8 +3512,6 @@ const i18n = {
     label_custom_w:    '宽度 (cm)',
     label_custom_h:    '高度 (cm)',
     label_colors:      'DMC颜色数量',
-    specialty_tag_placeholder: '例: AB',
-    specialty_tag_header:      '标签',
     label_keep_ratio:  '保持纵横比',
     label_show_symbols:'显示符号',
     label_cell_size:   '格子大小 (px)',
@@ -5017,9 +5009,6 @@ async function generatePattern() {
   const oldToNew = new Map(sortedPaletteWithOldIdx.map((p, ni) => [p.oldIdx, ni]));
   state.palette = sortedPaletteWithOldIdx.map((p, i) => ({...p, symbol: SYMBOLS[i % SYMBOLS.length]}));
 
-  // 색상별 특수 비즈 태그(AB 등) 저장소 초기화 — DMC 코드별 사용자 입력값
-  state.paletteSpecialtyTags = {};
-
   // Remap grid
   grid.forEach(cell => { cell.palIdx = oldToNew.get(cell.palIdx); });
 
@@ -5109,7 +5098,6 @@ function calcBeadStats() {
     count:  counts[i],
     ratio:  total > 0 ? counts[i] / total * 100 : 0,
     userAdded: !!p.userAdded,
-    specialtyTag: state.paletteSpecialtyTags?.[p.dmc] ?? "",
   }));
 }
 
@@ -5175,7 +5163,6 @@ function updateColorList() {
     <div>${t('stats_color_name')}</div>
     <div class="stats-th-count stats-th-sortable${beadStatSort.key==='count'?' sort-active':''}" data-sort="count">${t('stats_bead_count')}${si('count')}</div>
     <div class="stats-th-ratio stats-th-sortable${beadStatSort.key==='ratio'?' sort-active':''}" data-sort="ratio">${t('stats_ratio')}${si('ratio')}</div>
-    <div>${t('specialty_tag_header')}</div>
   `;
   thead.querySelectorAll('.stats-th-sortable').forEach(th => {
     th.addEventListener('click', () => {
@@ -5222,7 +5209,6 @@ function updateColorList() {
       <div class="stats-name" title="${s.name}">${s.name}</div>
       <div class="stats-count">${isTiny ? `<span class="tiny-badge" title="${t('tiny_color_badge')}">⚠</span>` : ''}${s.count.toLocaleString()}</div>
       <div class="stats-ratio">${s.ratio.toFixed(1)}%</div>
-      <div><input type="text" data-dmc="${s.dmcNo}" maxlength="10" placeholder="${t('specialty_tag_placeholder')}" style="width:100%;min-width:0;box-sizing:border-box;font-family:var(--mono);font-size:8px;padding:1px 3px;background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:3px;color:var(--text2)"></div>
     `;
 
     // ★/☆ 클릭: 보유 색상 토글
@@ -5271,19 +5257,6 @@ function updateColorList() {
         if (window.removePaletteColor) window.removePaletteColor(s.idx);
       });
       row.appendChild(rm);
-    }
-
-    // 특수 비즈 태그 입력: 값 복원 + 저장 (행 재렌더 시 값 유지)
-    const tagInput = row.querySelector('input[data-dmc]');
-    if (tagInput) {
-      const tagKey = String(s.dmcNo);
-      tagInput.value = state.paletteSpecialtyTags?.[tagKey] ?? '';
-      // 입력 클릭/타이핑이 행 선택(재렌더)을 트리거하지 않도록 차단
-      tagInput.addEventListener('click', e => e.stopPropagation());
-      tagInput.addEventListener('input', e => {
-        if (!state.paletteSpecialtyTags) state.paletteSpecialtyTags = {};
-        state.paletteSpecialtyTags[tagKey] = e.target.value;
-      });
     }
 
     container.appendChild(row);
@@ -6593,9 +6566,8 @@ function generatePDF() {
     doc.setFontSize(6.5);
     doc.setTextColor(30, 30, 30);
 
-    // DMC 번호 (특수 비즈 태그가 있으면 코드 뒤에 표기)
-    const specialtyTag = state.paletteSpecialtyTags?.[entry.dmc];
-    doc.text(String(entry.dmc) + (specialtyTag ? ' ' + specialtyTag : ''), COL.dmc.x + 1, cy + 3.8);
+    // DMC 번호
+    doc.text(String(entry.dmc), COL.dmc.x + 1, cy + 3.8);
     // 색상명 (32자 제한)
     doc.text(entry.name.length > 32 ? entry.name.slice(0, 31) + '…' : entry.name, COL.name.x + 1, cy + 3.8);
     // 비즈 수
