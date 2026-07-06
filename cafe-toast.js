@@ -28,11 +28,12 @@
   };
 
   /* ─── Copy (component language pack). Only ko today. ──────────── */
+  var CAFE_NAME = '다이아몬드페인팅클럽';
   var STRINGS = {
     ko: {
-      title: '도안 완성! 🎉 직접 완성하시면 다이아몬드아트클럽에서 자랑해 주세요.',
+      title: '도안 완성! 🎉 직접 완성하시면 ' + CAFE_NAME + '에서 자랑해 주세요.',
       cta: '카페에서 자랑하기 →',
-      cta_aria: '네이버 카페 다이아몬드아트클럽에서 완성작 자랑하기 (새 탭에서 열림)',
+      cta_aria: '네이버 카페 ' + CAFE_NAME + '에서 완성작 자랑하기 (새 탭에서 열림)',
       close_aria: '닫기',
     },
     // en/ja/zh: intentionally empty — toast is hidden for these locales.
