@@ -27,18 +27,20 @@
 
   if (!window.dpI18n || !window.dpI18n.extend) return;
 
+  var CAFE_NAME = '다이아몬드페인팅클럽';
+
   /* ─── Copy (i18n) ─────────────────────────────────────────────
      Only `ko` is needed today. Other locales are intentionally left
      without keys — the banner is hidden there regardless. Add keys
      here when their community is enabled above. */
   window.dpI18n.extend({
     ko: {
-      cb_title: '다이아몬드아트클럽 카페에서 함께해요',
+      cb_title: CAFE_NAME + ' 카페에서 함께해요',
       cb_point1: '사놓고 방치한 도안, 함께 완성할 페이스메이커',
       cb_point2: '나만 보기 아까운 완성작 마음껏 자랑',
       cb_point3: '잔접착제 처리·큐빅 정돈 등 고수들의 꿀팁',
       cb_cta: '네이버 카페 가입하기 →',
-      cb_aria: '네이버 카페 다이아몬드아트클럽 가입하기 (새 탭에서 열림)',
+      cb_aria: '네이버 카페 ' + CAFE_NAME + ' 가입하기 (새 탭에서 열림)',
     },
   });
 
