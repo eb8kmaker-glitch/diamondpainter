@@ -702,6 +702,30 @@
     color: var(--text2);
   }
 
+  /* ── WASD 패닝 / Shift+W,S 색상 이동 안내 배지 (물리 키보드 전제, 데스크톱 전용) ── */
+  #kbd-nav-hint {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: rgba(8,14,34,0.75);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 9.5px;
+    color: var(--text3);
+    pointer-events: none;
+    z-index: 10;
+  }
+  @media (max-width: 600px) {
+    #kbd-nav-hint { display: none; }
+  }
+
+  /* ── 캔버스 키보드 포커스 표시 (WASD 패닝 활성 상태) ── */
+  #canvas-area:focus { outline: none; }
+  #canvas-area:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--cyan);
+  }
+
   /* ── 알림 토스트 ── */
   #notification {
     position: fixed;
@@ -3021,6 +3045,7 @@ const i18n = {
     photo_help_gradient: '노을·하늘·바다처럼 색 변화가 부드러운 사진은, 색상 수보다 캔버스 크기를 키워야 그라데이션이 자연스러워요. 색만 늘리면 경계가 계단처럼 보일 수 있어요.',
     photo_help_portrait: '인물 사진은 피부 톤 변화가 중요해요. 중간 색상 수(40~60)에 충분한 캔버스 크기를 함께 쓰는 걸 추천해요.',
     photo_help_simple: '로고·일러스트처럼 색 경계가 뚜렷한 그림은 색상 수가 적어도(20~35) 깔끔해요.',
+    kbd_nav_hint: 'W A S D 이동 · Shift+W/S 색상 이동',
   },
   en: {
     mobile_paint_hint: 'Pinch to zoom in for more precise painting.',
@@ -3238,6 +3263,7 @@ const i18n = {
     photo_help_gradient: 'For soft gradients (sunsets, skies, water), a larger canvas matters more than more colors. Adding colors alone can make edges look stair-stepped.',
     photo_help_portrait: 'For portraits, subtle skin tones matter. A medium color count (40–60) with a generous canvas size works best.',
     photo_help_simple: 'For logos and illustrations with hard color edges, a low color count (20–35) stays clean.',
+    kbd_nav_hint: 'WASD to pan · Shift+W/S to change color',
   },
   ja: {
     mobile_paint_hint: 'ピンチで拡大すると、より正確に塗れます。',
@@ -3455,6 +3481,7 @@ const i18n = {
     photo_help_gradient: '夕焼け・空・海のようにグラデーションが多い写真は、色数よりキャンバスサイズを大きくする方が自然になります。',
     photo_help_portrait: '人物写真は肌のトーン変化が大切です。中程度の色数（40〜60）と十分なキャンバスサイズの併用がおすすめです。',
     photo_help_simple: 'ロゴやイラストなど色の境界がはっきりした絵は、色数が少なくても（20〜35）きれいに出ます。',
+    kbd_nav_hint: 'WASDで移動 · Shift+W/Sで色変更',
   },
   zh: {
     mobile_paint_hint: '双指放大可更精确地绘制。',
@@ -3672,6 +3699,7 @@ const i18n = {
     photo_help_gradient: '日落、天空、海面等渐变较多的照片，增大画布比增加颜色更自然。',
     photo_help_portrait: '人物照片的肤色细微变化很重要。建议中等颜色数（40～60）配合足够的画布尺寸。',
     photo_help_simple: 'logo、插画等色彩边界分明的图，颜色数较少（20～35）也很干净。',
+    kbd_nav_hint: 'WASD 移动 · Shift+W/S 切换颜色',
   },
   de: {
     mobile_paint_hint: 'Zum genaueren Malen mit zwei Fingern heranzoomen.',
@@ -3888,6 +3916,7 @@ const i18n = {
     photo_help_gradient: 'Bei weichen Verläufen (Sonnenuntergänge, Himmel, Wasser) zählt eine größere Leinwand mehr als zusätzliche Farben. Nur mehr Farben können Kanten treppenartig wirken lassen.',
     photo_help_portrait: 'Bei Porträts kommt es auf feine Hauttöne an. Eine mittlere Farbanzahl (40–60) mit großzügiger Leinwandgröße funktioniert am besten.',
     photo_help_simple: 'Bei Logos und Illustrationen mit harten Farbkanten bleibt eine niedrige Farbanzahl (20–35) sauber.',
+    kbd_nav_hint: 'WASD zum Verschieben · Umschalt+W/S für Farbe',
   },
   fr: {
     mobile_paint_hint: 'Pincez pour zoomer et peindre plus précisément.',
@@ -4104,6 +4133,7 @@ const i18n = {
     photo_help_gradient: 'Pour les dégradés doux (couchers de soleil, ciels, eau), une plus grande toile compte plus que plus de couleurs. Ajouter des couleurs seules peut donner des bords en escalier.',
     photo_help_portrait: 'Pour les portraits, les teintes de peau subtiles comptent. Un nombre de couleurs moyen (40 à 60) avec une toile généreuse donne les meilleurs résultats.',
     photo_help_simple: 'Pour les logos et illustrations à bords nets, un faible nombre de couleurs (20 à 35) reste propre.',
+    kbd_nav_hint: 'WASD pour déplacer · Maj+W/S pour la couleur',
   },
   es: {
     mobile_paint_hint: 'Pellizca para acercar y pintar con más precisión.',
@@ -4320,6 +4350,7 @@ const i18n = {
     photo_help_gradient: 'Para degradados suaves (atardeceres, cielos, agua), un lienzo más grande importa más que más colores. Agregar colores por sí solo puede hacer que los bordes se vean escalonados.',
     photo_help_portrait: 'Para retratos, importan los tonos sutiles de la piel. Una cantidad media de colores (40–60) con un lienzo amplio funciona mejor.',
     photo_help_simple: 'Para logos e ilustraciones con bordes de color definidos, una cantidad baja de colores (20–35) se mantiene limpia.',
+    kbd_nav_hint: 'WASD para desplazar · Mayús+W/S para color',
   },
   id: {
     mobile_paint_hint: 'Cubit untuk perbesar agar mengecat lebih presisi.',
@@ -4536,6 +4567,7 @@ const i18n = {
     photo_help_gradient: 'Untuk gradasi lembut (matahari terbenam, langit, air), memperbesar kanvas lebih penting daripada menambah warna. Menambah warna saja bisa membuat tepiannya terlihat bertangga.',
     photo_help_portrait: 'Untuk potret, gradasi halus warna kulit penting. Jumlah warna sedang (40–60) dengan ukuran kanvas yang lega paling cocok.',
     photo_help_simple: 'Untuk logo dan ilustrasi dengan tepi warna tegas, jumlah warna rendah (20–35) tetap rapi.',
+    kbd_nav_hint: 'WASD untuk geser · Shift+W/S untuk warna',
   },
   vi: {
     mobile_paint_hint: 'Chụm để phóng to, tô chính xác hơn.',
@@ -4752,6 +4784,7 @@ const i18n = {
     photo_help_gradient: 'Với các vùng chuyển màu mềm (hoàng hôn, bầu trời, mặt nước), canvas lớn hơn quan trọng hơn việc thêm màu. Chỉ thêm màu có thể khiến các cạnh bị răng cưa.',
     photo_help_portrait: 'Với ảnh chân dung, các sắc da tinh tế rất quan trọng. Số màu vừa phải (40–60) cùng canvas rộng rãi cho kết quả tốt nhất.',
     photo_help_simple: 'Với logo và tranh minh họa có cạnh màu rõ ràng, số màu thấp (20–35) giúp giữ nét sạch sẽ.',
+    kbd_nav_hint: 'WASD để di chuyển · Shift+W/S để đổi màu',
   },
 };
 
@@ -6310,6 +6343,7 @@ function updateColorList() {
     const isTiny = tinyIdxSet.has(s.idx);
 
     const row = document.createElement('div');
+    row.dataset.palIdx = s.idx; // Shift+W/S 키보드 팔레트 이동이 렌더된 순서를 찾는 데 사용
     row.className = [
       'stats-row',
       isHighlighted ? 'stats-highlighted' : '',
@@ -6714,6 +6748,96 @@ document.addEventListener('keyup', e => {
     }
   }
 });
+
+// ═══════════════════════════════════════════════════════════════
+// WASD 캔버스 패닝 / Shift+W,S 팔레트 색상 이동 (왼손 키보드 내비게이션)
+// 캔버스 영역(canvasArea)이 키보드 포커스를 가지고 있을 때만 활성화되므로
+// 검색창 등 입력 필드에 포커스가 있을 때는 W/A/S/D가 평범한 텍스트 입력으로 동작한다.
+// ═══════════════════════════════════════════════════════════════
+const PAN_STEP_PX = 60; // WASD 1회 입력당 뷰포트 이동 거리(화면 픽셀 기준, zoom 배율과 무관)
+const PAN_KEY_UP    = 'KeyW';
+const PAN_KEY_DOWN  = 'KeyS';
+const PAN_KEY_LEFT  = 'KeyA';
+const PAN_KEY_RIGHT = 'KeyD';
+const PALETTE_NAV_KEY_PREV = 'KeyW'; // Shift+W → 팔레트에서 이전 색상
+const PALETTE_NAV_KEY_NEXT = 'KeyS'; // Shift+S → 팔레트에서 다음 색상
+
+canvasArea.setAttribute('tabindex', '0');
+
+// 캔버스와 상호작용(클릭/터치)하면 키보드 포커스도 함께 옮겨 WASD를 바로 쓸 수 있게 한다.
+canvasArea.addEventListener('pointerdown', () => {
+  canvasArea.focus({ preventScroll: true });
+});
+
+// 한 축을 클램핑: 콘텐츠가 뷰포트보다 크면 빈 여백이 보이지 않게, 작으면 뷰포트 밖으로 나가지 않게 제한한다.
+function clampPanAxis(view, contentSize, viewportSize) {
+  const edgeA = viewportSize - contentSize;
+  const lo = Math.min(edgeA, 0);
+  const hi = Math.max(edgeA, 0);
+  return Math.min(Math.max(view, lo), hi);
+}
+
+function panViewport(dx, dy) {
+  if (!state.pattern) return;
+  const { w, h } = getCanvasSize();
+  const aw = canvasArea.clientWidth, ah = canvasArea.clientHeight;
+  state.viewX = clampPanAxis(state.viewX + dx, w * state.zoom, aw);
+  state.viewY = clampPanAxis(state.viewY + dy, h * state.zoom, ah);
+  applyTransform();
+}
+
+// 팔레트(색상 통계 리스트)에서 현재 선택 색상을 이전/다음으로 이동한다.
+// 렌더된 #color-list 행 순서(정렬/필터 반영)를 그대로 따라간다.
+function movePaletteSelection(direction) {
+  if (!state.pattern || !state.palette.length) return;
+  const rows = Array.from(document.querySelectorAll('#color-list .stats-row'));
+  if (!rows.length) return;
+
+  const curPos = rows.findIndex(r => Number(r.dataset.palIdx) === state.activePaletteIdx);
+  const fromPos = curPos === -1 ? (direction > 0 ? -1 : rows.length) : curPos;
+  const nextPos = Math.min(Math.max(fromPos + direction, 0), rows.length - 1);
+
+  const targetIdx = Number(rows[nextPos].dataset.palIdx);
+  state.activePaletteIdx = targetIdx;
+  state.highlightPaletteIdx = targetIdx; // 캔버스 강조 표시도 선택을 따라가도록 갱신
+  state.tool = 'paint';
+  setActiveTool('paint');
+  updatePaletteUI();
+  updateColorList();
+  redrawAllUserCells();
+
+  const newRow = document.querySelector(`#color-list .stats-row[data-pal-idx="${targetIdx}"]`);
+  if (newRow) newRow.scrollIntoView({ block: 'nearest' });
+}
+
+canvasArea.addEventListener('keydown', e => {
+  if (!state.pattern) return;
+  if (e.target !== canvasArea) return; // 캔버스 자체가 포커스일 때만 (내부 버튼 등은 제외)
+
+  if (e.shiftKey && (e.code === PALETTE_NAV_KEY_PREV || e.code === PALETTE_NAV_KEY_NEXT)) {
+    e.preventDefault();
+    movePaletteSelection(e.code === PALETTE_NAV_KEY_PREV ? -1 : 1);
+    return;
+  }
+
+  if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) return;
+
+  switch (e.code) {
+    case PAN_KEY_UP:    e.preventDefault(); panViewport(0, PAN_STEP_PX);  break;
+    case PAN_KEY_DOWN:  e.preventDefault(); panViewport(0, -PAN_STEP_PX); break;
+    case PAN_KEY_LEFT:  e.preventDefault(); panViewport(PAN_STEP_PX, 0);  break;
+    case PAN_KEY_RIGHT: e.preventDefault(); panViewport(-PAN_STEP_PX, 0); break;
+  }
+});
+
+// 안내 배지: "WASD로 이동, Shift+W/S로 색상 변경" — 문구는 i18n 언어팩(kbd_nav_hint)에서만 가져온다.
+(function initKbdNavHint() {
+  const hint = document.createElement('div');
+  hint.id = 'kbd-nav-hint';
+  hint.setAttribute('data-i18n', 'kbd_nav_hint');
+  hint.textContent = t('kbd_nav_hint');
+  canvasArea.appendChild(hint);
+})();
 
 // ─── Pointer 입력 통합 (mouse · pen · touch) ───
 // 단일 포인터 = 기존 마우스 페인트/팬 로직 그대로. 두 손가락(터치) = 핀치 줌 + 팬.
