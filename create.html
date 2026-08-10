@@ -720,6 +720,16 @@
     #kbd-nav-hint { display: none; }
   }
 
+  /* ── DMC 팔레트 상단: Shift+W,S 색상 이동 안내 (물리 키보드 전제, 데스크톱 전용) ── */
+  .palette-shift-hint {
+    padding: 3px 14px 0;
+    font-size: 9.5px;
+    color: var(--text3);
+  }
+  @media (max-width: 600px) {
+    .palette-shift-hint { display: none; }
+  }
+
   /* ── 캔버스 키보드 포커스 표시 (WASD 패닝 활성 상태) ── */
   #canvas-area:focus { outline: none; }
   #canvas-area:focus-visible {
@@ -2653,6 +2663,7 @@
 
     <!-- DMC 팔레트 관리 -->
     <div class="panel-title" style="padding: 10px 14px 0; margin-bottom:0" data-i18n="section_dmc_palette">DMC 팔레트</div>
+    <div class="palette-shift-hint" data-i18n="palette_shift_hint">Shift+W / Shift+S로 색상을 이동할 수 있어요</div>
     <div class="palette-add-wrap">
       <button id="palette-add-btn" class="palette-add-btn" type="button" disabled data-i18n="palette_add_color">+ Add Color</button>
       <div id="palette-search" class="palette-search" hidden>
@@ -3050,6 +3061,7 @@ const i18n = {
     kbd_nav_hint: 'W A S D 이동 · Shift+W/S 색상 이동',
     editor_guide_link: '📖 사용법 가이드',
     editor_guide_link_title: '에디터 사용법 가이드를 새 탭에서 엽니다',
+    palette_shift_hint: 'Shift+W / Shift+S로 색상을 이동할 수 있어요',
   },
   en: {
     mobile_paint_hint: 'Pinch to zoom in for more precise painting.',
@@ -3270,6 +3282,7 @@ const i18n = {
     kbd_nav_hint: 'WASD to pan · Shift+W/S to change color',
     editor_guide_link: '📖 Editor Guide',
     editor_guide_link_title: 'Opens the editor guide in a new tab',
+    palette_shift_hint: 'Shift+W / Shift+S to move between colors',
   },
   ja: {
     mobile_paint_hint: 'ピンチで拡大すると、より正確に塗れます。',
@@ -3490,6 +3503,7 @@ const i18n = {
     kbd_nav_hint: 'WASDで移動 · Shift+W/Sで色変更',
     editor_guide_link: '📖 使い方ガイド',
     editor_guide_link_title: 'エディター使い方ガイドを新しいタブで開きます',
+    palette_shift_hint: 'Shift+W / Shift+Sで色を移動できます',
   },
   zh: {
     mobile_paint_hint: '双指放大可更精确地绘制。',
@@ -3710,6 +3724,7 @@ const i18n = {
     kbd_nav_hint: 'WASD 移动 · Shift+W/S 切换颜色',
     editor_guide_link: '📖 使用指南',
     editor_guide_link_title: '在新标签页中打开编辑器使用指南',
+    palette_shift_hint: '可用 Shift+W / Shift+S 切换颜色',
   },
   de: {
     mobile_paint_hint: 'Zum genaueren Malen mit zwei Fingern heranzoomen.',
@@ -3929,6 +3944,7 @@ const i18n = {
     kbd_nav_hint: 'WASD zum Verschieben · Umschalt+W/S für Farbe',
     editor_guide_link: '📖 Editor-Anleitung',
     editor_guide_link_title: 'Öffnet die Editor-Anleitung in einem neuen Tab',
+    palette_shift_hint: 'Mit Umschalt+W / Umschalt+S zwischen Farben wechseln',
   },
   fr: {
     mobile_paint_hint: 'Pincez pour zoomer et peindre plus précisément.',
@@ -4148,6 +4164,7 @@ const i18n = {
     kbd_nav_hint: 'WASD pour déplacer · Maj+W/S pour la couleur',
     editor_guide_link: "📖 Guide de l'éditeur",
     editor_guide_link_title: "Ouvre le guide de l'éditeur dans un nouvel onglet",
+    palette_shift_hint: 'Maj+W / Maj+S pour changer de couleur',
   },
   es: {
     mobile_paint_hint: 'Pellizca para acercar y pintar con más precisión.',
@@ -4367,6 +4384,7 @@ const i18n = {
     kbd_nav_hint: 'WASD para desplazar · Mayús+W/S para color',
     editor_guide_link: '📖 Guía del editor',
     editor_guide_link_title: 'Abre la guía del editor en una pestaña nueva',
+    palette_shift_hint: 'Mayús+W / Mayús+S para cambiar de color',
   },
   id: {
     mobile_paint_hint: 'Cubit untuk perbesar agar mengecat lebih presisi.',
@@ -4586,6 +4604,7 @@ const i18n = {
     kbd_nav_hint: 'WASD untuk geser · Shift+W/S untuk warna',
     editor_guide_link: '📖 Panduan Editor',
     editor_guide_link_title: 'Membuka panduan editor di tab baru',
+    palette_shift_hint: 'Shift+W / Shift+S untuk berpindah warna',
   },
   vi: {
     mobile_paint_hint: 'Chụm để phóng to, tô chính xác hơn.',
@@ -4805,6 +4824,7 @@ const i18n = {
     kbd_nav_hint: 'WASD để di chuyển · Shift+W/S để đổi màu',
     editor_guide_link: '📖 Hướng dẫn',
     editor_guide_link_title: 'Mở hướng dẫn trình chỉnh sửa trong tab mới',
+    palette_shift_hint: 'Shift+W / Shift+S để chuyển màu',
   },
 };
 
