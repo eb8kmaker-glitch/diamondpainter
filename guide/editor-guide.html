@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script defer src="../utils.js"></script>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8254204287118850"
+       crossorigin="anonymous"></script>
+  <title>Diamond Painter Editor Guide: Every Button and Shortcut Explained — Diamond Painter</title>
+  <meta name="description" content="A complete reference for the Diamond Painter pattern editor — every toolbar button, settings panel option, editing tool, and keyboard shortcut (including WASD canvas panning) explained.">
+  <link rel="canonical" href="https://diamondpainter.app/guide/editor-guide.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Diamond Painter Editor Guide: Every Button and Shortcut Explained">
+  <meta property="og:description" content="A complete reference for the pattern editor — toolbar, settings panel, editing tools, canvas controls, and the DMC palette panel, all explained.">
+  <meta property="og:url" content="https://diamondpainter.app/guide/editor-guide.html">
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .spec-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin: 20px 0 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .spec-row {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 18px;
+      padding: 14px 18px;
+      background: var(--bg-alt);
+    }
+    .spec-row:nth-child(odd) { background: var(--bg); }
+    .spec-term {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .spec-desc {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.65;
+    }
+    @media (max-width: 640px) {
+      .spec-row { grid-template-columns: 1fr; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="container">
+    <a href="../index.html" class="nav-logo">
+      <div class="nav-logo-icon" aria-hidden="true">◆</div>
+      Diamond Painter
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="active" data-i18n="nav_guide">Guide</a></li>
+      <li><a href="../gallery.html" data-i18n="nav_gallery">Gallery</a></li>
+      <li><a href="../faq.html" data-i18n="nav_faq">FAQ</a></li>
+      <li><a href="../about.html" data-i18n="nav_about">About</a></li>
+      <li><a href="../contact.html" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <div class="nav-spacer"></div>
+    <select class="dp-lang-select" aria-label="Language">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+      <option value="zh">中文</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+      <option value="es">Español</option>
+      <option value="id">Bahasa Indonesia</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+    <a href="../create.html" class="nav-cta" data-i18n="nav_try_free">Try Free →</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<main class="article-page">
+  <div class="container">
+    <div class="article-layout">
+
+      <article id="editor-guide">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../index.html" data-i18n="bc_home">Home</a>
+          <span class="breadcrumb-sep" aria-hidden="true">›</span>
+          <a href="index.html" data-i18n="bc_guide">Guide</a>
+          <span class="breadcrumb-sep" aria-hidden="true">›</span>
+          <span aria-current="page" data-i18n="eg_breadcrumb_current">Editor Guide</span>
+        </nav>
+
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="tag" data-i18n="eg_meta_tag">Reference</span>
+            <span data-i18n="eg_meta_readtime">9 min read</span>
+            <span>Updated 2026</span>
+          </div>
+          <h1 class="article-title" data-i18n="eg_title">Diamond Painter Editor Guide: Every Button and Shortcut Explained</h1>
+          <p class="article-intro" data-i18n="eg_intro">
+            The pattern editor has a lot packed into it — a toolbar, a settings panel, six editing tools, mouse and keyboard shortcuts, and a right-hand palette panel. This reference walks through exactly what each one does, so you can stop guessing and start using the editor with confidence.
+          </p>
+        </header>
+
+        <!-- AdSense: ArticleTopAd -->
+<div style="text-align:center;margin:24px 0;">
+  <ins class="kakao_ad_area" style="display:none;"
+    data-ad-unit="DAN-IhSMDRvA0QRGGtj5"
+    data-ad-width="728"
+    data-ad-height="90"></ins>
+  <script type="text/javascript" src="//t1.kakaocdn.net/kas/static/ba.min.js" async></script>
+</div>
+
+        <div class="toc-box" aria-label="Table of contents">
+          <h4 data-i18n="eg_toc_title">In this guide</h4>
+          <ul class="toc-list">
+            <li><a href="#toolbar" data-i18n="eg_h2_toolbar">Top Toolbar</a></li>
+            <li><a href="#left-panel" data-i18n="eg_h2_leftpanel">Left Settings Panel</a></li>
+            <li><a href="#tools" data-i18n="eg_h2_tools">Editing Tools</a></li>
+            <li><a href="#canvas-controls" data-i18n="eg_h2_canvas">Canvas Controls (Mouse &amp; Keyboard)</a></li>
+            <li><a href="#right-panel" data-i18n="eg_h2_rightpanel">Right Panel</a></li>
+            <li><a href="#faq" data-i18n="faq_heading">Frequently Asked Questions</a></li>
+          </ul>
+        </div>
+
+        <div class="article-body">
+
+          <h2 id="toolbar" data-i18n="eg_h2_toolbar">Top Toolbar</h2>
+          <p data-i18n="eg_p_toolbar_intro">The toolbar across the top of the editor holds the actions you'll use most — generating a pattern, undoing mistakes, and saving your work in three different formats.</p>
+          <div class="spec-list">
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_toolbar_1_term">⚡ Generate Pattern</div><div class="spec-desc" data-i18n="eg_toolbar_1_desc">Runs the pattern generator using your uploaded photo and current settings (canvas size, bead type, color count). Stays disabled until a photo is loaded.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_toolbar_2_term">🎲 Show Variations</div><div class="spec-desc" data-i18n="eg_toolbar_2_desc">Generates up to 9 candidate patterns with slightly different settings so you can compare them side by side and pick the one you like best.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_toolbar_3_term">↩ Undo / ↪ Redo</div><div class="spec-desc" data-i18n="eg_toolbar_3_desc">Steps backward or forward through your manual edits. Keyboard shortcuts: Ctrl+Z to undo, Ctrl+Y (or Ctrl+Shift+Z) to redo.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_toolbar_4_term">🔄 Replace Color</div><div class="spec-desc" data-i18n="eg_toolbar_4_desc">Swaps every cell using one palette color for a different color across the whole canvas in a single action — useful for merging two similar shades.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_toolbar_5_term">🗑 Clear Edits</div><div class="spec-desc" data-i18n="eg_toolbar_5_desc">Erases all of your manual painting and reverts the canvas back to the state it was in right after generation.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_toolbar_6_term">📂 Load</div><div class="spec-desc" data-i18n="eg_toolbar_6_desc">Reopens a project file (.json) you saved earlier, restoring the pattern and all of your edits exactly as you left them.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_toolbar_7_term">💾 Save Project (.json)</div><div class="spec-desc" data-i18n="eg_toolbar_7_desc">Saves the current pattern and edit history to a file on your device, so you can pick the project back up later.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_toolbar_8_term">📄 Save PDF</div><div class="spec-desc" data-i18n="eg_toolbar_8_desc">Exports a print-ready PDF containing the pattern grid, the color legend, and bead-count statistics.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_toolbar_9_term">📤 Save Image (PNG)</div><div class="spec-desc" data-i18n="eg_toolbar_9_desc">Exports the pattern as a high-resolution PNG image, including symbols and grid lines exactly as shown on screen.</div></div>
+          </div>
+
+          <!-- AdSense: FooterAd -->
+<div style="text-align:center;margin:24px 0;">
+  <ins class="kakao_ad_area" style="display:none;"
+    data-ad-unit="DAN-IhSMDRvA0QRGGtj5"
+    data-ad-width="728"
+    data-ad-height="90"></ins>
+  <script type="text/javascript" src="//t1.kakaocdn.net/kas/static/ba.min.js" async></script>
+</div>
+
+          <h2 id="left-panel" data-i18n="eg_h2_leftpanel">Left Settings Panel</h2>
+          <p data-i18n="eg_p_leftpanel_intro">Before you generate a pattern, the left panel is where you set up the canvas — bead type, physical size, and how many colors to use.</p>
+          <div class="spec-list">
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_leftpanel_1_term">Bead type (Round / Square)</div><div class="spec-desc" data-i18n="eg_leftpanel_1_desc">Choose round (2.8mm) or square (2.5mm) drills. Because they're different sizes, each type produces a slightly different grid density on the same canvas.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_leftpanel_2_term">Canvas size</div><div class="spec-desc" data-i18n="eg_leftpanel_2_desc">Enter a width and height in centimeters to set the physical size of the finished piece — the grid dimensions update automatically to match.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_leftpanel_3_term">DMC color count</div><div class="spec-desc" data-i18n="eg_leftpanel_3_desc">A slider from 5 to 100 that sets how many distinct DMC colors the pattern uses. Fewer colors keep things simple; more colors capture finer detail.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_leftpanel_4_term">Use owned colors only</div><div class="spec-desc" data-i18n="eg_leftpanel_4_desc">After you've marked colors with ★ as ones you already own, enable this to limit new patterns to only those colors.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_leftpanel_5_term">Show symbols</div><div class="spec-desc" data-i18n="eg_leftpanel_5_desc">Toggles whether each cell displays its color-coded symbol in addition to its fill color — helpful when printing in black and white.</div></div>
+          </div>
+
+          <h2 id="tools" data-i18n="eg_h2_tools">Editing Tools</h2>
+          <p data-i18n="eg_p_tools_intro">Once a pattern is generated, these six tools let you touch up individual cells or whole regions by hand.</p>
+          <div class="spec-list">
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_tools_1_term">🖊 Paint</div><div class="spec-desc" data-i18n="eg_tools_1_desc">Places beads of the currently selected color. Click or drag across cells to paint; Shift+click erases a cell instead.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_tools_2_term">🗑 Erase</div><div class="spec-desc" data-i18n="eg_tools_2_desc">Clears whatever cell you click, leaving it empty.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_tools_3_term">🪣 Fill</div><div class="spec-desc" data-i18n="eg_tools_3_desc">Click one cell to flood-fill every connected cell of the same color with your selected color in one action — great for backgrounds.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_tools_4_term">💉 Pick</div><div class="spec-desc" data-i18n="eg_tools_4_desc">Click any cell on the canvas to instantly set its color as your active paint color, without hunting for it in the palette list.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_tools_5_term">⬚ Marquee select</div><div class="spec-desc" data-i18n="eg_tools_5_desc">Drag a rectangle across the canvas to select an area, then fill or edit every cell inside it at once.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_tools_6_term">➰ Lasso select</div><div class="spec-desc" data-i18n="eg_tools_6_desc">Draw a freeform outline to select an irregularly shaped area for batch editing.</div></div>
+          </div>
+
+          <h2 id="canvas-controls" data-i18n="eg_h2_canvas">Canvas Controls (Mouse &amp; Keyboard)</h2>
+          <p data-i18n="eg_p_canvas_intro">These are the ways to move around and zoom the canvas itself, separate from the editing tools above. Keyboard shortcuts only work while the canvas has focus — click it first.</p>
+          <div class="spec-list">
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_canvas_1_term">Space + drag</div><div class="spec-desc" data-i18n="eg_canvas_1_desc">Hold Space and drag with the mouse to pan the view around the canvas.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_canvas_2_term">Mouse wheel</div><div class="spec-desc" data-i18n="eg_canvas_2_desc">Scroll to zoom in or out, centered on your cursor position.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_canvas_3_term">W A S D</div><div class="spec-desc" data-i18n="eg_canvas_3_desc">With the canvas focused, pans the viewport up / left / down / right — handy for keeping one hand on the keyboard while the other stays on the mouse.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_canvas_4_term">Shift + W / Shift + S</div><div class="spec-desc" data-i18n="eg_canvas_4_desc">Steps to the previous (Shift+W) or next (Shift+S) color in the palette list without leaving the canvas, updating the canvas highlight to match.</div></div>
+          </div>
+
+          <h2 id="right-panel" data-i18n="eg_h2_rightpanel">Right Panel</h2>
+          <p data-i18n="eg_p_rightpanel_intro">The right panel tracks your progress and holds the DMC palette you're working from.</p>
+          <div class="spec-list">
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_rightpanel_1_term">Pattern info</div><div class="spec-desc" data-i18n="eg_rightpanel_1_desc">Live counts for total cells, DMC colors used, cells you've manually modified, and cells still unedited.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_rightpanel_2_term">Display options</div><div class="spec-desc" data-i18n="eg_rightpanel_2_desc">Toggle symbol display, a stronger grid line, and highlighting for whichever color is currently selected.</div></div>
+            <div class="spec-row"><div class="spec-term" data-i18n="eg_rightpanel_3_term">DMC palette</div><div class="spec-desc" data-i18n="eg_rightpanel_3_desc">Add extra colors, search by DMC code or name, mark colors you own with ★, and see each color's cell count and percentage of the pattern.</div></div>
+          </div>
+
+        </div>
+
+        <div class="article-cta-banner">
+          <div class="icon" aria-hidden="true">◆</div>
+          <div>
+            <h3 data-i18n="eg_cta_title">Ready to put this into practice?</h3>
+            <p data-i18n="eg_cta_desc">Open the editor and try out the tools and shortcuts on a real pattern — upload any photo to get started, free.</p>
+            <a href="../create.html" class="btn-primary btn-sm" data-i18n="eg_cta_btn">Open the Pattern Editor →</a>
+          </div>
+        </div>
+
+        <section aria-labelledby="faq" id="faq">
+          <h2 id="faq-editor" style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(20px,3vw,26px);font-weight:600;color:var(--primary);margin:48px 0 16px;letter-spacing:-0.01em;" data-i18n="faq_heading">Frequently Asked Questions</h2>
+          <div class="faq-list">
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span data-i18n="eg_faq_1_q">Do I need to memorize all these shortcuts?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer" data-i18n="eg_faq_1_a">
+                No — every tool and shortcut is also available as a clickable button, and hovering or selecting a tool shows a short description in the tool card. The keyboard shortcuts are just faster once you're used to them.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span data-i18n="eg_faq_2_q">Why isn't WASD panning the canvas?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer" data-i18n="eg_faq_2_a">
+                The canvas needs keyboard focus first — click anywhere on the canvas once, then W/A/S/D will pan the view. If you're typing in a text field like the color search box, WASD types normally instead, as expected.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span data-i18n="eg_faq_3_q">Can I undo after saving or exporting?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-answer" data-i18n="eg_faq_3_a">
+                Yes. Saving a project, exporting a PDF, or exporting a PNG doesn't clear your undo history — you can keep undoing and redoing edits afterward just as before.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <nav aria-label="Related guides" style="margin-top:48px;">
+          <div class="sidebar-related">
+            <h4>Related Guides</h4>
+            <div class="related-links">
+              <a href="diamond-painting-beginner-guide.html" data-i18n="bg_title">Complete Beginner's Guide to Diamond Painting</a>
+              <a href="custom-diamond-painting-tutorial.html" data-i18n="ct_title">How to Create a Custom Diamond Painting Pattern from Your Own Photo</a>
+              <a href="dmc-color-guide.html" data-i18n="dc_title">DMC Color Guide for Diamond Painting</a>
+            </div>
+          </div>
+        </nav>
+      </article>
+
+      <aside class="article-sidebar" aria-label="Sidebar">
+        <div class="sidebar-cta">
+          <h4 data-i18n="sidebar_cta_title">Generate Your Custom Pattern</h4>
+          <p data-i18n="sidebar_cta_desc">Upload your photo and get a full DMC-coded pattern — free, private, instant.</p>
+          <a href="../create.html" class="btn-primary btn-sm" style="width:100%;justify-content:center;" data-i18n="sidebar_cta_btn">Open Pattern Generator</a>
+        </div>
+        <div class="sidebar-related">
+          <h4>More Guides</h4>
+          <div class="related-links">
+            <a href="diamond-painting-beginner-guide.html" data-i18n="bg_title">Beginner's Guide</a>
+            <a href="custom-diamond-painting-tutorial.html" data-i18n="ct_title">Custom Pattern Tutorial</a>
+            <a href="dmc-color-guide.html" data-i18n="dc_title">DMC Color Guide</a>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+<!-- AdSense: ArticleTopAd -->
+<div class="container">
+<div style="text-align:center;margin:24px 0;">
+  <ins class="kakao_ad_area" style="display:none;"
+    data-ad-unit="DAN-IhSMDRvA0QRGGtj5"
+    data-ad-width="728"
+    data-ad-height="90"></ins>
+  <script type="text/javascript" src="//t1.kakaocdn.net/kas/static/ba.min.js" async></script>
+</div>
+</div>
+
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../index.html" class="nav-logo" style="margin-bottom:14px;display:inline-flex;">
+          <div class="nav-logo-icon" aria-hidden="true">◆</div>
+          Diamond Painter
+        </a>
+        <p class="footer-tagline" data-i18n="footer_tagline">Turn any photo into a beautiful diamond painting pattern — free, in your browser, no sign-up needed.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_tool">Tool</h4>
+        <a href="../create.html" data-i18n="footer_create_pattern">Create Pattern</a>
+        <a href="diamond-painting-beginner-guide.html" data-i18n="footer_beginner_guide">Beginner Guide</a>
+        <a href="custom-diamond-painting-tutorial.html" data-i18n="footer_custom_tutorial">Custom Tutorial</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_guides">Guides</h4>
+        <a href="index.html" data-i18n="footer_all_guides">All Guides</a>
+        <a href="diamond-painting-tips.html" data-i18n="footer_tips">Tips &amp; Tricks</a>
+        <a href="best-diamond-painting-accessories.html" data-i18n="footer_accessories">Accessories</a>
+        <a href="dmc-color-guide.html" data-i18n="footer_dmc_guide">DMC Color Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_info">Info</h4>
+        <a href="../faq.html" data-i18n="footer_faq">FAQ</a>
+        <a href="../about.html" data-i18n="footer_about">About</a>
+        <a href="../contact.html" data-i18n="footer_contact">Contact</a>
+        <a href="../privacy-policy.html" data-i18n="footer_privacy">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer_copyright">© 2026 Diamond Painter. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+  toggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+  });
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+      btn.setAttribute('aria-expanded', (!isOpen).toString());
+    });
+  });
+</script>
+<script src="../i18n.js"></script>
+<script src="../community-banner.js"></script>
+<script src="article-translations.js"></script>
+<script src="../ads.js" defer></script>
+<script type="module" src="/analytics.js"></script>
+</body>
+</html>
