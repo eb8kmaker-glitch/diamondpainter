@@ -31,6 +31,7 @@
     { "source": "/best-image-types-for-diamond-painting.html", "destination": "/guide/best-image-types-for-diamond-painting", "permanent": true },
     { "source": "/best-resolution-for-cross-stitch.html", "destination": "/guide/best-resolution-for-cross-stitch", "permanent": true },
     { "source": "/how-to-print-large-patterns.html", "destination": "/guide/how-to-print-large-patterns", "permanent": true },
+    { "source": "/editor-guide.html", "destination": "/guide/editor-guide", "permanent": true },
 
     { "source": "/guide/best-diamond-painting-accessories.html", "destination": "/guide/best-diamond-painting-accessories", "permanent": true },
     { "source": "/guide/best-image-types-for-diamond-painting.html", "destination": "/guide/best-image-types-for-diamond-painting", "permanent": true },
@@ -45,6 +46,7 @@
     { "source": "/guide/how-to-print-large-patterns.html", "destination": "/guide/how-to-print-large-patterns", "permanent": true },
     { "source": "/guide/quick-start.html", "destination": "/guide/quick-start", "permanent": true },
     { "source": "/guide/square-vs-round-drill.html", "destination": "/guide/square-vs-round-drill", "permanent": true },
+    { "source": "/guide/editor-guide.html", "destination": "/guide/editor-guide", "permanent": true },
 
     { "source": "/diamond-painting-beginner-guide", "destination": "/guide/diamond-painting-beginner-guide", "permanent": true },
     { "source": "/custom-diamond-painting-tutorial", "destination": "/guide/custom-diamond-painting-tutorial", "permanent": true },
@@ -57,7 +59,8 @@
     { "source": "/how-to-make-diamond-painting-patterns", "destination": "/guide/how-to-make-diamond-painting-patterns", "permanent": true },
     { "source": "/best-image-types-for-diamond-painting", "destination": "/guide/best-image-types-for-diamond-painting", "permanent": true },
     { "source": "/best-resolution-for-cross-stitch", "destination": "/guide/best-resolution-for-cross-stitch", "permanent": true },
-    { "source": "/how-to-print-large-patterns", "destination": "/guide/how-to-print-large-patterns", "permanent": true }
+    { "source": "/how-to-print-large-patterns", "destination": "/guide/how-to-print-large-patterns", "permanent": true },
+    { "source": "/editor-guide", "destination": "/guide/editor-guide", "permanent": true }
   ],
   "headers": [
     {

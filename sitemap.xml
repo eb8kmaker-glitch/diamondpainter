@@ -166,6 +166,13 @@
     <priority>0.7</priority>
   </url>
 
+  <url>
+    <loc>https://diamondpainter.app/guide/editor-guide</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Colors & DMC -->
   <url>
     <loc>https://diamondpainter.app/guide/dmc-color-guide</loc>
