@@ -730,6 +730,17 @@
     .palette-shift-hint { display: none; }
   }
 
+  /* ── 캔버스 좌표 눈금자 (열/행) — 크기(px)는 JS의 RULER_SIZE_PX 상수가 인라인으로 지정 ── */
+  #ruler-top, #ruler-left {
+    position: absolute;
+    top: 0; left: 0;
+    background: rgba(8,14,34,0.75);
+    pointer-events: none;
+    z-index: 9;
+  }
+  #ruler-top { border-bottom: 1px solid var(--glass-border); }
+  #ruler-left { border-right: 1px solid var(--glass-border); }
+
   /* ── 캔버스 키보드 포커스 표시 (WASD 패닝 활성 상태) ── */
   #canvas-area:focus { outline: none; }
   #canvas-area:focus-visible {
@@ -2922,6 +2933,7 @@ const i18n = {
     opt_symbols:    '기호 표시',
     opt_grid:       '강한 격자선',
     opt_highlight:  '선택 색상 강조',
+    opt_ruler: '눈금자 표시',
     // 도구 이름
     tool_name_paint: '색상 입력',
     tool_name_erase: '색상 제거',
@@ -3156,6 +3168,7 @@ const i18n = {
     opt_symbols:   'Show symbols',
     opt_grid:      'Strong grid lines',
     opt_highlight: 'Highlight selected color',
+    opt_ruler: 'Show ruler',
     tool_name_paint: 'Paint Color',
     tool_name_erase: 'Remove Color',
     tool_name_fill:  'Fill Region',
@@ -3377,6 +3390,7 @@ const i18n = {
     opt_symbols:   '記号を表示',
     opt_grid:      '強いグリッド線',
     opt_highlight: '選択色をハイライト',
+    opt_ruler: '目盛りを表示',
     tool_name_paint: '色入力',
     tool_name_erase: '色削除',
     tool_name_fill:  '領域塗りつぶし',
@@ -3598,6 +3612,7 @@ const i18n = {
     opt_symbols:   '显示符号',
     opt_grid:      '加强网格线',
     opt_highlight: '高亮选中颜色',
+    opt_ruler: '显示标尺',
     tool_name_paint: '填色',
     tool_name_erase: '清除颜色',
     tool_name_fill:  '区域填充',
@@ -3819,6 +3834,7 @@ const i18n = {
     opt_symbols: 'Symbole anzeigen',
     opt_grid: 'Kräftige Rasterlinien',
     opt_highlight: 'Ausgewählte Farbe hervorheben',
+    opt_ruler: 'Lineal anzeigen',
     tool_name_paint: 'Farbe malen',
     tool_name_erase: 'Farbe entfernen',
     tool_name_fill: 'Bereich füllen',
@@ -4039,6 +4055,7 @@ const i18n = {
     opt_symbols: 'Afficher les symboles',
     opt_grid: 'Lignes de grille épaisses',
     opt_highlight: 'Surligner la couleur sélectionnée',
+    opt_ruler: 'Afficher la règle',
     tool_name_paint: 'Peindre',
     tool_name_erase: 'Effacer la couleur',
     tool_name_fill: 'Remplir une zone',
@@ -4259,6 +4276,7 @@ const i18n = {
     opt_symbols: 'Mostrar símbolos',
     opt_grid: 'Líneas de cuadrícula marcadas',
     opt_highlight: 'Resaltar el color seleccionado',
+    opt_ruler: 'Mostrar regla',
     tool_name_paint: 'Pintar color',
     tool_name_erase: 'Quitar color',
     tool_name_fill: 'Rellenar región',
@@ -4479,6 +4497,7 @@ const i18n = {
     opt_symbols: 'Tampilkan simbol',
     opt_grid: 'Garis grid tebal',
     opt_highlight: 'Soroti warna terpilih',
+    opt_ruler: 'Tampilkan penggaris',
     tool_name_paint: 'Cat Warna',
     tool_name_erase: 'Hapus Warna',
     tool_name_fill: 'Isi Area',
@@ -4699,6 +4718,7 @@ const i18n = {
     opt_symbols: 'Hiện ký hiệu',
     opt_grid: 'Đường lưới đậm',
     opt_highlight: 'Làm nổi màu đang chọn',
+    opt_ruler: 'Hiện thước đo',
     tool_name_paint: 'Tô màu',
     tool_name_erase: 'Xóa màu',
     tool_name_fill: 'Tô vùng',
@@ -5604,6 +5624,7 @@ function applyTransform() {
   container.style.transform = `translate(${state.viewX}px, ${state.viewY}px) scale(${state.zoom})`;
   document.getElementById('zoom-indicator').textContent = Math.round(state.zoom * 100) + '%';
   drawMinimap();
+  drawRulers();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -6877,6 +6898,141 @@ canvasArea.addEventListener('keydown', e => {
   hint.setAttribute('data-i18n', 'kbd_nav_hint');
   hint.textContent = t('kbd_nav_hint');
   canvasArea.appendChild(hint);
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// 캔버스 좌표 눈금자 (열/행) — #canvas-container 바깥의 오버레이 <canvas> 2장.
+// state.viewX/viewY/zoom이 바뀌는 모든 경로(WASD/드래그/휠/핀치/미니맵)는
+// 결국 applyTransform()을 거치므로, 그 안에서 drawRulers()만 호출하면
+// 별도 구독 없이 전부 동기화된다. 화면 표시는 1-index(cx=0 → "1")이며,
+// 페인팅용 #coords 배지(0-index)는 이 작업과 무관하게 그대로 둔다.
+// ═══════════════════════════════════════════════════════════════
+const RULER_SIZE_PX = 20;                 // 눈금자 두께(px)
+const RULER_FONT_SIZE_PX = 9;             // 눈금 숫자 폰트 크기(px)
+const RULER_MIN_LABEL_GAP_PX = 32;        // 인접 라벨 사이 최소 화면 간격(px) — 이보다 좁으면 스텝을 키움
+const RULER_STEP_CANDIDATES = [1, 2, 5, 10, 20, 25, 50, 100, 200, 500]; // "몇 셀마다 라벨"의 허용 후보값
+const RULER_TICK_LEN_PX = 5;              // 눈금 표시선 길이(px)
+
+let rulerTopCanvas, rulerTopCtx, rulerLeftCanvas, rulerLeftCtx;
+let rulerTextColor = '#8f9bbd', rulerTickColor = 'rgba(255,255,255,0.25)';
+
+// 실효 셀 크기(px) 기준으로, 라벨이 겹치지 않는 최소 스텝을 고른다.
+function getRulerStep(effectiveCellPx) {
+  for (const step of RULER_STEP_CANDIDATES) {
+    if (step * effectiveCellPx >= RULER_MIN_LABEL_GAP_PX) return step;
+  }
+  return RULER_STEP_CANDIDATES[RULER_STEP_CANDIDATES.length - 1];
+}
+
+function drawRulers() {
+  if (!rulerTopCanvas) return;
+  const toggle = document.getElementById('opt-show-ruler');
+  if (toggle && !toggle.checked) return;
+
+  const aw = canvasArea.clientWidth, ah = canvasArea.clientHeight;
+  if (rulerTopCanvas.width !== aw) rulerTopCanvas.width = aw;
+  if (rulerTopCanvas.height !== RULER_SIZE_PX) rulerTopCanvas.height = RULER_SIZE_PX;
+  const leftHeight = Math.max(0, ah - RULER_SIZE_PX);
+  if (rulerLeftCanvas.width !== RULER_SIZE_PX) rulerLeftCanvas.width = RULER_SIZE_PX;
+  if (rulerLeftCanvas.height !== leftHeight) rulerLeftCanvas.height = leftHeight;
+
+  rulerTopCtx.clearRect(0, 0, rulerTopCanvas.width, rulerTopCanvas.height);
+  rulerLeftCtx.clearRect(0, 0, rulerLeftCanvas.width, rulerLeftCanvas.height);
+  if (!state.pattern) return;
+
+  const { width, height } = state.pattern;
+  const ecs = state.cellSize * state.zoom; // effective cell size(px) — zoom에 따른 화면상 실제 셀 크기
+  if (ecs <= 0) return;
+  const step = getRulerStep(ecs);
+
+  rulerTopCtx.font = rulerLeftCtx.font = `${RULER_FONT_SIZE_PX}px monospace`;
+  rulerTopCtx.fillStyle = rulerLeftCtx.fillStyle = rulerTextColor;
+  rulerTopCtx.strokeStyle = rulerLeftCtx.strokeStyle = rulerTickColor;
+  rulerTopCtx.textBaseline = 'middle';
+  rulerLeftCtx.textBaseline = 'middle';
+
+  // ── 상단(열) 눈금자 ── 도안 범위([0,width))를 벗어나는 열은 그리지 않는다.
+  const firstCx = Math.max(0, Math.floor(-state.viewX / ecs));
+  const lastCx = Math.min(width - 1, Math.ceil((aw - state.viewX) / ecs));
+  const startCx = Math.ceil(firstCx / step) * step;
+  rulerTopCtx.beginPath();
+  for (let cx = startCx; cx <= lastCx; cx += step) {
+    const sx = state.viewX + cx * ecs;
+    if (sx < 0 || sx > aw) continue;
+    rulerTopCtx.moveTo(sx, RULER_SIZE_PX - RULER_TICK_LEN_PX);
+    rulerTopCtx.lineTo(sx, RULER_SIZE_PX);
+  }
+  rulerTopCtx.stroke();
+  for (let cx = startCx; cx <= lastCx; cx += step) {
+    const sx = state.viewX + cx * ecs;
+    if (sx < 0 || sx > aw) continue;
+    rulerTopCtx.fillText(String(cx + 1), sx + 3, RULER_SIZE_PX / 2);
+  }
+
+  // ── 좌측(행) 눈금자 ── 도안 범위([0,height))를 벗어나는 행은 그리지 않는다.
+  const viewYInLeft = state.viewY - RULER_SIZE_PX; // 좌측 캔버스는 상단 눈금자 아래(오프셋 RULER_SIZE_PX)부터 시작
+  const firstCy = Math.max(0, Math.floor(-viewYInLeft / ecs));
+  const lastCy = Math.min(height - 1, Math.ceil((leftHeight - viewYInLeft) / ecs));
+  const startCy = Math.ceil(firstCy / step) * step;
+  rulerLeftCtx.beginPath();
+  for (let cy = startCy; cy <= lastCy; cy += step) {
+    const sy = viewYInLeft + cy * ecs;
+    if (sy < 0 || sy > leftHeight) continue;
+    rulerLeftCtx.moveTo(RULER_SIZE_PX - RULER_TICK_LEN_PX, sy);
+    rulerLeftCtx.lineTo(RULER_SIZE_PX, sy);
+  }
+  rulerLeftCtx.stroke();
+  rulerLeftCtx.textAlign = 'right';
+  for (let cy = startCy; cy <= lastCy; cy += step) {
+    const sy = viewYInLeft + cy * ecs;
+    if (sy < 0 || sy > leftHeight) continue;
+    rulerLeftCtx.fillText(String(cy + 1), RULER_SIZE_PX - RULER_TICK_LEN_PX - 2, sy);
+  }
+  rulerLeftCtx.textAlign = 'left';
+}
+
+(function initRulers() {
+  // 테마 색상은 CSS 커스텀 프로퍼티에서 그대로 읽어와 하드코딩 중복을 피한다.
+  const rootStyle = getComputedStyle(document.documentElement);
+  rulerTextColor = rootStyle.getPropertyValue('--text3').trim() || rulerTextColor;
+  rulerTickColor = 'rgba(255,255,255,0.25)';
+
+  rulerTopCanvas = document.createElement('canvas');
+  rulerTopCanvas.id = 'ruler-top';
+  rulerTopCanvas.style.height = RULER_SIZE_PX + 'px';
+  rulerTopCanvas.style.width = '100%';
+  rulerTopCtx = rulerTopCanvas.getContext('2d');
+
+  rulerLeftCanvas = document.createElement('canvas');
+  rulerLeftCanvas.id = 'ruler-left';
+  rulerLeftCanvas.style.top = RULER_SIZE_PX + 'px';
+  rulerLeftCanvas.style.width = RULER_SIZE_PX + 'px';
+  rulerLeftCanvas.style.height = `calc(100% - ${RULER_SIZE_PX}px)`;
+  rulerLeftCtx = rulerLeftCanvas.getContext('2d');
+
+  canvasArea.appendChild(rulerTopCanvas);
+  canvasArea.appendChild(rulerLeftCanvas);
+
+  // "표시 옵션" 패널에 눈금자 토글 체크박스 주입 (기존 3개 체크박스와 동일한 마크업 패턴, 기본 ON)
+  const viewOptionRow = document.querySelector('.view-option-row');
+  if (viewOptionRow) {
+    const label = document.createElement('label');
+    label.className = 'checkbox-row';
+    label.style.marginTop = '5px';
+    label.innerHTML = '<input type="checkbox" id="opt-show-ruler" checked><span data-i18n="opt_ruler"></span>';
+    viewOptionRow.appendChild(label);
+    label.querySelector('span').textContent = t('opt_ruler');
+    label.querySelector('input').addEventListener('change', function() {
+      rulerTopCanvas.style.display = this.checked ? '' : 'none';
+      rulerLeftCanvas.style.display = this.checked ? '' : 'none';
+      if (this.checked) drawRulers();
+    });
+  }
+
+  // 캔버스 영역 리사이즈 시에도 눈금자를 다시 그린다(기존에 리사이즈 감지가 없던 부분에 순수 추가).
+  new ResizeObserver(() => drawRulers()).observe(canvasArea);
+
+  drawRulers();
 })();
 
 // ─── Pointer 입력 통합 (mouse · pen · touch) ───
