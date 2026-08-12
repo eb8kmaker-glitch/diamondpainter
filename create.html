@@ -692,7 +692,7 @@
   /* ── 좌표 ── */
   #coords {
     position: absolute;
-    top: 12px; left: 12px;
+    top: calc(var(--ruler-thickness-px, 0px) + 12px); left: 12px;
     background: rgba(8,14,34,0.75);
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(8px);
@@ -705,7 +705,7 @@
   /* ── WASD 패닝 / Shift+W,S 색상 이동 안내 배지 (물리 키보드 전제, 데스크톱 전용) ── */
   #kbd-nav-hint {
     position: absolute;
-    top: 12px; right: 12px;
+    top: calc(var(--ruler-thickness-px, 0px) + 12px); right: 12px;
     background: rgba(8,14,34,0.75);
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(8px);
@@ -6907,21 +6907,36 @@ canvasArea.addEventListener('keydown', e => {
 // 별도 구독 없이 전부 동기화된다. 화면 표시는 1-index(cx=0 → "1")이며,
 // 페인팅용 #coords 배지(0-index)는 이 작업과 무관하게 그대로 둔다.
 // ═══════════════════════════════════════════════════════════════
-const RULER_SIZE_PX = 20;                 // 눈금자 두께(px)
-const RULER_FONT_SIZE_PX = 9;             // 눈금 숫자 폰트 크기(px)
+const RULER_SIZE_PX = 34;                 // 눈금자 두께(px) — 셀번호+cm 2줄 표기를 위해 20→34
+const RULER_FONT_SIZE_PX = 9;             // 셀 번호 줄 폰트 크기(px)
+const RULER_CM_FONT_SIZE_PX = 7;          // cm 값 줄 폰트 크기(px) — 좌측 눈금자 폭(RULER_SIZE_PX) 안에 "123.4cm" 형태가 들어가도록 셀 번호 줄보다 작게
+const RULER_LABEL_LINE_GAP_PX = 2;        // 셀 번호 줄 / cm 값 줄 사이 간격(px)
+const RULER_CM_DECIMALS = 1;              // cm 값 표시 소수 자릿수
 const RULER_MIN_LABEL_GAP_PX = 32;        // 인접 라벨 사이 최소 화면 간격(px) — 이보다 좁으면 스텝을 키움
-const RULER_STEP_CANDIDATES = [1, 2, 5, 10, 20, 25, 50, 100, 200, 500]; // "몇 셀마다 라벨"의 허용 후보값
+const RULER_STEP_CANDIDATES = [1, 2, 5, 10, 20, 25, 50, 100, 200, 500]; // (참고용, 셀 전용) "몇 셀마다 라벨"의 허용 후보값 — cm 병기 모드에서는 미사용, 회귀 없이 그대로 유지
+const RULER_STEP_CM_CANDIDATES = [1, 2, 5, 10, 20, 25, 50, 100, 200, 500]; // "몇 cm마다 라벨"의 허용 후보값(cm 단위) — 셀 후보(RULER_STEP_CANDIDATES)로는 비즈 mm에 따라 cm 값이 애매해져(예: 2.8mm×5셀=1.4cm) 별도로 둠
 const RULER_TICK_LEN_PX = 5;              // 눈금 표시선 길이(px)
 
 let rulerTopCanvas, rulerTopCtx, rulerLeftCanvas, rulerLeftCtx;
 let rulerTextColor = '#8f9bbd', rulerTickColor = 'rgba(255,255,255,0.25)';
 
-// 실효 셀 크기(px) 기준으로, 라벨이 겹치지 않는 최소 스텝을 고른다.
+// 실효 셀 크기(px) 기준으로, cm 라벨이 겹치지 않는 최소 스텝을 고른다.
+// cm 후보(RULER_STEP_CM_CANDIDATES)를 canvasState.beadMm으로 셀 단위 환산해 검사하므로,
+// 비즈 종류(mm)가 바뀌면 같은 cm 후보라도 셀 스텝이 달라진다.
 function getRulerStep(effectiveCellPx) {
-  for (const step of RULER_STEP_CANDIDATES) {
-    if (step * effectiveCellPx >= RULER_MIN_LABEL_GAP_PX) return step;
+  for (const cmStep of RULER_STEP_CM_CANDIDATES) {
+    const cellStep = Math.max(1, Math.round(cmStep * 10 / canvasState.beadMm));
+    if (cellStep * effectiveCellPx >= RULER_MIN_LABEL_GAP_PX) return cellStep;
   }
-  return RULER_STEP_CANDIDATES[RULER_STEP_CANDIDATES.length - 1];
+  const lastCm = RULER_STEP_CM_CANDIDATES[RULER_STEP_CM_CANDIDATES.length - 1];
+  return Math.max(1, Math.round(lastCm * 10 / canvasState.beadMm));
+}
+
+// 1-index 셀 번호 + 실측 cm 값(같은 "셀 수 × beadMm/10" 공식, 사이드바 실제 도안 크기와 동일 계산)을 함께 반환.
+function getRulerLabelText(cellIndex) {
+  const cellNum = cellIndex + 1;
+  const cm = (cellNum * canvasState.beadMm / 10).toFixed(RULER_CM_DECIMALS);
+  return { cellNum: String(cellNum), cmText: `${cm}cm` };
 }
 
 function drawRulers() {
@@ -6945,11 +6960,15 @@ function drawRulers() {
   if (ecs <= 0) return;
   const step = getRulerStep(ecs);
 
-  rulerTopCtx.font = rulerLeftCtx.font = `${RULER_FONT_SIZE_PX}px monospace`;
   rulerTopCtx.fillStyle = rulerLeftCtx.fillStyle = rulerTextColor;
   rulerTopCtx.strokeStyle = rulerLeftCtx.strokeStyle = rulerTickColor;
   rulerTopCtx.textBaseline = 'middle';
   rulerLeftCtx.textBaseline = 'middle';
+
+  // 셀 번호 줄(위) / cm 값 줄(아래) 두 줄을 스택하기 위한 기준 y오프셋(중심 기준 ±)
+  const topLine1Y = 2 + RULER_FONT_SIZE_PX / 2;
+  const topLine2Y = topLine1Y + RULER_FONT_SIZE_PX / 2 + RULER_LABEL_LINE_GAP_PX + RULER_CM_FONT_SIZE_PX / 2;
+  const leftLineOffset = (RULER_FONT_SIZE_PX + RULER_CM_FONT_SIZE_PX) / 4 + RULER_LABEL_LINE_GAP_PX / 2;
 
   // ── 상단(열) 눈금자 ── 도안 범위([0,width))를 벗어나는 열은 그리지 않는다.
   const firstCx = Math.max(0, Math.floor(-state.viewX / ecs));
@@ -6966,7 +6985,11 @@ function drawRulers() {
   for (let cx = startCx; cx <= lastCx; cx += step) {
     const sx = state.viewX + cx * ecs;
     if (sx < 0 || sx > aw) continue;
-    rulerTopCtx.fillText(String(cx + 1), sx + 3, RULER_SIZE_PX / 2);
+    const { cellNum, cmText } = getRulerLabelText(cx);
+    rulerTopCtx.font = `${RULER_FONT_SIZE_PX}px monospace`;
+    rulerTopCtx.fillText(cellNum, sx + 3, topLine1Y);
+    rulerTopCtx.font = `${RULER_CM_FONT_SIZE_PX}px monospace`;
+    rulerTopCtx.fillText(cmText, sx + 3, topLine2Y);
   }
 
   // ── 좌측(행) 눈금자 ── 도안 범위([0,height))를 벗어나는 행은 그리지 않는다.
@@ -6986,7 +7009,12 @@ function drawRulers() {
   for (let cy = startCy; cy <= lastCy; cy += step) {
     const sy = viewYInLeft + cy * ecs;
     if (sy < 0 || sy > leftHeight) continue;
-    rulerLeftCtx.fillText(String(cy + 1), RULER_SIZE_PX - RULER_TICK_LEN_PX - 2, sy);
+    const { cellNum, cmText } = getRulerLabelText(cy);
+    const lx = RULER_SIZE_PX - RULER_TICK_LEN_PX - 2;
+    rulerLeftCtx.font = `${RULER_FONT_SIZE_PX}px monospace`;
+    rulerLeftCtx.fillText(cellNum, lx, sy - leftLineOffset);
+    rulerLeftCtx.font = `${RULER_CM_FONT_SIZE_PX}px monospace`;
+    rulerLeftCtx.fillText(cmText, lx, sy + leftLineOffset);
   }
   rulerLeftCtx.textAlign = 'left';
 }
@@ -6996,6 +7024,9 @@ function drawRulers() {
   const rootStyle = getComputedStyle(document.documentElement);
   rulerTextColor = rootStyle.getPropertyValue('--text3').trim() || rulerTextColor;
   rulerTickColor = 'rgba(255,255,255,0.25)';
+
+  // #coords/#kbd-nav-hint는 눈금자 두께만큼 아래로 밀어서 겹치지 않게 함(자체 로직은 CSS 오프셋 그대로).
+  canvasArea.style.setProperty('--ruler-thickness-px', RULER_SIZE_PX + 'px');
 
   rulerTopCanvas = document.createElement('canvas');
   rulerTopCanvas.id = 'ruler-top';
@@ -7394,6 +7425,7 @@ document.querySelectorAll('input[name="bead-type"]').forEach(radio => {
     document.getElementById('bead-round-label').classList.toggle('active', this.id === 'bead-round');
     document.getElementById('bead-square-label').classList.toggle('active', this.id === 'bead-square');
     updateCalcDisplay();
+    drawRulers(); // 눈금자 cm 라벨은 canvasState.beadMm 기준이므로 비즈 종류 변경 시 즉시 재계산
   });
 });
 
