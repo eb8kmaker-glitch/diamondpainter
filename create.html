@@ -6907,15 +6907,20 @@ canvasArea.addEventListener('keydown', e => {
 // 별도 구독 없이 전부 동기화된다. 화면 표시는 1-index(cx=0 → "1")이며,
 // 페인팅용 #coords 배지(0-index)는 이 작업과 무관하게 그대로 둔다.
 // ═══════════════════════════════════════════════════════════════
-const RULER_SIZE_PX = 34;                 // 눈금자 두께(px) — 셀번호+cm 2줄 표기를 위해 20→34
+const RULER_SIZE_PX = 44;                 // 눈금자 두께(px) — 8px cm 폰트 기준 좌측 텍스트 예산(44-TICK_LEN-gap=37px)이 "123.4cm"류 최장 라벨(33.7px)을 여유 있게 수용하도록 34→44
 const RULER_FONT_SIZE_PX = 9;             // 셀 번호 줄 폰트 크기(px)
-const RULER_CM_FONT_SIZE_PX = 7;          // cm 값 줄 폰트 크기(px) — 좌측 눈금자 폭(RULER_SIZE_PX) 안에 "123.4cm" 형태가 들어가도록 셀 번호 줄보다 작게
+const RULER_CM_FONT_SIZE_PX = 8;          // cm 값 줄 폰트 크기(px) — 7px는 실측상 가독성 저하(획이 가늘어 보임) 확인되어 8px로 상향
+const RULER_CM_FONT_WEIGHT = 'bold';      // cm 값 줄 굵기 — monospace는 굵기와 무관하게 advance width가 고정되어(실측 확인) 폭 비용 없이 획만 두꺼워짐
+const RULER_CM_TEXT_COLOR = '#b8c2e0';    // cm 값 줄 색상(--text2 재사용) — 셀 번호 줄(rulerTextColor, --text3)보다 밝게 해 색상으로도 구분 + 작은 폰트의 체감 대비 보강
 const RULER_LABEL_LINE_GAP_PX = 2;        // 셀 번호 줄 / cm 값 줄 사이 간격(px)
 const RULER_CM_DECIMALS = 1;              // cm 값 표시 소수 자릿수
-const RULER_MIN_LABEL_GAP_PX = 32;        // 인접 라벨 사이 최소 화면 간격(px) — 이보다 좁으면 스텝을 키움
+const RULER_MIN_LABEL_GAP_PX = 40;        // 인접 라벨 사이 최소 화면 간격(px) — 8px cm 텍스트 최대 폭(33.7px)이 기존 32px보다 넓어져 함께 상향(이보다 좁으면 스텝을 키움)
 const RULER_STEP_CANDIDATES = [1, 2, 5, 10, 20, 25, 50, 100, 200, 500]; // (참고용, 셀 전용) "몇 셀마다 라벨"의 허용 후보값 — cm 병기 모드에서는 미사용, 회귀 없이 그대로 유지
 const RULER_STEP_CM_CANDIDATES = [1, 2, 5, 10, 20, 25, 50, 100, 200, 500]; // "몇 cm마다 라벨"의 허용 후보값(cm 단위) — 셀 후보(RULER_STEP_CANDIDATES)로는 비즈 mm에 따라 cm 값이 애매해져(예: 2.8mm×5셀=1.4cm) 별도로 둠
 const RULER_TICK_LEN_PX = 5;              // 눈금 표시선 길이(px)
+
+const RULER_CELL_FONT = `${RULER_FONT_SIZE_PX}px monospace`;               // 셀 번호 줄 font 문자열(매직 스트링 반복 방지)
+const RULER_CM_FONT = `${RULER_CM_FONT_WEIGHT} ${RULER_CM_FONT_SIZE_PX}px monospace`; // cm 값 줄 font 문자열(굵기 포함)
 
 let rulerTopCanvas, rulerTopCtx, rulerLeftCanvas, rulerLeftCtx;
 let rulerTextColor = '#8f9bbd', rulerTickColor = 'rgba(255,255,255,0.25)';
@@ -6960,7 +6965,6 @@ function drawRulers() {
   if (ecs <= 0) return;
   const step = getRulerStep(ecs);
 
-  rulerTopCtx.fillStyle = rulerLeftCtx.fillStyle = rulerTextColor;
   rulerTopCtx.strokeStyle = rulerLeftCtx.strokeStyle = rulerTickColor;
   rulerTopCtx.textBaseline = 'middle';
   rulerLeftCtx.textBaseline = 'middle';
@@ -6986,9 +6990,11 @@ function drawRulers() {
     const sx = state.viewX + cx * ecs;
     if (sx < 0 || sx > aw) continue;
     const { cellNum, cmText } = getRulerLabelText(cx);
-    rulerTopCtx.font = `${RULER_FONT_SIZE_PX}px monospace`;
+    rulerTopCtx.font = RULER_CELL_FONT;
+    rulerTopCtx.fillStyle = rulerTextColor;
     rulerTopCtx.fillText(cellNum, sx + 3, topLine1Y);
-    rulerTopCtx.font = `${RULER_CM_FONT_SIZE_PX}px monospace`;
+    rulerTopCtx.font = RULER_CM_FONT;
+    rulerTopCtx.fillStyle = RULER_CM_TEXT_COLOR;
     rulerTopCtx.fillText(cmText, sx + 3, topLine2Y);
   }
 
@@ -7011,9 +7017,11 @@ function drawRulers() {
     if (sy < 0 || sy > leftHeight) continue;
     const { cellNum, cmText } = getRulerLabelText(cy);
     const lx = RULER_SIZE_PX - RULER_TICK_LEN_PX - 2;
-    rulerLeftCtx.font = `${RULER_FONT_SIZE_PX}px monospace`;
+    rulerLeftCtx.font = RULER_CELL_FONT;
+    rulerLeftCtx.fillStyle = rulerTextColor;
     rulerLeftCtx.fillText(cellNum, lx, sy - leftLineOffset);
-    rulerLeftCtx.font = `${RULER_CM_FONT_SIZE_PX}px monospace`;
+    rulerLeftCtx.font = RULER_CM_FONT;
+    rulerLeftCtx.fillStyle = RULER_CM_TEXT_COLOR;
     rulerLeftCtx.fillText(cmText, lx, sy + leftLineOffset);
   }
   rulerLeftCtx.textAlign = 'left';
